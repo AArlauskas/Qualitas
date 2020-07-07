@@ -1,0 +1,23 @@
+.ButtonBlock {
+    .Button {
+        background-color: #ce2b27;
+        color: white;
+        width: 100px;
+
+        &:hover {
+            background-color: #ff302b;
+        }
+    }
+
+    .ButtonCancel {
+        background-color: #cfc9c9;
+        color: black;
+        width: 100px;
+    }
+
+    .ButtonAddCategory {
+        background-color: #ce2b27;
+        color: white;
+        width: 140px;
+    }
+}

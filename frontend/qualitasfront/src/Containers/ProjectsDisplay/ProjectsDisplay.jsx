@@ -1,14 +1,14 @@
 import React, { Component } from 'react';
 
-class HomePageDisplay extends Component {
+class ProjectsDisplay extends Component {
     state = {  }
     render() { 
         return ( 
             <div>
-                Home page
+                Projects display
             </div>
          );
     }
 }
  
-export default HomePageDisplay;
+export default ProjectsDisplay;

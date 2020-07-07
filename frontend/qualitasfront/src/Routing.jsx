@@ -1,18 +1,21 @@
 import React, { Component } from 'react';
 import { Switch, Route, Redirect } from 'react-router';
-import HomePageDisplay from "./Containers/HomePageDisplay/HomePageDisplay";
+import ProjectsDisplay from "./Containers/ProjectsDisplay/ProjectsDisplay";
 import ReportsDisplay from "./Containers/ReportsDisplay/ReportsDisplay";
 import TeamsDisplay from "./Containers/TeamsDisplay/TeamsDisplay";
 import TemplatesDisplay from "./Containers/TemplatesDisplay/TemplatesDisplay";
+import ArchiveDisplay from "./Containers/ArchiveDisplay/ArchiveDisplay";
+import NavigationBreadcrumbs from './Components/NavigationBreadcrumbs/NavigationBreadcrumbs';
 
 class Routing extends Component {
     state = {  }
     render() { 
         return ( 
             <div>
+                <NavigationBreadcrumbs/>
                 <Switch>
-                    <Route exact path = "/">
-                        <HomePageDisplay />
+                    <Route path = "/projects">
+                        <ProjectsDisplay />
                     </Route>
                     <Route path="/reports">
                         <ReportsDisplay />
@@ -23,8 +26,11 @@ class Routing extends Component {
                     <Route path="/templates">
                         <TemplatesDisplay />
                     </Route>
+                    <Route path="/archives">
+                        <ArchiveDisplay />
+                    </Route>
                     <Route>
-                        <Redirect to="/"/>
+                        <Redirect to="/projects"/>
                     </Route>
                 </Switch>
             </div>

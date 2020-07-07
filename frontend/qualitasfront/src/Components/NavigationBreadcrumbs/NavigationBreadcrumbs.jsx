@@ -1,6 +1,6 @@
 import React from "react";
 import { Breadcrumbs, Link } from "@material-ui/core";
-import { PeopleRounded, DashboardRounded, AssignmentTurnedInOutlined, ArchiveOutlined, WorkRounded } from "@material-ui/icons";
+import { PeopleRounded, DashboardRounded, AssignmentTurnedInOutlined, ArchiveOutlined, WorkRounded, GroupWorkOutlined } from "@material-ui/icons";
 import "./NavigationBreadcrumbs.scss";
 
 const NavigationBreadcrumbs = () => {
@@ -19,7 +19,7 @@ const NavigationBreadcrumbs = () => {
                     href="/teams"
                     className={currentPage === "/teams" ? "LinkBold" : "Link"}
                 >
-                    <PeopleRounded className="Icon" fontSize="small"/>
+                    <GroupWorkOutlined className="Icon" fontSize="small"/>
                     Teams
                 </Link>
                 <Link
@@ -35,6 +35,13 @@ const NavigationBreadcrumbs = () => {
                 >
                     <AssignmentTurnedInOutlined className="Icon" fontSize="small" />
                     Reports
+                </Link>
+                <Link
+                    href="/users"
+                    className={currentPage === "/users" ? "LinkBold" : "Link"}
+                >
+                    <PeopleRounded className="Icon" fontSize="small" />
+                    Users
                 </Link>
                 <Link
                     href="/archives"

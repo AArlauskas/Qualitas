@@ -6,14 +6,18 @@ import TeamsDisplay from "./Containers/TeamsDisplay/TeamsDisplay";
 import TemplatesDisplay from "./Containers/TemplatesDisplay/TemplatesDisplay";
 import ArchiveDisplay from "./Containers/ArchiveDisplay/ArchiveDisplay";
 import NavigationBreadcrumbs from './Components/NavigationBreadcrumbs/NavigationBreadcrumbs';
+import UserListDisplay from './Containers/UserListDisplay/UserListDisplay';
+import LoginDisplay from './Containers/LoginDisplay/LoginDisplay';
 
 class Routing extends Component {
     state = {  }
     render() { 
         return ( 
             <div>
-                <NavigationBreadcrumbs/>
+                {window.localStorage.getItem("role") === "admin" ? <NavigationBreadcrumbs/> : null}
                 <Switch>
+                    {window.localStorage.getItem("role") === "admin" ? 
+                    <React.Fragment>
                     <Route path = "/projects">
                         <ProjectsDisplay />
                     </Route>
@@ -29,9 +33,18 @@ class Routing extends Component {
                     <Route path="/archives">
                         <ArchiveDisplay />
                     </Route>
-                    <Route>
-                        <Redirect to="/projects"/>
+                    <Route path="/users">
+                        <UserListDisplay/>
                     </Route>
+                     </React.Fragment> : 
+                    <React.Fragment>
+                         <Route path="/">
+                        <LoginDisplay/>
+                    </Route>
+                    <Route>
+                        <Redirect to="/"/>
+                    </Route>
+                     </React.Fragment>}
                 </Switch>
             </div>
          );

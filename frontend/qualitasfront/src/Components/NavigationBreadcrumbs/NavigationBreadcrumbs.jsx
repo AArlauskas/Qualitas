@@ -51,6 +51,9 @@ const NavigationBreadcrumbs = () => {
                     Archives
                 </Link>
             </Breadcrumbs>
+            <div>
+                <a onClick={() => window.localStorage.clear()} href="/">Log Out</a>
+            </div>
         </div>
     );
 };

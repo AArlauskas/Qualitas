@@ -7,7 +7,6 @@ const initialState = {
 export const reducer = (state = initialState, action) => {
     switch (action.type) {
         case ActionType.LOAD_USERS: {
-            console.log("got called");
             return {
                 ...state,
                 Users: action.payload

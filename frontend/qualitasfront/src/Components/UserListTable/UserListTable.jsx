@@ -53,17 +53,16 @@ class UserListTable extends Component {
             { title: "Team", field: "team", editable: "never" },
             // { title: "Projects", field: "projects", editable: "never", render: rowData => rowData.projects === [] ? "" : rowData.projects }
         ],
-        users: this.props.userData
     }
 
     render() {
         return (
             <div style={{ marginTop: 10, paddingLeft: 10, paddingRight: 10 }}>
-                {console.log(this.props.userData)}
                 <MaterialTable
                     options={{
                         filtering: true,
-                        actionsColumnIndex: -1
+                        actionsColumnIndex: -1,
+                        pageSize: 10
                     }}
                     icons={tableIcons}
                     title="Accounts"

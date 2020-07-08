@@ -13,14 +13,11 @@ class UserListDisplay extends Component {
     }
     render() {
         return (
-            <div>
-                {this.props.userData === [] ? null :
-                    <UserListTable
-                        userData={this.props.userData}
-                        addUser={this.props.addUser}
-                        updateUser={this.props.updateUser}
-                        deleteUser={this.props.deleteUser} />}
-            </div>
+            <UserListTable
+                userData={this.props.userData}
+                addUser={this.props.addUser}
+                updateUser={this.props.updateUser}
+                deleteUser={this.props.deleteUser} />
         );
     }
 }

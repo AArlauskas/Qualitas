@@ -7,7 +7,7 @@ const NavigationBreadcrumbs = () => {
     const currentPage = window.location.pathname;
     return (
         <div className="Navigation-Breadcrumbs-Wrapper">
-                        <Breadcrumbs separator={<div className={"Separator"}>||</div>} className="Breadcrumbs">
+            <Breadcrumbs separator={<div className={"Separator"}>||</div>} className="Breadcrumbs">
                 <Link
                     href="/projects"
                     className={currentPage === "/projects" ? "LinkBold" : "Link"}
@@ -19,7 +19,7 @@ const NavigationBreadcrumbs = () => {
                     href="/teams"
                     className={currentPage === "/teams" ? "LinkBold" : "Link"}
                 >
-                    <GroupWorkOutlined className="Icon" fontSize="small"/>
+                    <GroupWorkOutlined className="Icon" fontSize="small" />
                     Teams
                 </Link>
                 <Link
@@ -51,7 +51,9 @@ const NavigationBreadcrumbs = () => {
                     Archives
                 </Link>
             </Breadcrumbs>
-            <div>
+            <div style={{ marginTop: 5, marginRight: 5 }}>
+                {window.localStorage.getItem("name")}
+                <br />
                 <a onClick={() => window.localStorage.clear()} href="/">Log Out</a>
             </div>
         </div>

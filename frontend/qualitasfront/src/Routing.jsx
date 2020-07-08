@@ -10,45 +10,52 @@ import UserListDisplay from './Containers/UserListDisplay/UserListDisplay';
 import LoginDisplay from './Containers/LoginDisplay/LoginDisplay';
 
 class Routing extends Component {
-    state = {  }
-    render() { 
-        return ( 
+    state = {}
+    render() {
+        return (
             <div>
-                {window.localStorage.getItem("role") === "admin" ? <NavigationBreadcrumbs/> : null}
-                <Switch>
-                    {window.localStorage.getItem("role") === "admin" ? 
+                {window.localStorage.getItem("role") === "admin" ? <NavigationBreadcrumbs /> : null}
+
+                {window.localStorage.getItem("role") === "admin" ?
                     <React.Fragment>
-                    <Route path = "/projects">
-                        <ProjectsDisplay />
-                    </Route>
-                    <Route path="/reports">
-                        <ReportsDisplay />
-                    </Route>
-                    <Route path="/teams">
-                        <TeamsDisplay />
-                    </Route>
-                    <Route path="/templates">
-                        <TemplatesDisplay />
-                    </Route>
-                    <Route path="/archives">
-                        <ArchiveDisplay />
-                    </Route>
-                    <Route path="/users">
-                        <UserListDisplay/>
-                    </Route>
-                     </React.Fragment> : 
+                        <Switch>
+                            <Route path="/projects">
+                                <ProjectsDisplay />
+                            </Route>
+                            <Route path="/reports">
+                                <ReportsDisplay />
+                            </Route>
+                            <Route path="/teams">
+                                <TeamsDisplay />
+                            </Route>
+                            <Route path="/templates">
+                                <TemplatesDisplay />
+                            </Route>
+                            <Route path="/archives">
+                                <ArchiveDisplay />
+                            </Route>
+                            <Route path="/users">
+                                <UserListDisplay />
+                            </Route>
+                            <Route>
+                                <Redirect to="/projects" />
+                            </Route>
+                        </Switch>
+                    </React.Fragment> :
                     <React.Fragment>
-                         <Route path="/">
-                        <LoginDisplay/>
-                    </Route>
-                    <Route>
-                        <Redirect to="/"/>
-                    </Route>
-                     </React.Fragment>}
-                </Switch>
+                        <Switch>
+                            <Route path="/">
+                                <LoginDisplay />
+                            </Route>
+                            <Route>
+                                <Redirect to="/" />
+                            </Route>
+                        </Switch>
+                    </React.Fragment>}
+
             </div>
-         );
+        );
     }
 }
- 
+
 export default Routing;

@@ -1,42 +1,43 @@
 import React, { Component } from 'react';
-import users from '../../Constants/Users';
-import DefaultAutoComplete from "../../Components/DefaultComponents/DefaultAutoComplete"
-import { List, ListItem, Button } from '@material-ui/core';
+import UserListTable from '../../Components/UserListTable/UserListTable';
+import { connect } from "react-redux";
+import { fetchUserData, addUser, updateUser, deleteUser } from '../../Actions/UserListActions';
+
 
 class UserListDisplay extends Component {
-    state = { 
+    componentDidMount() {
+        this.props.fetchUserData();
+    }
+    state = {
         type: "user"
-     }
-    render() { 
-        return ( 
+    }
+    render() {
+        return (
             <div>
-                {console.log(this.state.type)}
-                <div style={{marginBottom: 15, marginTop: 10}}>
-                <DefaultAutoComplete 
-                label="Groups:"
-                options={[{name: "Users", type: "user"},
-            {name: "Admins", type: "admin"},
-        {name: "Clients", type: "client"}]}
-                defaultValue={{name: "Users", type: "user"}}
-                onSelect={e => this.setState({
-                    type: e.target.value.type
-                })}
-                getOptionLabel={option => option.name}/>
-                </div>
-                <List>
-                {users.filter(user => user.role === this.state.type).map(user => {
-                    return (
-                        <ListItem classes={{ gutters: "padding" }}>
-                            <Button>
-                                {user.user}
-                            </Button>
-                            </ListItem> 
-                    );
-                })}
-                </List>
+                {this.props.userData === [] ? null :
+                    <UserListTable
+                        userData={this.props.userData}
+                        addUser={this.props.addUser}
+                        updateUser={this.props.updateUser}
+                        deleteUser={this.props.deleteUser} />}
             </div>
-         );
+        );
     }
 }
- 
-export default UserListDisplay;
+
+
+const mapStateToProps = (state) => ({
+    userData: state.Users
+});
+
+const mapDispatchToProps = (dispatch) => ({
+    fetchUserData: () => dispatch(fetchUserData()),
+    addUser: (data) => dispatch(addUser(data)),
+    updateUser: (data) => dispatch(updateUser(data)),
+    deleteUser: (oldData) => dispatch(deleteUser(oldData))
+});
+
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(UserListDisplay);

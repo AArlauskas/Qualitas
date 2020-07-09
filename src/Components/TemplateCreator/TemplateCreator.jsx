@@ -230,10 +230,76 @@ class TemplateCreator extends Component {
                                     </ListItem>
                                     <List>
                                         {this.state.criteria.filter(criteria => criteria.parentId === entry.id).map(criteria => {
-                                            return (<ListItem button style={{ marginLeft: 30 }}>
-                                                <ListItemText>{criteria.name}</ListItemText>
-                                                <ListItemText>Points: {criteria.points}</ListItemText>
-                                            </ListItem>)
+                                            if (criteria.editing) {
+                                                return (
+                                                    <ListItem button key={criteria.id}>
+                                                        <TextField focused={true} style={{ width: 500 }} defaultValue={criteria.name} onChange={e => {
+                                                            let tempCriteria = [...this.state.criteria];
+                                                            tempCriteria.find(critical => critical.id === criteria.id).name = e.target.value;
+                                                            this.setState({ criteria: tempCriteria })
+                                                        }} />
+                                                        <TextField style={{ marginLeft: 1000, width: 100 }} type="number" focused={true} defaultValue={criteria.points} onChange={(e) => {
+                                                            let tempCriteria = [...this.state.criteria];
+                                                            tempCriteria.find(critical => critical.id === criteria.id).points = e.target.value;
+                                                            this.setState({ criteria: tempCriteria })
+                                                        }} />
+                                                        <ListItemSecondaryAction>
+                                                            <IconButton edge="end" aria-label="Save" onClick={() => {
+                                                                let id = criteria.id;
+                                                                let tempCriteria = [...this.state.criteria];
+                                                                tempCriteria.find(critical => critical.id === id).editing = false;
+                                                                this.setState({
+                                                                    editing: false,
+                                                                    criteria: tempCriteria
+                                                                })
+                                                            }}>
+                                                                <DoneIcon />
+                                                            </IconButton>
+                                                            <IconButton edge="end" aria-label="Delete" onClick={() => {
+                                                                let id = criteria.id;
+                                                                let tempCriteria = [...this.state.criteria];
+                                                                tempCriteria.splice(tempCriteria.indexOf(criteria), 1);
+                                                                tempCriteria.filter(critical => critical.id === id);
+                                                                this.setState({
+                                                                    criteria: tempCriteria
+                                                                })
+                                                            }}>
+                                                                <DeleteIcon />
+                                                            </IconButton>
+                                                        </ListItemSecondaryAction>
+                                                    </ListItem>
+                                                )
+                                            }
+                                            else {
+                                                return (<ListItem button style={{ marginLeft: 30 }}>
+                                                    <ListItemText>{criteria.name}</ListItemText>
+                                                    <ListItemText>Points: {criteria.points}</ListItemText>
+                                                    <ListItemSecondaryAction>
+                                                        <IconButton edge="end" aria-label="edit" onClick={() => {
+                                                            let id = criteria.id;
+                                                            let tempCriteria = [...this.state.criteria];
+                                                            tempCriteria.find(criteria => criteria.id === id).editing = true;
+                                                            this.setState({
+                                                                editing: true,
+                                                                criteria: tempCriteria
+                                                            })
+                                                        }}>
+                                                            <EditIcon />
+                                                        </IconButton>
+                                                        <IconButton disabled={this.state.editing} edge="end" aria-label="Delete" onClick={() => {
+                                                            let id = criteria.id;
+                                                            let tempCriteria = [...this.state.criteria];
+                                                            tempCriteria.splice(tempCriteria.indexOf(criteria), 1);
+                                                            tempCriteria.filter(critical => critical.id === id);
+                                                            this.setState({
+                                                                criteria: tempCriteria
+                                                            })
+                                                        }}>
+                                                            <DeleteIcon />
+                                                        </IconButton>
+                                                    </ListItemSecondaryAction>
+                                                </ListItem>)
+                                            }
                                         })}
                                     </List>
                                 </div>

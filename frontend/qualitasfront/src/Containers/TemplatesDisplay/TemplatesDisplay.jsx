@@ -1,14 +1,15 @@
 import React, { Component } from 'react';
+import { Button } from '@material-ui/core';
 
 class TemplatesDisplay extends Component {
-    state = {  }
-    render() { 
-        return ( 
+    state = {}
+    render() {
+        return (
             <div>
-                Templates display
+                <Button color="primary" href="/newTemplate">Create new template</Button>
             </div>
-         );
+        );
     }
 }
- 
+
 export default TemplatesDisplay;

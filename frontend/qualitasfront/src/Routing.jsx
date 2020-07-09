@@ -8,6 +8,7 @@ import ArchiveDisplay from "./Containers/ArchiveDisplay/ArchiveDisplay";
 import NavigationBreadcrumbs from './Components/NavigationBreadcrumbs/NavigationBreadcrumbs';
 import UserListDisplay from './Containers/UserListDisplay/UserListDisplay';
 import LoginDisplay from './Containers/LoginDisplay/LoginDisplay';
+import TemplateCreatorDisplay from "./Containers/TemplateCreatorDisplay/TemplateCreatorDisplay";
 
 class Routing extends Component {
     state = {}
@@ -30,6 +31,9 @@ class Routing extends Component {
                             </Route>
                             <Route path="/templates">
                                 <TemplatesDisplay />
+                            </Route>
+                            <Route path="/newTemplate">
+                                <TemplateCreatorDisplay />
                             </Route>
                             <Route path="/archives">
                                 <ArchiveDisplay />

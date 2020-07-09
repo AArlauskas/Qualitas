@@ -1,14 +1,33 @@
 import React, { Component } from 'react';
+import { connect } from "react-redux";
+import ArchivedUserListTable from '../../Components/ArchivedUserListTable/ArchivedUserListTable';
+import { fetchArchivedUserData, unarchiveUser, deleteUser } from '../../Actions/ArchivedUserListActions';
 
 class ArchiveDisplay extends Component {
-    state = {  }
-    render() { 
-        return ( 
+    state = {}
+    componentDidMount() {
+        this.props.fetchArchivedUserData();
+    }
+    render() {
+        return (
             <div>
-                Archive Display
+                <ArchivedUserListTable
+                    archivedUserData={this.props.archivedUserData}
+                    unarchiveUser={this.props.unarchiveUser}
+                    deleteUser={this.props.deleteUser} />
             </div>
-         );
+        );
     }
 }
- 
-export default ArchiveDisplay;
+
+const mapStateToProps = (state) => ({
+    archivedUserData: state.Users
+});
+
+const mapDispatchToProps = (dispatch) => ({
+    fetchArchivedUserData: () => dispatch(fetchArchivedUserData()),
+    unarchiveUser: (oldData) => dispatch(unarchiveUser(oldData)),
+    deleteUser: (oldData) => dispatch(deleteUser(oldData))
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(ArchiveDisplay);

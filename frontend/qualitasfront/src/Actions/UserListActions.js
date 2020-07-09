@@ -22,9 +22,9 @@ export const updateUser = (data) => (dispatch) => {
     });
 };
 
-export const deleteUser = (oldData) => (dispatch) => {
+export const archiveUser = (oldData) => (dispatch) => {
     dispatch({
-        type: ActionType.DELETE_USER,
+        type: ActionType.ARCHIVE_USER,
         payload: oldData
     });
 };

@@ -6,7 +6,8 @@ const users = [
         firstname: "administratorius",
         lastname: "pagrindinis",
         role: "admin",
-        projects: []
+        projects: [],
+        archived: false
     },
     {
         id: 1,
@@ -16,7 +17,7 @@ const users = [
         lastname: "Arlauskas",
         role: "user",
         team: "InfomediaTheBest",
-        projects: []
+        projects: [], archived: false
     },
     {
         id: 2,
@@ -26,7 +27,8 @@ const users = [
         lastname: "Kazkokia",
         role: "user",
         team: "We_Do_Love_Calls",
-        projects: ["Vilniaus Vandenys", "MTTC", "TEST CASE SCENARIO"]
+        projects: ["Vilniaus Vandenys", "MTTC", "TEST CASE SCENARIO"],
+        archived: false
     },
     {
         id: 3,
@@ -35,7 +37,28 @@ const users = [
         firstname: "Vilniaus",
         lastname: "Vandenys",
         role: "client",
-        projects: []
+        projects: [],
+        archived: false
+    },
+    {
+        id: 4,
+        user: "archived_client",
+        pass: "archived_client",
+        firstname: "Archived",
+        lastname: "Client type",
+        role: "client",
+        projects: [],
+        archived: true
+    },
+    {
+        id: 5,
+        user: "archived_user",
+        pass: "archived_user",
+        firstname: "Archived",
+        lastname: "User type",
+        role: "user",
+        projects: ["MTTC"],
+        archived: true
     }
 ]
 

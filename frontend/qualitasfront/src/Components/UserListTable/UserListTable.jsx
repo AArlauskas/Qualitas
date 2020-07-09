@@ -15,6 +15,7 @@ import Remove from '@material-ui/icons/Remove';
 import SaveAlt from '@material-ui/icons/SaveAlt';
 import Search from '@material-ui/icons/Search';
 import ViewColumn from '@material-ui/icons/ViewColumn';
+import ArchiveIcon from '@material-ui/icons/Archive';
 
 const tableIcons = {
     Add: forwardRef((props, ref) => <AddBox {...props} ref={ref} />),
@@ -33,7 +34,8 @@ const tableIcons = {
     Search: forwardRef((props, ref) => <Search {...props} ref={ref} />),
     SortArrow: forwardRef((props, ref) => <ArrowDownward {...props} ref={ref} />),
     ThirdStateCheck: forwardRef((props, ref) => <Remove {...props} ref={ref} />),
-    ViewColumn: forwardRef((props, ref) => <ViewColumn {...props} ref={ref} />)
+    ViewColumn: forwardRef((props, ref) => <ViewColumn {...props} ref={ref} />),
+    Archive: forwardRef((props, ref) => <ArchiveIcon {...props} ref={ref} />)
 };
 
 class UserListTable extends Component {
@@ -67,7 +69,19 @@ class UserListTable extends Component {
                     icons={tableIcons}
                     title="Accounts"
                     columns={this.state.columns}
-                    data={this.props.userData}
+                    data={this.props.userData.filter(user => user.archived === false)}
+                    actions={[{
+                        icon: () => <ArchiveIcon />,
+                        tooltip: "Archive",
+                        onClick: (event, rowData) => {
+                            new Promise((resolve) => {
+                                setTimeout(() => {
+                                    resolve();
+                                    this.props.archiveUser(rowData);
+                                }, 600);
+                            })
+                        }
+                    }]}
                     editable={{
                         isEditable: rowData => rowData.role === "user",
                         onRowAdd: (newData) =>
@@ -86,15 +100,15 @@ class UserListTable extends Component {
                                     }
                                 }, 600);
                             }),
-                        onRowDelete: (oldData) =>
-                            new Promise((resolve) => {
-                                setTimeout(() => {
-                                    resolve();
-                                    this.setState((prevState) => {
-                                        this.props.deleteUser(oldData);
-                                    });
-                                }, 600);
-                            })
+                        // onRowDelete: (oldData) =>
+                        //     new Promise((resolve) => {
+                        //         setTimeout(() => {
+                        //             resolve();
+                        //             this.setState((prevState) => {
+                        //                 this.props.archiveUser(oldData);
+                        //             });
+                        //         }, 600);
+                        //     })
                     }}
                 />
             </div>

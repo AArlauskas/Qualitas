@@ -99,9 +99,12 @@ export const reducer = (state = initialState, action) => {
 
         case ActionType.CREATE_TEMPLATE: {
             let template = action.payload;
+            let tempTemplates = [...state.Templates];
+            tempTemplates.push(template);
+            console.log(tempTemplates);
             return {
                 ...state,
-                Templates: [...state.Templates, template]
+                Templates: tempTemplates
             }
         }
 

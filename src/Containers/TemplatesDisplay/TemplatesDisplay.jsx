@@ -12,6 +12,7 @@ class TemplatesDisplay extends Component {
     render() {
         return (
             <div>
+                {console.log(this.props.templates)}
                 <Button color="primary" variant="outlined" href="/newTemplate" style={{ marginBottom: 10 }}>Create new template</Button>
                 <TemplateTable
                     templates={this.props.templates}

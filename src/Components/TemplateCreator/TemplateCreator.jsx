@@ -485,8 +485,8 @@ class TemplateCreator extends Component {
                             name: criteria.name,
                             parentId: criteria.parentId
                         }));
-                        console.log(outputData);
-                        window.location.href = "/templates"
+                        this.props.createTemplate(outputData);
+                        //window.location.href = "/templates"
                     }}>Save</Button>
                 </div>
             </div>

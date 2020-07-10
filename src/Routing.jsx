@@ -35,6 +35,9 @@ class Routing extends Component {
                             <Route path="/newTemplate">
                                 <TemplateCreatorDisplay />
                             </Route>
+                            <Route exact path="/EditTemplate/:id">
+                                <TemplateCreatorDisplay />
+                            </Route>
                             <Route path="/archives">
                                 <ArchiveDisplay />
                             </Route>

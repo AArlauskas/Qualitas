@@ -1,7 +1,9 @@
 import { ActionType } from "../Constants/ActionType";
 
 const initialState = {
-    Users: []
+    Users: [],
+    Templates: [],
+    TemplateToEdit: null
 };
 
 export const reducer = (state = initialState, action) => {
@@ -65,6 +67,49 @@ export const reducer = (state = initialState, action) => {
             return {
                 ...state,
                 Users: [...tempUsers]
+            }
+        }
+
+        case ActionType.LOAD_TEMPLATE_LIST: {
+            let templates = action.payload;
+            let templateNames = [];
+            templates.forEach(template => {
+                templateNames.push({
+                    id: template.id,
+                    name: template.name
+                })
+            });
+            return {
+                ...state,
+                Templates: templateNames
+            }
+        }
+
+        case ActionType.LOAD_TEMPLATE: {
+            if (state.TemplateToEdit !== null) {
+                state.TemplateToEdit = null;
+            }
+            let id = action.payload;
+            let templateToEdit = state.Templates.find(template => template.id === id);
+            return {
+                ...state,
+                TemplateToEdit: templateToEdit
+            }
+        }
+
+        case ActionType.CREATE_TEMPLATE: {
+            let template = action.payload;
+            return {
+                ...state,
+                Templates: [...state.Templates, template]
+            }
+        }
+
+        case ActionType.DELETE_TEMPLATE: {
+            let templateId = action.payload;
+            return {
+                ...state,
+                Templates: state.Templates.filter(template => template.id !== templateId)
             }
         }
 

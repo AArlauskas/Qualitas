@@ -3,7 +3,7 @@ import { ActionType } from "../Constants/ActionType";
 const initialState = {
     Users: [],
     Templates: [],
-    TemplateToEdit: null
+    Projects: []
 };
 
 export const reducer = (state = initialState, action) => {
@@ -101,7 +101,6 @@ export const reducer = (state = initialState, action) => {
             let template = action.payload;
             let tempTemplates = [...state.Templates];
             tempTemplates.push(template);
-            console.log(tempTemplates);
             return {
                 ...state,
                 Templates: tempTemplates
@@ -113,7 +112,6 @@ export const reducer = (state = initialState, action) => {
             let tempTemplates = [...state.Templates];
             let index = tempTemplates.indexOf(tempTemplates.find(temp => temp.id === template.id));
             tempTemplates[index] = template;
-            console.log(tempTemplates);
             return {
                 ...state,
                 Templates: [...tempTemplates]
@@ -125,6 +123,40 @@ export const reducer = (state = initialState, action) => {
             return {
                 ...state,
                 Templates: state.Templates.filter(template => template.id !== templateId)
+            }
+        }
+
+        case ActionType.LOAD_PROJECTS: {
+            return {
+                ...state,
+                Projects: action.payload
+            }
+        }
+
+        case ActionType.CREATE_PROJECT: {
+            let createdProject = action.payload;
+            return {
+                ...state,
+                Projects: [...state.Projects, createdProject]
+            }
+        }
+
+        case ActionType.UPDATE_PROJECT: {
+            let updatedProject = action.payload;
+            let TempProjects = [...state.Projects];
+            let index = TempProjects.indexOf(TempProjects.find(temp => temp.id === updatedProject.id));
+            TempProjects[index] = updatedProject;
+            return {
+                ...state,
+                Projects: [...TempProjects]
+            }
+        }
+
+        case ActionType.DELETE_PROJECT: {
+            let id = action.payload.id;
+            return {
+                ...state,
+                Projects: [...state.Projects.filter(project => project.id !== id)]
             }
         }
 

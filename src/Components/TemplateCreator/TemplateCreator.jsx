@@ -16,74 +16,6 @@ const calculateSum = (criteria) => {
 let index = 4;
 
 class TemplateCreator extends Component {
-    // componentWillMount() {
-    //     if (this.props.editId === undefined) {
-    //         this.setState({
-    //             editing: false,
-    //             templateName: "",
-    //             topics: [
-    //                 {
-    //                     id: 0,
-    //                     name: "Confidentiality",
-    //                     critical: true,
-    //                     editing: false,
-    //                     open: true,
-    //                 },
-    //                 {
-    //                     id: 1,
-    //                     name: "Swearing",
-    //                     critical: true,
-    //                     editing: false,
-    //                     open: true,
-    //                 },
-    //                 {
-    //                     id: 2,
-    //                     name: "Communication",
-    //                     critical: false,
-    //                     editing: false,
-    //                     open: true,
-    //                 },
-    //                 {
-    //                     id: 3,
-    //                     name: "Data Entries",
-    //                     critical: false,
-    //                     editing: false,
-    //                     open: true,
-    //                 }
-    //             ],
-    //             criteria: []
-    //         })
-    //     }
-    //     else {
-    //         this.setState({
-    //             id: this.props.editId,
-    //             editing: false,
-    //             templateName: this.props.templateToEdit.name,
-    //             topics: [
-    //                 this.props.templateToUpdate.forEach(temp => {
-    //                     return ({
-    //                         id: temp.id,
-    //                         name: temp.name,
-    //                         critical: temp.critical,
-    //                         editing: false,
-    //                         open: true
-    //                     })
-    //                 })
-    //             ],
-    //             criteria: [
-    //                 this.props.templateToUpdate.topics.forEach(temp => {
-    //                     return ({
-    //                         id: temp.id,
-    //                         name: temp.name,
-    //                         points: temp.points,
-    //                         parentId: temp.parentId,
-    //                         editing: false,
-    //                     })
-    //                 })
-    //             ]
-    //         })
-    //     }
-    // }
     state = {
         editing: false,
         templateName: "",
@@ -123,7 +55,7 @@ class TemplateCreator extends Component {
     render() {
         return (
             <div style={{ marginLeft: 15, marginRight: 15 }}>
-                <TextField style={{ paddingBottom: 15, width: 250 }} label="Template name" onChange={e => this.setState({ templateName: e.target.value })} />
+                <TextField style={{ paddingBottom: 15, width: 250 }} defaultValue="" label="Template name" onChange={e => this.setState({ templateName: e.target.value })} />
                 <div className="ButtonBlock" >
                     <Button color="secondary" variant="contained" onClick={() => {
                         let tempTopics = [...this.state.topics]

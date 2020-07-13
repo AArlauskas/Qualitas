@@ -9,7 +9,6 @@ class TemplateCreatorDisplay extends Component {
     render() {
         return (
             <div>
-                {console.log(fetchTemplateToEdit())}
                 <TemplateEditor
                     template={fetchTemplateToEdit()}
                     editTemplate={this.props.editTemplate} />

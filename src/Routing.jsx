@@ -9,6 +9,7 @@ import NavigationBreadcrumbs from './Components/NavigationBreadcrumbs/Navigation
 import UserListDisplay from './Containers/UserListDisplay/UserListDisplay';
 import LoginDisplay from './Containers/LoginDisplay/LoginDisplay';
 import TemplateCreatorDisplay from "./Containers/TemplateCreatorDisplay/TemplateCreatorDisplay";
+import TemplateEditorDisplay from "./Containers/TemplateEditorDisplay/TemplateEditorDisplay";
 
 class Routing extends Component {
     state = {}
@@ -36,7 +37,7 @@ class Routing extends Component {
                                 <TemplateCreatorDisplay />
                             </Route>
                             <Route exact path="/EditTemplate/:id">
-                                <TemplateCreatorDisplay />
+                                <TemplateEditorDisplay />
                             </Route>
                             <Route path="/archives">
                                 <ArchiveDisplay />

@@ -108,6 +108,18 @@ export const reducer = (state = initialState, action) => {
             }
         }
 
+        case ActionType.UPDATE_TEMPLATE: {
+            let template = action.payload;
+            let tempTemplates = [...state.Templates];
+            let index = tempTemplates.indexOf(tempTemplates.find(temp => temp.id === template.id));
+            tempTemplates[index] = template;
+            console.log(tempTemplates);
+            return {
+                ...state,
+                Templates: [...tempTemplates]
+            }
+        }
+
         case ActionType.DELETE_TEMPLATE: {
             let templateId = action.payload;
             return {

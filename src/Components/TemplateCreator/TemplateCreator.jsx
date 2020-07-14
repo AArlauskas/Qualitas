@@ -86,7 +86,7 @@ class TemplateCreator extends Component {
                     </Button>
                 </div>
                 <p><b>Overall Points: {calculateSum(this.state.criteria)}</b></p>
-                <List style={{ color: "red" }}>
+                <List style={{ color: "red", borderColor: "red" }}>
                     <ListSubheader component="div" style={{ color: "red" }} >
                         Criticals
                     </ListSubheader>
@@ -143,7 +143,15 @@ class TemplateCreator extends Component {
                         }
                         else {
                             return (
-                                <ListItem button key={entry.id}>
+                                <ListItem button key={entry.id} onClick={() => {
+                                    let id = entry.id;
+                                    let tempTopics = [...this.state.topics];
+                                    tempTopics.find(critical => critical.id === id).editing = true;
+                                    this.setState({
+                                        editing: true,
+                                        topics: tempTopics
+                                    })
+                                }}>
                                     <ListItemText>{entry.name}</ListItemText>
                                     <ListItemSecondaryAction>
                                         <IconButton disabled={this.state.editing} edge="end" aria-label="Edit" onClick={() => {
@@ -239,7 +247,15 @@ class TemplateCreator extends Component {
                             return (
                                 <div key={entry.id}>
                                     <React.Fragment>
-                                        <ListItem button>
+                                        <ListItem button onClick={() => {
+                                            let id = entry.id;
+                                            let tempTopics = [...this.state.topics];
+                                            tempTopics.find(critical => critical.id === id).editing = true;
+                                            this.setState({
+                                                editing: true,
+                                                topics: tempTopics
+                                            })
+                                        }}>
                                             <ListItemIcon>
                                                 <IconButton onClick={() => {
                                                     let tempTopics = [...this.state.topics];
@@ -363,7 +379,15 @@ class TemplateCreator extends Component {
                                                 return (
 
                                                     <Collapse in={entry.open} key={criteria.id}>
-                                                        <ListItem key={criteria.id} button style={{ paddingLeft: 80 }}>
+                                                        <ListItem key={criteria.id} button style={{ paddingLeft: 80 }} onClick={() => {
+                                                            let id = criteria.id;
+                                                            let tempCriteria = [...this.state.criteria];
+                                                            tempCriteria.find(criteria => criteria.id === id).editing = true;
+                                                            this.setState({
+                                                                editing: true,
+                                                                criteria: tempCriteria
+                                                            })
+                                                        }}>
                                                             <ListItemText>{criteria.name}</ListItemText>
                                                             <ListItemText style={{ textAlign: "right", paddingRight: 200 }}>{criteria.points}</ListItemText>
                                                             <ListItemSecondaryAction>

@@ -54,7 +54,7 @@ class TemplateCreator extends Component {
     render() {
         return (
             <div style={{ marginLeft: 15, marginRight: 15 }}>
-                <TextField style={{ paddingBottom: 15, width: 250 }} defaultValue={this.state.templateName} label="Template name" onChange={e => this.setState({ templateName: e.target.value })} />
+                <TextField focused={true} style={{ paddingBottom: 15, width: 250 }} defaultValue={this.state.templateName} label="Template name" onChange={e => this.setState({ templateName: e.target.value })} />
                 <div className="ButtonBlock" >
                     <Button color="secondary" variant="contained" onClick={() => {
                         let tempTopics = [...this.state.topics]
@@ -104,7 +104,7 @@ class TemplateCreator extends Component {
                                     }
                                 }}>
                                     <ListItem button key={entry.id}>
-                                        <TextField autoFocus style={{ width: 500 }} defaultValue={entry.name} onChange={e => {
+                                        <TextField autoFocus focused={true} style={{ width: 500 }} defaultValue={entry.name} onChange={e => {
                                             let tempTopics = [...this.state.topics];
                                             tempTopics.find(critical => critical.id === entry.id).name = e.target.value;
                                             this.setState({ topics: tempTopics })
@@ -142,7 +142,15 @@ class TemplateCreator extends Component {
                         }
                         else {
                             return (
-                                <ListItem button key={entry.id}>
+                                <ListItem button key={entry.id} onClick={e => {
+                                    let id = entry.id;
+                                    let tempTopics = [...this.state.topics];
+                                    tempTopics.find(critical => critical.id === id).editing = true;
+                                    this.setState({
+                                        editing: true,
+                                        topics: tempTopics
+                                    });
+                                }}>
                                     <ListItemText>{entry.name}</ListItemText>
                                     <ListItemSecondaryAction>
                                         <IconButton disabled={this.state.editing} edge="end" aria-label="Edit" onClick={() => {
@@ -197,7 +205,7 @@ class TemplateCreator extends Component {
                                     }
                                 }}>
                                     <ListItem button >
-                                        <TextField autoFocus style={{ width: 500 }} defaultValue={entry.name} onChange={e => {
+                                        <TextField autoFocus focused={true} style={{ width: 500 }} defaultValue={entry.name} onChange={e => {
                                             let tempTopics = [...this.state.topics];
                                             tempTopics.find(critical => critical.id === entry.id).name = e.target.value;
                                             this.setState({ topics: tempTopics })
@@ -238,7 +246,15 @@ class TemplateCreator extends Component {
                             return (
                                 <div key={entry.id}>
                                     <React.Fragment>
-                                        <ListItem button>
+                                        <ListItem button onClick={() => {
+                                            let id = entry.id;
+                                            let tempTopics = [...this.state.topics];
+                                            tempTopics.find(critical => critical.id === id).editing = true;
+                                            this.setState({
+                                                editing: true,
+                                                topics: tempTopics
+                                            })
+                                        }}>
                                             <ListItemIcon>
                                                 <IconButton onClick={() => {
                                                     let tempTopics = [...this.state.topics];
@@ -313,7 +329,7 @@ class TemplateCreator extends Component {
                                                                 })
                                                             }
                                                         }}>
-                                                            <TextField autoFocus style={{ width: 500 }} defaultValue={criteria.name} onChange={e => {
+                                                            <TextField focused={true} autoFocus style={{ width: 500 }} defaultValue={criteria.name} onChange={e => {
                                                                 let tempCriteria = [...this.state.criteria];
                                                                 tempCriteria.find(critical => critical.id === criteria.id).name = e.target.value;
                                                                 this.setState({ criteria: tempCriteria })
@@ -362,7 +378,15 @@ class TemplateCreator extends Component {
                                                 return (
 
                                                     <Collapse in={entry.open} key={criteria.id}>
-                                                        <ListItem key={criteria.id} button style={{ paddingLeft: 80 }}>
+                                                        <ListItem key={criteria.id} button style={{ paddingLeft: 80 }} onClick={() => {
+                                                            let id = criteria.id;
+                                                            let tempCriteria = [...this.state.criteria];
+                                                            tempCriteria.find(criteria => criteria.id === id).editing = true;
+                                                            this.setState({
+                                                                editing: true,
+                                                                criteria: tempCriteria
+                                                            })
+                                                        }}>
                                                             <ListItemText>{criteria.name}</ListItemText>
                                                             <ListItemText style={{ textAlign: "right", paddingRight: 200 }}>{criteria.points}</ListItemText>
                                                             <ListItemSecondaryAction>

@@ -3,7 +3,8 @@ import { ActionType } from "../Constants/ActionType";
 const initialState = {
     Users: [],
     Templates: [],
-    Projects: []
+    Projects: [],
+    Teams: []
 };
 
 export const reducer = (state = initialState, action) => {
@@ -157,6 +158,13 @@ export const reducer = (state = initialState, action) => {
             return {
                 ...state,
                 Projects: [...state.Projects.filter(project => project.id !== id)]
+            }
+        }
+
+        case ActionType.LOAD_TEAM_LIST: {
+            return {
+                ...state,
+                Teams: action.payload
             }
         }
 

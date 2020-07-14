@@ -10,14 +10,14 @@ class ProjectDetailsDisplay extends Component {
     render() {
         let project = fetchProject();
         let ProjectUsers = fetchProjectUsers();
-        let OtherUsers = fetchOtherUsers();
+        let AllUsers = fetchAllUsers();
         return (
             <div>
-                {ProjectUsers === undefined || OtherUsers === undefined ? null :
+                {ProjectUsers === undefined || AllUsers === undefined ? null :
                     <ProjectDetails
                         project={project}
                         projectUsers={ProjectUsers}
-                        otherUsers={OtherUsers} />}
+                        allUsers={AllUsers} />}
             </div>
         );
     }
@@ -43,27 +43,24 @@ const fetchProjectUsers = () => {
         let user = users.find(temp => temp.id === dep.userId);
         ProjectUsers.push({
             id: user.id,
-            name: user.firstname,
-            surname: user.lastname
+            firstname: user.firstname,
+            lastname: user.lastname
         });
 
     });
     return ProjectUsers;
 }
 
-const fetchOtherUsers = () => {
-    let id = parseInt(window.location.href.split("/ProjectDetails/")[1]);
-    let userDependency = dependencies.filter(temp => temp.projectId !== id);
-    let OtherUsers = [];
-    userDependency.forEach(dep => {
-        let user = users.filter(temp => temp.role === "user").find(temp => temp.id === dep.userId);
-        OtherUsers.push({
+const fetchAllUsers = () => {
+    let AllUsers = [];
+    users.filter(user => user.role === "user").forEach(user => {
+        AllUsers.push({
             id: user.id,
-            name: user.firstname,
-            surname: user.lastname
+            firstname: user.firstname,
+            lastname: user.lastname
         });
     });
-    return OtherUsers;
+    return AllUsers;
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(ProjectDetailsDisplay);

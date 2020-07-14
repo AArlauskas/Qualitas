@@ -86,7 +86,7 @@ class TemplateCreator extends Component {
                     </Button>
                 </div>
                 <p><b>Overall Points: {calculateSum(this.state.criteria)}</b></p>
-                <List style={{ color: "red", borderColor: "red" }}>
+                <List style={{ color: "red" }}>
                     <ListSubheader component="div" style={{ color: "red" }} >
                         Criticals
                     </ListSubheader>

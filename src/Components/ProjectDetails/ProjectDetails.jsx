@@ -15,39 +15,23 @@ export default class ProjectDetails extends React.Component {
         this.handleChange = this.handleChange.bind(this);
     }
 
-    componentWillMount() {
+    UNSAFE_componentWillMount() {
         this.getMock();
     }
 
     getMock() {
         const dataSource = [];
         const targetKeys = [];
-        // this.props.projectUsers.forEach(user => {
-        //     dataSource.push({
-        //         key: user.id,
-        //         title: "user.firstname +  + user.lastname",
-        //     });
-        // });
-        // this.props.otherUsers.forEach(user => {
-        //     targetKeys.push({
-        //         key: user.id,
-        //         title: "user.firstname + + user.lastname",
-        //     });
-        // });
-        let length = 15;
-        for (let i = 0; i < (length < 1 ? 10 : length); i += 1) {
-            const data = {
-                key: i.toString(),
-                title: `content${i + 1}`,
-                description: `description of content${i + 1}`,
-                disabled: i % 3 < 1,
-                chosen: Math.random() * 2 > 1,
-            };
-            if (data.chosen) {
-                targetKeys.push(data.key);
-            }
-            dataSource.push(data);
-        }
+        this.props.allUsers.forEach(user => {
+            dataSource.push({
+                key: user.id,
+                title: user.firstname + " " + user.lastname,
+            });
+        });
+        this.props.projectUsers.forEach(user => {
+            targetKeys.push(user.id);
+        });
+        console.log(dataSource);
         this.setState({
             dataSource,
             selectedKeys: [],
@@ -74,6 +58,9 @@ export default class ProjectDetails extends React.Component {
                     <h2>Project's name: {this.props.project.name}</h2>
                 </div>
                 <div>
+                    <span>Unassigned users</span> <span style={{ float: "right" }}>Assigned users</span>
+                </div>
+                <div>
                     <Transfer
                         render={item => `${item.title}`}
                         dataSource={this.state.dataSource}
@@ -82,14 +69,14 @@ export default class ProjectDetails extends React.Component {
                         onSelectChange={this.handleSelectChange}
                         filterOption={this.filterOption}
                         onChange={this.handleChange}
-                        titles={['Assigned users', 'unassigned users']}
+                        titles={['Unassigned users', 'Assigned users']}
                         className={'test'}
                         rowHeight={32}
                         listStyle={{
                             width: '100%',
                             height: 800,
                         }}
-                        operations={['Add   ', 'Remove']}
+                        operations={['Remove from project', 'Assign/Add to project']}
                         showSearch
                         notFoundContent={'not found'}
                         searchPlaceholder={'Search'}

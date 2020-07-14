@@ -39,8 +39,15 @@ const tableIcons = {
 };
 
 class UserListTable extends Component {
-    state = {
-        columns: [
+    state = {}
+
+    componentDidMount() {
+        let names = this.props.teams;
+        let lookup = names.reduce(function (acc, cur, i) {
+            acc[cur.id] = cur.name;
+            return acc;
+        }, {});
+        let columns = [
             {
                 title: "Role", field: "role", lookup: {
                     "admin": "Admin",
@@ -52,9 +59,19 @@ class UserListTable extends Component {
             {
                 title: 'Surname', field: 'lastname',
             },
-            { title: "Team", field: "team", editable: "never" },
+            {
+                title: "Team", field: "teamId",
+                render: rowData => <p>{this.props.teams.find(team => rowData.teamId === team.id) === undefined ?
+                    null : this.props.teams.find(team => rowData.teamId === team.id).name}</p>,
+                lookup: lookup,
+                filtering: false
+            },
             // { title: "Projects", field: "projects", editable: "never", render: rowData => rowData.projects === [] ? "" : rowData.projects }
-        ],
+        ];
+
+        this.setState({
+            columns
+        })
     }
 
     render() {
@@ -88,6 +105,8 @@ class UserListTable extends Component {
                             new Promise((resolve) => {
                                 setTimeout(() => {
                                     resolve();
+                                    console.log(newData);
+                                    console.log(this.props.userData)
                                     this.props.addUser(newData)
                                 }, 600);
                             }),

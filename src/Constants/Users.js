@@ -16,7 +16,7 @@ const users = [
         firstname: "Aurimas",
         lastname: "Arlauskas",
         role: "user",
-        team: "InfomediaTheBest",
+        teamId: 1,
         projects: [], archived: false
     },
     {
@@ -26,7 +26,7 @@ const users = [
         firstname: "Greta",
         lastname: "Kazkokia",
         role: "user",
-        team: "We_Do_Love_Calls",
+        teamId: 2,
         projects: ["Vilniaus Vandenys", "MTTC", "TEST CASE SCENARIO"],
         archived: false
     },
@@ -56,6 +56,7 @@ const users = [
         pass: "archived_user",
         firstname: "Archived",
         lastname: "User type",
+        teamId: 3,
         role: "user",
         projects: ["MTTC"],
         archived: true

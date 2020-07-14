@@ -1,6 +1,7 @@
 import { ActionType } from "../Constants/ActionType";
 import projects from "../Constants/Projects";
 import templates from "../Constants/Templates";
+require('react-virtualized-transfer/lib/css')
 
 export const fetchProjects = () => (dispatch) => {
     let CompleteProjects = [];

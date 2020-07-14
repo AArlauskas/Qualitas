@@ -249,7 +249,7 @@ class TemplateCreator extends Component {
                                                 }}> {entry.open ? <ExpandLess /> : <ExpandMore />}</IconButton>
                                             </ListItemIcon>
                                             <ListItemText>{entry.name}</ListItemText>
-                                            <ListItemText style={{ textAlign: "right", paddingRight: 200 }}>{<p>Points: {calculateSum(this.state.criteria.filter(temp => temp.parentId === entry.id))}</p>}</ListItemText>
+                                            <ListItemText style={{ textAlign: "right", marginRight: 200 }}>{<p>Points: {calculateSum(this.state.criteria.filter(temp => temp.parentId === entry.id))}</p>}</ListItemText>
                                             <ListItemSecondaryAction>
                                                 <IconButton disabled={this.state.editing} edge="end" aria-label="Add" onClick={() => {
                                                     let newCriteria = {
@@ -302,7 +302,7 @@ class TemplateCreator extends Component {
                                             if (criteria.editing) {
                                                 return (
                                                     <ListItem button key={criteria.id}>
-                                                        <div style={{ marginLeft: 80 }} onKeyPress={e => {
+                                                        <div style={{ paddingLeft: 80 }} onKeyPress={e => {
                                                             if (e.key === "Enter") {
                                                                 let id = criteria.id;
                                                                 let tempCriteria = [...this.state.criteria];
@@ -320,7 +320,7 @@ class TemplateCreator extends Component {
                                                             }} />
                                                         </div>
                                                         <div>
-                                                            <TextField style={{ width: 40, paddingLeft: 1010 }} type="number" focused={true} defaultValue={criteria.points} onChange={(e) => {
+                                                            <TextField style={{ width: 40, marginLeft: 450 }} type="number" focused={true} defaultValue={criteria.points} onChange={(e) => {
                                                                 let tempCriteria = [...this.state.criteria];
                                                                 let points = e.target.value;
                                                                 if (points === "") {
@@ -362,9 +362,9 @@ class TemplateCreator extends Component {
                                                 return (
 
                                                     <Collapse in={entry.open} key={criteria.id}>
-                                                        <ListItem key={criteria.id} button style={{ marginLeft: 80 }}>
+                                                        <ListItem key={criteria.id} button style={{ paddingLeft: 80 }}>
                                                             <ListItemText>{criteria.name}</ListItemText>
-                                                            <ListItemText style={{ textAlign: "right", paddingRight: 310 }}>{criteria.points}</ListItemText>
+                                                            <ListItemText style={{ textAlign: "right", paddingRight: 200 }}>{criteria.points}</ListItemText>
                                                             <ListItemSecondaryAction>
                                                                 <IconButton edge="end" aria-label="edit" onClick={() => {
                                                                     let id = criteria.id;

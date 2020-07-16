@@ -5,12 +5,48 @@
     <!-- SSDL content -->
     <edmx:StorageModels>
     <Schema Namespace="QualitasModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="CriteriaTemplate">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="name" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="points" Type="int" Nullable="false" />
+          <Property Name="TopicId" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="EvaluationTemplate">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="name" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="isDeleted" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="sysdiagrams">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="principal_id" Type="int" Nullable="false" />
+          <Property Name="diagram_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="version" Type="int" />
+          <Property Name="definition" Type="varbinary(max)" />
+        </EntityType>
         <EntityType Name="Team">
           <Key>
             <PropertyRef Name="id" />
           </Key>
           <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="name" Type="nvarchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="TopicTemplate">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="name" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="isCritical" Type="bit" Nullable="false" />
+          <Property Name="TemplateId" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="User">
           <Key>
@@ -26,6 +62,30 @@
           <Property Name="IsDeleted" Type="bit" Nullable="false" />
           <Property Name="TeamId" Type="int" />
         </EntityType>
+        <Association Name="FK_CriteriaTemplate_TopicTemplate">
+          <End Role="TopicTemplate" Type="Self.TopicTemplate" Multiplicity="1" />
+          <End Role="CriteriaTemplate" Type="Self.CriteriaTemplate" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TopicTemplate">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="CriteriaTemplate">
+              <PropertyRef Name="TopicId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TopicTemplate_EvaluationTemplate">
+          <End Role="EvaluationTemplate" Type="Self.EvaluationTemplate" Multiplicity="1" />
+          <End Role="TopicTemplate" Type="Self.TopicTemplate" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="EvaluationTemplate">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="TopicTemplate">
+              <PropertyRef Name="TemplateId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_User_Team">
           <End Role="Team" Type="Self.Team" Multiplicity="0..1" />
           <End Role="User" Type="Self.User" Multiplicity="*" />
@@ -39,8 +99,20 @@
           </ReferentialConstraint>
         </Association>
         <EntityContainer Name="QualitasModelStoreContainer">
+          <EntitySet Name="CriteriaTemplate" EntityType="Self.CriteriaTemplate" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="EvaluationTemplate" EntityType="Self.EvaluationTemplate" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Team" EntityType="Self.Team" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TopicTemplate" EntityType="Self.TopicTemplate" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="User" EntityType="Self.User" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_CriteriaTemplate_TopicTemplate" Association="Self.FK_CriteriaTemplate_TopicTemplate">
+            <End Role="TopicTemplate" EntitySet="TopicTemplate" />
+            <End Role="CriteriaTemplate" EntitySet="CriteriaTemplate" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TopicTemplate_EvaluationTemplate" Association="Self.FK_TopicTemplate_EvaluationTemplate">
+            <End Role="EvaluationTemplate" EntitySet="EvaluationTemplate" />
+            <End Role="TopicTemplate" EntitySet="TopicTemplate" />
+          </AssociationSet>
           <AssociationSet Name="FK_User_Team" Association="Self.FK_User_Team">
             <End Role="Team" EntitySet="Team" />
             <End Role="User" EntitySet="User" />
@@ -92,7 +164,83 @@
             <End Role="Team" EntitySet="Teams" />
             <End Role="User" EntitySet="Users" />
           </AssociationSet>
+          <EntitySet Name="CriteriaTemplates" EntityType="QualitasModel.CriteriaTemplate" />
+          <EntitySet Name="EvaluationTemplates" EntityType="QualitasModel.EvaluationTemplate" />
+          <EntitySet Name="sysdiagrams" EntityType="QualitasModel.sysdiagram" />
+          <EntitySet Name="TopicTemplates" EntityType="QualitasModel.TopicTemplate" />
+          <AssociationSet Name="FK_CriteriaTemplate_TopicTemplate" Association="QualitasModel.FK_CriteriaTemplate_TopicTemplate">
+            <End Role="TopicTemplate" EntitySet="TopicTemplates" />
+            <End Role="CriteriaTemplate" EntitySet="CriteriaTemplates" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TopicTemplate_EvaluationTemplate" Association="QualitasModel.FK_TopicTemplate_EvaluationTemplate">
+            <End Role="EvaluationTemplate" EntitySet="EvaluationTemplates" />
+            <End Role="TopicTemplate" EntitySet="TopicTemplates" />
+          </AssociationSet>
         </EntityContainer>
+        <EntityType Name="CriteriaTemplate">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="points" Type="Int32" Nullable="false" />
+          <Property Name="TopicId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="TopicTemplate" Relationship="QualitasModel.FK_CriteriaTemplate_TopicTemplate" FromRole="CriteriaTemplate" ToRole="TopicTemplate" />
+        </EntityType>
+        <EntityType Name="EvaluationTemplate">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="TopicTemplates" Relationship="QualitasModel.FK_TopicTemplate_EvaluationTemplate" FromRole="EvaluationTemplate" ToRole="TopicTemplate" />
+          <Property Name="isDeleted" Type="Boolean" Nullable="false" />
+        </EntityType>
+        <EntityType Name="sysdiagram">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="principal_id" Type="Int32" Nullable="false" />
+          <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="version" Type="Int32" />
+          <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
+        </EntityType>
+        <EntityType Name="TopicTemplate">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="isCritical" Type="Boolean" Nullable="false" />
+          <Property Name="TemplateId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="CriteriaTemplates" Relationship="QualitasModel.FK_CriteriaTemplate_TopicTemplate" FromRole="TopicTemplate" ToRole="CriteriaTemplate" />
+          <NavigationProperty Name="EvaluationTemplate" Relationship="QualitasModel.FK_TopicTemplate_EvaluationTemplate" FromRole="TopicTemplate" ToRole="EvaluationTemplate" />
+        </EntityType>
+        <Association Name="FK_CriteriaTemplate_TopicTemplate">
+          <End Type="QualitasModel.TopicTemplate" Role="TopicTemplate" Multiplicity="1" />
+          <End Type="QualitasModel.CriteriaTemplate" Role="CriteriaTemplate" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TopicTemplate">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="CriteriaTemplate">
+              <PropertyRef Name="TopicId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TopicTemplate_EvaluationTemplate">
+          <End Type="QualitasModel.EvaluationTemplate" Role="EvaluationTemplate" Multiplicity="1" />
+          <End Type="QualitasModel.TopicTemplate" Role="TopicTemplate" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="EvaluationTemplate">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="TopicTemplate">
+              <PropertyRef Name="TemplateId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -119,6 +267,46 @@
                 <ScalarProperty Name="IsArchived" ColumnName="IsArchived" />
                 <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
                 <ScalarProperty Name="TeamId" ColumnName="TeamId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CriteriaTemplates">
+            <EntityTypeMapping TypeName="QualitasModel.CriteriaTemplate">
+              <MappingFragment StoreEntitySet="CriteriaTemplate">
+                <ScalarProperty Name="TopicId" ColumnName="TopicId" />
+                <ScalarProperty Name="points" ColumnName="points" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="EvaluationTemplates">
+            <EntityTypeMapping TypeName="QualitasModel.EvaluationTemplate">
+              <MappingFragment StoreEntitySet="EvaluationTemplate">
+                <ScalarProperty Name="isDeleted" ColumnName="isDeleted" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="sysdiagrams">
+            <EntityTypeMapping TypeName="QualitasModel.sysdiagram">
+              <MappingFragment StoreEntitySet="sysdiagrams">
+                <ScalarProperty Name="definition" ColumnName="definition" />
+                <ScalarProperty Name="version" ColumnName="version" />
+                <ScalarProperty Name="diagram_id" ColumnName="diagram_id" />
+                <ScalarProperty Name="principal_id" ColumnName="principal_id" />
+                <ScalarProperty Name="name" ColumnName="name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TopicTemplates">
+            <EntityTypeMapping TypeName="QualitasModel.TopicTemplate">
+              <MappingFragment StoreEntitySet="TopicTemplate">
+                <ScalarProperty Name="TemplateId" ColumnName="TemplateId" />
+                <ScalarProperty Name="isCritical" ColumnName="isCritical" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="id" ColumnName="id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

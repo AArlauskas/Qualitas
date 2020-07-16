@@ -45,6 +45,31 @@ namespace Qualitas_Backend.Controllers
             return Ok(list);
         }
 
+        [ResponseType(typeof(LoginResponse))]
+        [HttpGet]
+        [Route("api/Users/login")]
+
+        public async Task<IHttpActionResult> Login(LoginRequest request)
+        {
+            try
+            {
+                var user = await db.Users.FirstAsync(temp => temp.username == request.username && temp.password == request.password);
+                var response = new LoginResponse
+                {
+                    Id = user.id,
+                    firstname = user.firstname,
+                    lastname = user.lastname,
+                    role = user.RoleType,
+                    username = user.username
+                };
+                return Ok(response);
+            }
+            catch (Exception e)
+            {
+                return NotFound();
+            }
+        }
+
         [ResponseType(typeof(void))]
         [Route("api/Users/archive/{id}")]
         public async Task<IHttpActionResult> ArchiveUser([FromUri] int id)

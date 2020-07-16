@@ -1,11 +1,47 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Schema Namespace="QualitasModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="CriteriaTemplate">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="name" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="points" Type="int" Nullable="false" />
+    <Property Name="TopicId" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="EvaluationTemplate">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="name" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="isDeleted" Type="bit" Nullable="false" />
+  </EntityType>
+  <EntityType Name="sysdiagrams">
+    <Key>
+      <PropertyRef Name="diagram_id" />
+    </Key>
+    <Property Name="name" Type="nvarchar" MaxLength="128" Nullable="false" />
+    <Property Name="principal_id" Type="int" Nullable="false" />
+    <Property Name="diagram_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="version" Type="int" />
+    <Property Name="definition" Type="varbinary(max)" />
+  </EntityType>
   <EntityType Name="Team">
     <Key>
       <PropertyRef Name="id" />
     </Key>
     <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="name" Type="nvarchar" MaxLength="50" Nullable="false" />
+  </EntityType>
+  <EntityType Name="TopicTemplate">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="name" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="isCritical" Type="bit" Nullable="false" />
+    <Property Name="TemplateId" Type="int" Nullable="false" />
   </EntityType>
   <EntityType Name="User">
     <Key>
@@ -21,6 +57,30 @@
     <Property Name="IsDeleted" Type="bit" Nullable="false" />
     <Property Name="TeamId" Type="int" />
   </EntityType>
+  <Association Name="FK_CriteriaTemplate_TopicTemplate">
+    <End Role="TopicTemplate" Type="Self.TopicTemplate" Multiplicity="1" />
+    <End Role="CriteriaTemplate" Type="Self.CriteriaTemplate" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="TopicTemplate">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="CriteriaTemplate">
+        <PropertyRef Name="TopicId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_TopicTemplate_EvaluationTemplate">
+    <End Role="EvaluationTemplate" Type="Self.EvaluationTemplate" Multiplicity="1" />
+    <End Role="TopicTemplate" Type="Self.TopicTemplate" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="EvaluationTemplate">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="TopicTemplate">
+        <PropertyRef Name="TemplateId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
   <Association Name="FK_User_Team">
     <End Role="Team" Type="Self.Team" Multiplicity="0..1" />
     <End Role="User" Type="Self.User" Multiplicity="*" />
@@ -34,8 +94,20 @@
     </ReferentialConstraint>
   </Association>
   <EntityContainer Name="QualitasModelStoreContainer">
+    <EntitySet Name="CriteriaTemplate" EntityType="Self.CriteriaTemplate" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="EvaluationTemplate" EntityType="Self.EvaluationTemplate" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Team" EntityType="Self.Team" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="TopicTemplate" EntityType="Self.TopicTemplate" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="User" EntityType="Self.User" Schema="dbo" store:Type="Tables" />
+    <AssociationSet Name="FK_CriteriaTemplate_TopicTemplate" Association="Self.FK_CriteriaTemplate_TopicTemplate">
+      <End Role="TopicTemplate" EntitySet="TopicTemplate" />
+      <End Role="CriteriaTemplate" EntitySet="CriteriaTemplate" />
+    </AssociationSet>
+    <AssociationSet Name="FK_TopicTemplate_EvaluationTemplate" Association="Self.FK_TopicTemplate_EvaluationTemplate">
+      <End Role="EvaluationTemplate" EntitySet="EvaluationTemplate" />
+      <End Role="TopicTemplate" EntitySet="TopicTemplate" />
+    </AssociationSet>
     <AssociationSet Name="FK_User_Team" Association="Self.FK_User_Team">
       <End Role="Team" EntitySet="Team" />
       <End Role="User" EntitySet="User" />

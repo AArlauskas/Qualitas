@@ -10,13 +10,13 @@ let Api = axios.create({
 
 
 //does not work YET
-export const Login = async () => {
-    return await Api.get("/Users/0")
+export const Login = async (data) => {
+    return await Api.get("/Users/login", data)
         .then((response) => {
             return response.data;
         })
         .catch((error) => {
-            throw Error("An error has occurred calling the api: " + error);
+            return "notFound";
         });
 };
 
@@ -149,3 +149,32 @@ export const RemoveFromTeam = async (id, data) => {
             throw Error("An error has occurred calling the api: " + error);
         });
 }
+
+export const FetchTemplatesList = async () => {
+    return await Api.get("/EvaluationTemplates/")
+        .then((response) => {
+            return response.data;
+        })
+        .catch((error) => {
+            throw Error("An error has occurred calling the api: " + error);
+        });
+};
+
+export const CreateTemplate = async (data) => {
+    return await Api.post("/EvaluationTemplates/full", data).then(response => {
+        return response.data;
+    })
+        .catch((error) => {
+            throw Error("An error has occured calling the api: " + error);
+        });
+}
+
+export const DeleteTemplate = async (id) => {
+    return await Api.delete("/EvaluationTemplates/" + id)
+        .then((response) => {
+            return response.data;
+        })
+        .catch((error) => {
+            throw Error("An error has occurred calling the api: " + error);
+        });
+};

@@ -27,5 +27,9 @@ namespace Qualitas_Backend.Models
     
         public virtual DbSet<Team> Teams { get; set; }
         public virtual DbSet<User> Users { get; set; }
+        public virtual DbSet<CriteriaTemplate> CriteriaTemplates { get; set; }
+        public virtual DbSet<EvaluationTemplate> EvaluationTemplates { get; set; }
+        public virtual DbSet<sysdiagram> sysdiagrams { get; set; }
+        public virtual DbSet<TopicTemplate> TopicTemplates { get; set; }
     }
 }

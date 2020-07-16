@@ -29,7 +29,7 @@ class LoginLayout extends Component {
                             <TextField
                                 label="password"
                                 required
-                                password
+                                password="true"
                                 error={this.state.showError !== ""}
                                 helperText={this.state.showError === "" ?
                                     null : this.state.showError === "wrong" ? "Field is wrong" : "Too short!"}

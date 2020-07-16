@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30011.22
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Qualitas_Backend", "Qualitas_Backend\Qualitas_Backend.csproj", "{9E08CAF2-6BF0-40C3-B344-458CDA10F4F1}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{9E08CAF2-6BF0-40C3-B344-458CDA10F4F1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9E08CAF2-6BF0-40C3-B344-458CDA10F4F1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9E08CAF2-6BF0-40C3-B344-458CDA10F4F1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9E08CAF2-6BF0-40C3-B344-458CDA10F4F1}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {6599D586-FC6A-41ED-850D-F53F430E1D9A}
+	EndGlobalSection
+EndGlobal

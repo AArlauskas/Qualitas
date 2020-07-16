@@ -106,6 +106,10 @@ class UserListTable extends Component {
                             new Promise((resolve) => {
                                 setTimeout(() => {
                                     resolve();
+                                    if (newData.firstname === undefined || newData.lastname === undefined ||
+                                        newData.role === undefined) {
+                                        return;
+                                    }
                                     let newUser = {
                                         id: this.props.userData.length,
                                         role: newData.role,
@@ -123,6 +127,10 @@ class UserListTable extends Component {
                             new Promise((resolve) => {
                                 setTimeout(() => {
                                     resolve();
+                                    if (newData.firstname === undefined || newData.lastname === undefined ||
+                                        newData.role === undefined) {
+                                        return;
+                                    }
                                     if (oldData) {
                                         this.props.updateUser(newData);
                                     }

@@ -31,7 +31,6 @@ export default class ProjectDetails extends React.Component {
         this.props.projectUsers.forEach(user => {
             targetKeys.push(user.id);
         });
-        console.log(dataSource);
         this.setState({
             dataSource,
             selectedKeys: [],

@@ -50,6 +50,7 @@ namespace Qualitas_Backend.Controllers
         public async Task<IHttpActionResult> ArchiveUser([FromUri] int id)
         {
             db.Users.Find(id).IsArchived = true;
+            db.Users.Find(id).TeamId = null;
             await db.SaveChangesAsync();
             return Ok(id);
         }

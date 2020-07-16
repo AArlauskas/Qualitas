@@ -11,6 +11,7 @@ using System.Web.Http;
 using System.Web.Http.Cors;
 using System.Web.Http.Description;
 using Qualitas_Backend.Models;
+using Qualitas_Backend.Responses;
 
 namespace Qualitas_Backend.Controllers
 {
@@ -25,6 +26,28 @@ namespace Qualitas_Backend.Controllers
             return db.Teams;
         }
 
+        [ResponseType(typeof(List<TeamListResponse>))]
+        [HttpGet]
+        [Route("api/Teams/list")]
+        public async Task<IHttpActionResult> GetTeamList()
+        {
+            var list = new List<TeamListResponse>();
+            await db.Teams.ForEachAsync(team =>
+            {
+                var entry = new TeamListResponse
+                {
+                    id = team.id,
+                    name = team.name,
+                    userCount = team.Users.Count
+                };
+
+                list.Add(entry);
+            });
+            return Ok(list);
+        }
+
+
+
         // GET: api/Teams/5
         [ResponseType(typeof(Team))]
         public async Task<IHttpActionResult> GetTeam(int id)
@@ -36,6 +59,46 @@ namespace Qualitas_Backend.Controllers
             }
 
             return Ok(team);
+        }
+
+        [HttpPut]
+        [Route("api/Teams/add/{id}")]
+        public async Task<IHttpActionResult> AddTeamMembers(int id, int[] add)
+        {
+            Team team = await db.Teams.FindAsync(id);
+            if (team == null)
+            {
+                return NotFound();
+            }
+
+            foreach(int value in add)
+            {
+                db.Users.Find(value).Team = team;
+            }
+
+            await db.SaveChangesAsync();
+
+            return Ok();
+        }
+
+        [HttpPut]
+        [Route("api/Teams/remove/{id}")]
+        public async Task<IHttpActionResult> RemoveTeamMembers(int id, int[] add)
+        {
+            Team team = await db.Teams.FindAsync(id);
+            if (team == null)
+            {
+                return NotFound();
+            }
+
+            foreach (int value in add)
+            {
+                db.Users.Find(value).TeamId = null;
+            }
+
+            await db.SaveChangesAsync();
+
+            return Ok();
         }
 
         // PUT: api/Teams/5
@@ -74,7 +137,7 @@ namespace Qualitas_Backend.Controllers
         }
 
         // POST: api/Teams
-        [ResponseType(typeof(Team))]
+        [ResponseType(typeof(TeamListResponse))]
         public async Task<IHttpActionResult> PostTeam(Team team)
         {
             if (!ModelState.IsValid)
@@ -99,8 +162,13 @@ namespace Qualitas_Backend.Controllers
                     throw;
                 }
             }
-
-            return CreatedAtRoute("DefaultApi", new { id = team.id }, team);
+            var response = new TeamListResponse()
+            {
+                id = team.id,
+                name = team.name,
+                userCount = 0
+            };
+            return Ok(response);
         }
 
         // DELETE: api/Teams/5

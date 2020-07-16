@@ -79,3 +79,73 @@ export const MarkUserDeleted = async (id) => {
             console.log(id);
         });
 };
+
+export const FetchTeamsList = async () => {
+    return await Api.get("/Teams/list")
+        .then((response) => {
+            return response.data;
+        })
+        .catch((error) => {
+            throw Error("An error has occurred calling the api: " + error);
+        });
+};
+
+export const CreateTeam = async (data) => {
+    return await Api.post("/Teams/", data)
+        .then((response) => {
+            return response.data;
+        })
+        .catch((error) => {
+            throw Error("An error has occurred calling the api: " + error);
+        });
+};
+
+export const UpdateTeam = async (data) => {
+    return await Api.put("/Teams/" + data.id, data)
+        .then((response) => {
+            return response.data;
+        })
+        .catch((error) => {
+            throw Error("An error has occurred calling the api: " + error);
+        });
+};
+
+export const DeleteTeam = async (id) => {
+    return await Api.delete("/Teams/" + id)
+        .then((response) => {
+            return response.data;
+        })
+        .catch((error) => {
+            throw Error("An error has occurred calling the api: " + error);
+        });
+};
+
+export const GetTeam = async (id) => {
+    return await Api.get("/Teams/" + id)
+        .then((response) => {
+            return response.data;
+        })
+        .catch((error) => {
+            throw Error("An error has occurred calling the api: " + error);
+        });
+};
+
+export const AddToTeam = async (id, data) => {
+    return await Api.put("/Teams/add/" + id, data)
+        .then((response) => {
+            return response.data;
+        })
+        .catch((error) => {
+            throw Error("An error has occurred calling the api: " + error);
+        });
+}
+
+export const RemoveFromTeam = async (id, data) => {
+    return await Api.put("/Teams/remove/" + id, data)
+        .then((response) => {
+            return response.data;
+        })
+        .catch((error) => {
+            throw Error("An error has occurred calling the api: " + error);
+        });
+}

@@ -11,6 +11,7 @@ import LoginDisplay from './Containers/LoginDisplay/LoginDisplay';
 import TemplateCreatorDisplay from "./Containers/TemplateCreatorDisplay/TemplateCreatorDisplay";
 import TemplateEditorDisplay from "./Containers/TemplateEditorDisplay/TemplateEditorDisplay";
 import ProjectDetailsDisplay from './Containers/ProjectDetailsDisplay/ProjectDetailsDisplay';
+import TeamMembersDisplay from './Components/TeamMembersDisplay/TeamMembersDisplay';
 
 class Routing extends Component {
     state = {}
@@ -33,6 +34,9 @@ class Routing extends Component {
                             </Route>
                             <Route path="/teams">
                                 <TeamsDisplay />
+                            </Route>
+                            <Route exact path="/teamMembers/:id">
+                                <TeamMembersDisplay />
                             </Route>
                             <Route path="/templates">
                                 <TemplatesDisplay />

@@ -170,6 +170,33 @@ export const reducer = (state = initialState, action) => {
             }
         }
 
+        case ActionType.CREATE_TEAM: {
+            return {
+                ...state,
+                Teams: [...state.Teams, action.payload]
+            }
+        }
+
+        case ActionType.UPDATE_TEAM: {
+            let tempTeams = [...state.Teams];
+            let updatedTeam = action.payload;
+            let index = tempTeams.indexOf(tempTeams.find(team => team.id === updatedTeam.id));
+            tempTeams[index] = updatedTeam;
+            return {
+                ...state,
+                Teams: [...tempTeams]
+            }
+
+        }
+
+        case ActionType.DELETE_TEAM: {
+            let teamId = action.payload;
+            return {
+                ...state,
+                Teams: state.Teams.filter(team => team.id !== teamId)
+            }
+        }
+
         default:
             return {
                 ...state

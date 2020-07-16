@@ -140,6 +140,7 @@
     <Compile Include="Requests\CreateUserRequest.cs" />
     <Compile Include="Requests\LoginRequest.cs" />
     <Compile Include="Responses\LoginResponse.cs" />
+    <Compile Include="Responses\TeamListResponse.cs" />
     <Compile Include="Responses\UserListResponse.cs" />
   </ItemGroup>
   <ItemGroup>

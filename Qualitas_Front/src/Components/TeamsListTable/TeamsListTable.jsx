@@ -15,22 +15,17 @@ import Remove from '@material-ui/icons/Remove';
 import SaveAlt from '@material-ui/icons/SaveAlt';
 import Search from '@material-ui/icons/Search';
 import ViewColumn from '@material-ui/icons/ViewColumn';
-import UnarchiveIcon from '@material-ui/icons/Unarchive';
+import GroupAddIcon from '@material-ui/icons/GroupAdd';
 
-class ArchivedUserListTable extends Component {
+class TeamsListTable extends Component {
     state = {
         columns: [
             {
-                title: "Role", field: "role", lookup: {
-                    "admin": "Admin",
-                    "user": "User",
-                    "client": "Client"
-                }
+                title: "name", field: "name"
             },
-            { title: 'Name', field: 'firstname' },
             {
-                title: 'Surname', field: 'lastname',
-            },
+                title: "Number of users", field: "userCount", type: "numeric", editable: "never"
+            }
         ]
     }
     render() {
@@ -55,45 +50,57 @@ class ArchivedUserListTable extends Component {
         };
         return (
             <div>
-                <div style={{ marginTop: 10, paddingLeft: 10, paddingRight: 10 }}>
-                    <MaterialTable
-                        options={{
-                            filtering: true,
-                            actionsColumnIndex: -1,
-                            pageSize: 10
-                        }}
-                        icons={tableIcons}
-                        title="Archived Accounts"
-                        columns={this.state.columns}
-                        data={this.props.archivedUserData.filter(user => user.isArchived === true)}
-                        actions={[{
-                            icon: () => <UnarchiveIcon />,
-                            tooltip: "Unarchive",
-                            onClick: (event, rowData) => {
-                                new Promise((resolve) => {
-                                    setTimeout(() => {
-                                        resolve();
-                                        this.props.unarchiveUser(rowData);
-                                    }, 600);
-                                })
-                            }
-                        }]}
-                        editable={{
-                            onRowDelete: (oldData) =>
-                                new Promise((resolve) => {
-                                    setTimeout(() => {
-                                        resolve();
-                                        this.setState((prevState) => {
-                                            this.props.deleteUser(oldData);
-                                        });
-                                    }, 600);
-                                })
-                        }}
-                    />
-                </div>
+                {console.log(this.props.teamsList)}
+                <MaterialTable
+                    columns={this.state.columns}
+                    data={this.props.teamsList}
+                    icons={tableIcons}
+                    title="Teams"
+                    options={{
+                        filtering: true,
+                        actionsColumnIndex: -1,
+                        pageSize: 10
+                    }}
+                    actions={[{
+                        icon: () => <GroupAddIcon />,
+                        tooltip: "Team members",
+                        onClick: (event, rowData) => {
+                            new Promise((resolve) => {
+                                setTimeout(() => {
+                                    resolve();
+                                    window.location.href = "/teamMembers/" + rowData.id
+                                }, 600);
+                            })
+                        }
+                    }]}
+                    editable={{
+                        onRowAdd: (newData) =>
+                            new Promise((resolve) => {
+                                setTimeout(() => {
+                                    resolve();
+                                    this.props.createTeam(newData);
+                                }, 600);
+                            }),
+                        onRowUpdate: (newData, oldData) =>
+                            new Promise((resolve) => {
+                                setTimeout(() => {
+                                    resolve();
+                                    if (oldData) {
+                                        this.props.updateTeam(newData);
+                                    }
+                                }, 600);
+                            }),
+                        onRowDelete: (oldData) =>
+                            new Promise((resolve) => {
+                                setTimeout(() => {
+                                    resolve();
+                                    this.props.deleteTeam(oldData.id);
+                                }, 600);
+                            })
+                    }} />
             </div>
         );
     }
 }
 
-export default ArchivedUserListTable;
+export default TeamsListTable;

@@ -1,6 +1,5 @@
 import { ActionType } from "../Constants/ActionType";
-import teams from "../Constants/Teams";
-import { FetchUserList, ArchiveUser, CreateUser, UpdateUser } from "../API/API";
+import { FetchUserList, ArchiveUser, CreateUser, UpdateUser, FetchTeamsList } from "../API/API";
 
 export const fetchUserData = () => async (dispatch) => {
     let userList = await FetchUserList()
@@ -10,10 +9,11 @@ export const fetchUserData = () => async (dispatch) => {
     });
 };
 
-export const fetchTeamNames = () => (dispatch) => {
+export const fetchTeamNames = () => async (dispatch) => {
+    let teamsList = await FetchTeamsList()
     dispatch({
         type: ActionType.LOAD_TEAM_LIST,
-        payload: teams
+        payload: teamsList
     });
 };
 

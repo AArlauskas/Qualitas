@@ -29,6 +29,16 @@ namespace Qualitas_Backend.Controllers
             var list = new List<UserListResponse>();
             await db.Users.Where(user => !user.IsDeleted).ForEachAsync(user =>
             {
+                var projects = new List<ProjectsListItem>();
+                foreach(var project in user.Projects)
+                {
+                    var item = new ProjectsListItem()
+                    {
+                        id = project.id,
+                        name = project.name
+                    };
+                    projects.Add(item);
+                }
                 var entry = new UserListResponse
                 {
                     id = user.id,
@@ -37,7 +47,8 @@ namespace Qualitas_Backend.Controllers
                     lastname = user.lastname,
                     isArchived = user.IsArchived,
                     role = user.RoleType,
-                    teamId = user.TeamId
+                    teamId = user.TeamId,
+                    projects = projects
                 };
 
                 list.Add(entry);
@@ -111,6 +122,43 @@ namespace Qualitas_Backend.Controllers
             return Ok(user);
         }
 
+        [ResponseType(typeof(UserListResponse))]
+        [HttpGet]
+        [Route("api/Users/projects/{id}")]
+        public async Task<IHttpActionResult> GetUserProjects(int id)
+        {
+            User user = await db.Users.FindAsync(id);
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            var projects = new List<ProjectsListItem>();
+            foreach (var project in user.Projects)
+            {
+                var item = new ProjectsListItem()
+                {
+                    id = project.id,
+                    name = project.name
+                };
+                projects.Add(item);
+            }
+
+            var entry = new UserListResponse
+            {
+                id = user.id,
+                name = user.username,
+                firstname = user.firstname,
+                lastname = user.lastname,
+                isArchived = user.IsArchived,
+                role = user.RoleType,
+                teamId = user.TeamId,
+                projects = projects
+            };
+
+            return Ok(entry);
+        }
+
         // PUT: api/Users/5
         [ResponseType(typeof(void))]
         public async Task<IHttpActionResult> PutUser(int id, CreateUserRequest request)
@@ -138,6 +186,48 @@ namespace Qualitas_Backend.Controllers
             }
 
             return StatusCode(HttpStatusCode.NoContent);
+        }
+
+        [HttpPut]
+        [Route("api/Users/addProject/{id}")]
+        public async Task<IHttpActionResult> AddProjectsToUser(int id, int[] add)
+        {
+            User user = await db.Users.FindAsync(id);
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            foreach (int value in add)
+            {
+                var temp = db.Projects.Find(value);
+                user.Projects.Add(temp);
+            }
+
+            await db.SaveChangesAsync();
+
+            return Ok();
+        }
+
+        [HttpPut]
+        [Route("api/Users/removeProject/{id}")]
+        public async Task<IHttpActionResult> RemoveProjectsFromUser(int id, int[] remove)
+        {
+            User user = await db.Users.FindAsync(id);
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            foreach (int value in remove)
+            {
+                var temp = db.Projects.Find(value);
+                user.Projects.Remove(temp);
+            }
+
+            await db.SaveChangesAsync();
+
+            return Ok();
         }
 
         // POST: api/Users

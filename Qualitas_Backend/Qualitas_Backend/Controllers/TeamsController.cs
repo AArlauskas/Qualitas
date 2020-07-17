@@ -32,13 +32,13 @@ namespace Qualitas_Backend.Controllers
         public async Task<IHttpActionResult> GetTeamList()
         {
             var list = new List<TeamListResponse>();
-            await db.Teams.ForEachAsync(team =>
+            await db.Teams.Include(team => team.Users).ForEachAsync(team =>
             {
                 var entry = new TeamListResponse
                 {
                     id = team.id,
                     name = team.name,
-                    userCount = team.Users.Count
+                    userCount = team.Users.Where(user => !user.IsDeleted && !user.IsArchived).Count()
                 };
 
                 list.Add(entry);

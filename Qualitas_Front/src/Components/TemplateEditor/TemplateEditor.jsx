@@ -17,16 +17,17 @@ let index = 4;
 
 class TemplateCreator extends Component {
     UNSAFE_componentWillMount() {
+        console.log(this.props.template)
         this.setState({
             id: this.props.template.id,
             editing: false,
-            templateName: this.props.template.name,
+            templateName: this.props.template.TemplateName,
             topics: [],
             criteria: []
         });
         let criteria = [];
         let topics = [];
-        this.props.template.topics.forEach(temp => {
+        this.props.template.Topics.forEach(temp => {
             topics.push({
                 id: temp.id,
                 name: temp.name,
@@ -35,7 +36,7 @@ class TemplateCreator extends Component {
                 open: true
             });
         });
-        this.props.template.criteria.forEach(temp => {
+        this.props.template.Criteria.forEach(temp => {
             criteria.push({
                 id: temp.id,
                 name: temp.name,
@@ -441,8 +442,8 @@ class TemplateCreator extends Component {
                             name: criteria.name,
                             parentId: criteria.parentId
                         }));
-                        this.props.editTemplate(outputData);
-                        window.location.href = "/templates"
+                        this.props.editTemplate(outputData.id, outputData);
+                        setTimeout(() => window.location.href = "/templates", 3000);
                     }}>Save</Button>
                 </div>
             </div>

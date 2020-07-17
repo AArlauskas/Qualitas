@@ -16,6 +16,7 @@ import SaveAlt from '@material-ui/icons/SaveAlt';
 import Search from '@material-ui/icons/Search';
 import ViewColumn from '@material-ui/icons/ViewColumn';
 import ArchiveIcon from '@material-ui/icons/Archive';
+import WorkIcon from '@material-ui/icons/Work';
 
 const tableIcons = {
     Add: forwardRef((props, ref) => <AddBox {...props} ref={ref} />),
@@ -88,18 +89,31 @@ class UserListTable extends Component {
                     title="Accounts"
                     columns={this.state.columns}
                     data={this.props.userData.filter(user => user.isArchived === false)}
-                    actions={[{
-                        icon: () => <ArchiveIcon />,
-                        tooltip: "Archive",
-                        onClick: (event, rowData) => {
-                            new Promise((resolve) => {
-                                setTimeout(() => {
-                                    resolve();
-                                    this.props.archiveUser(rowData);
-                                }, 600);
-                            })
-                        }
-                    }]}
+                    actions={[
+                        {
+                            icon: () => <WorkIcon />,
+                            tooltip: "Projects",
+                            onClick: (event, rowData) => {
+                                new Promise((resolve) => {
+                                    setTimeout(() => {
+                                        resolve();
+                                        window.location.href = "/UsersProjects/" + rowData.id
+                                    }, 600);
+                                })
+                            },
+                        },
+                        {
+                            icon: () => <ArchiveIcon />,
+                            tooltip: "Archive",
+                            onClick: (event, rowData) => {
+                                new Promise((resolve) => {
+                                    setTimeout(() => {
+                                        resolve();
+                                        this.props.archiveUser(rowData);
+                                    }, 600);
+                                })
+                            }
+                        }]}
                     editable={{
                         isEditable: rowData => rowData.role === "user",
                         onRowAdd: (newData) =>

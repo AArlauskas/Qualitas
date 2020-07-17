@@ -12,6 +12,8 @@ import TemplateCreatorDisplay from "./Containers/TemplateCreatorDisplay/Template
 import TemplateEditorDisplay from "./Containers/TemplateEditorDisplay/TemplateEditorDisplay";
 import ProjectDetailsDisplay from './Containers/ProjectDetailsDisplay/ProjectDetailsDisplay';
 import TeamMembersDisplay from './Components/TeamMembersDisplay/TeamMembersDisplay';
+import UsersProjectsDisplay from './Containers/UsersProjectsDisplay/UsersProjectsDisplay';
+import TemplateProjectsDisplay from './Containers/TemplateProjectsDisplay/TemplateProjectsDisplay';
 
 class Routing extends Component {
     state = {}
@@ -44,6 +46,9 @@ class Routing extends Component {
                             <Route path="/newTemplate">
                                 <TemplateCreatorDisplay />
                             </Route>
+                            <Route exact path="/TemplateProjects/:id">
+                                <TemplateProjectsDisplay />
+                            </Route>
                             <Route exact path="/EditTemplate/:id">
                                 <TemplateEditorDisplay />
                             </Route>
@@ -52,6 +57,9 @@ class Routing extends Component {
                             </Route>
                             <Route path="/users">
                                 <UserListDisplay />
+                            </Route>
+                            <Route exact path="/UsersProjects/:id">
+                                <UsersProjectsDisplay />
                             </Route>
                             <Route>
                                 <Redirect to="/projects" />

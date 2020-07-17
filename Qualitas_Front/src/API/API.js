@@ -30,6 +30,26 @@ export const FetchUserList = async () => {
         });
 };
 
+export const AddToProjectUser = async (id, data) => {
+    return await Api.put("/Projects/adduser/" + id, data)
+        .then((response) => {
+            return response.data;
+        })
+        .catch((error) => {
+            throw Error("An error has occurred calling the api: " + error);
+        });
+}
+
+export const RemoveFromProjectUser = async (id, data) => {
+    return await Api.put("/Projects/removeuser/" + id, data)
+        .then((response) => {
+            return response.data;
+        })
+        .catch((error) => {
+            throw Error("An error has occurred calling the api: " + error);
+        });
+}
+
 export const ArchiveUser = async (id) => {
     return await Api.post("/Users/archive/" + id)
         .then((response) => {
@@ -62,6 +82,36 @@ export const CreateUser = async (data) => {
 
 export const UpdateUser = async (data) => {
     return await Api.put("/Users/" + data.id, data)
+        .then((response) => {
+            return response.data;
+        })
+        .catch((error) => {
+            throw Error("An error has occurred calling the api: " + error);
+        });
+};
+
+export const AddProjectToUser = async (id, data) => {
+    return await Api.put("/Users/addProject/" + id, data)
+        .then((response) => {
+            return response.data;
+        })
+        .catch((error) => {
+            throw Error("An error has occurred calling the api: " + error);
+        });
+}
+
+export const RemoveProjectFromUser = async (id, data) => {
+    return await Api.put("/Users/removeProject/" + id, data)
+        .then((response) => {
+            return response.data;
+        })
+        .catch((error) => {
+            throw Error("An error has occurred calling the api: " + error);
+        });
+}
+
+export const FetchUserForProjects = async (id) => {
+    return await Api.get("/Users/projects/" + id,)
         .then((response) => {
             return response.data;
         })
@@ -160,6 +210,46 @@ export const FetchTemplatesList = async () => {
         });
 };
 
+export const FetchTemplateProjects = async (id) => {
+    return await Api.get("/EvaluationTemplates/projects/" + id)
+        .then((response) => {
+            return response.data;
+        })
+        .catch((error) => {
+            throw Error("An error has occurred calling the api: " + error);
+        });
+};
+
+export const AddToTemplateProject = async (id, data) => {
+    return await Api.put("/EvaluationTemplates/addProject/" + id, data)
+        .then((response) => {
+            return response.data;
+        })
+        .catch((error) => {
+            throw Error("An error has occurred calling the api: " + error);
+        });
+}
+
+export const RemoveFromTemplateProject = async (id, data) => {
+    return await Api.put("/EvaluationTemplates/removeProject/" + id, data)
+        .then((response) => {
+            return response.data;
+        })
+        .catch((error) => {
+            throw Error("An error has occurred calling the api: " + error);
+        });
+}
+
+export const FetchTemplateToEdit = async (id) => {
+    return await Api.get("/EvaluationTemplates/" + id)
+        .then((response) => {
+            return response.data;
+        })
+        .catch((error) => {
+            throw Error("An error has occurred calling the api: " + error);
+        });
+};
+
 export const CreateTemplate = async (data) => {
     return await Api.post("/EvaluationTemplates/full", data).then(response => {
         return response.data;
@@ -169,8 +259,17 @@ export const CreateTemplate = async (data) => {
         });
 }
 
+export const EditTemplate = async (id, data) => {
+    return await Api.put("/EvaluationTemplates/full" + id, data).then(response => {
+        return response.data;
+    })
+        .catch((error) => {
+            throw Error("An error has occured calling the api: " + error);
+        });
+}
+
 export const DeleteTemplate = async (id) => {
-    return await Api.delete("/EvaluationTemplates/" + id)
+    return await Api.post("/EvaluationTemplates/markdeleted/" + id)
         .then((response) => {
             return response.data;
         })
@@ -178,3 +277,53 @@ export const DeleteTemplate = async (id) => {
             throw Error("An error has occurred calling the api: " + error);
         });
 };
+
+export const FetchProjectsList = async () => {
+    return await Api.get("/Projects/list")
+        .then((response) => {
+            return response.data;
+        })
+        .catch((error) => {
+            throw Error("An error has occurred calling the api: " + error);
+        });
+};
+
+export const CreateProject = async (data) => {
+    return await Api.post("/Projects/", data).then(response => {
+        return response.data;
+    })
+        .catch((error) => {
+            throw Error("An error has occured calling the api: " + error);
+        });
+}
+
+export const UpadateProjectName = async (id, data) => {
+    return await Api.post("/Projects/name/" + id, data)
+        .then((response) => {
+            return response.data;
+        })
+        .catch((error) => {
+            throw Error("An error has occurred calling the api: " + error);
+        });
+};
+
+export const DeleteProject = async (id) => {
+    return await Api.post("/Projects/markdeleted/" + id)
+        .then((response) => {
+            return response.data;
+        })
+        .catch((error) => {
+            throw Error("An error has occurred calling the api: " + error);
+        });
+};
+
+export const FetchProjectToEdit = async (id) => {
+    return await Api.get("/Projects/" + id)
+        .then((response) => {
+            return response.data;
+        })
+        .catch((error) => {
+            throw Error("An error has occurred calling the api: " + error);
+        });
+};
+

@@ -12,6 +12,8 @@ using System.Web.Http.Cors;
 using System.Web.Http.Description;
 using Qualitas_Backend.Models;
 using Qualitas_Backend.Requests;
+using Qualitas_Backend.Requests.SubClassesForRequests;
+using Qualitas_Backend.Responses;
 
 namespace Qualitas_Backend.Controllers
 {
@@ -23,11 +25,11 @@ namespace Qualitas_Backend.Controllers
         // GET: api/EvaluationTemplates
         public IQueryable<EvaluationTemplate> GetEvaluationTemplates()
         {
-            return db.EvaluationTemplates.Include(template => template.TopicTemplates);
+            return db.EvaluationTemplates.Include(template => template.TopicTemplates).Where(template => !template.isDeleted);
         }
 
         // GET: api/EvaluationTemplates/5
-        [ResponseType(typeof(EvaluationTemplate))]
+        [ResponseType(typeof(GetFullEvaluationTemplateResponse))]
         public async Task<IHttpActionResult> GetEvaluationTemplate(int id)
         {
             EvaluationTemplate evaluationTemplate = await db.EvaluationTemplates.FindAsync(id);
@@ -36,25 +38,73 @@ namespace Qualitas_Backend.Controllers
                 return NotFound();
             }
 
-            return Ok(evaluationTemplate);
+            var response = new GetFullEvaluationTemplateResponse();
+            response.id = evaluationTemplate.id;
+            response.TemplateName = evaluationTemplate.name;
+            response.Criteria = new List<Criteria>();
+            response.Topics = new List<Topic>();
+            foreach(var topic in evaluationTemplate.TopicTemplates)
+            {
+                var tempTopic = new Topic()
+                {
+                    id = topic.id,
+                    name = topic.name,
+                    critical = topic.isCritical,
+                    parentId = topic.TemplateId
+                };
+                response.Topics.Add(tempTopic);
+                foreach(var criteria in topic.CriteriaTemplates)
+                {
+                    var tempCriteria = new Criteria()
+                    {
+                        id = criteria.id,
+                        name = criteria.name,
+                        points = criteria.points,
+                        parentId = tempTopic.id,
+                    };
+                    response.Criteria.Add(tempCriteria);
+                }
+            }
+
+            return Ok(response);
+        }
+
+        [ResponseType(typeof(UserListResponse))]
+        [HttpGet]
+        [Route("api/EvaluationTemplates/projects/{id}")]
+        public async Task<IHttpActionResult> GetTemplateProjects(int id)
+        {
+            EvaluationTemplate template = await db.EvaluationTemplates.FindAsync(id);
+            if (template == null)
+            {
+                return NotFound();
+            }
+
+            var projects = new List<ProjectsListItem>();
+            foreach (var project in template.Projects)
+            {
+                var item = new ProjectsListItem()
+                {
+                    id = project.id,
+                    name = project.name
+                };
+                projects.Add(item);
+            }
+
+            var entry = new TemplateProjectsResponse
+            {
+                id = template.id,
+                name = template.name,
+                projects = projects
+            };
+
+            return Ok(entry);
         }
 
         // PUT: api/EvaluationTemplates/5
         [ResponseType(typeof(void))]
-        public async Task<IHttpActionResult> PutEvaluationTemplate(int id, EvaluationTemplate evaluationTemplate)
+        public async Task<IHttpActionResult> PutEvaluationTemplate(int id, CreateFullEvaluationTemplateRequest request)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            if (id != evaluationTemplate.id)
-            {
-                return BadRequest();
-            }
-
-            db.Entry(evaluationTemplate).State = EntityState.Modified;
-
             try
             {
                 await db.SaveChangesAsync();
@@ -74,6 +124,48 @@ namespace Qualitas_Backend.Controllers
             return StatusCode(HttpStatusCode.NoContent);
         }
 
+        [HttpPut]
+        [Route("api/EvaluationTemplates/addProject/{id}")]
+        public async Task<IHttpActionResult> AddProjectsToUser(int id, int[] add)
+        {
+            EvaluationTemplate template = await db.EvaluationTemplates.FindAsync(id);
+            if (template == null)
+            {
+                return NotFound();
+            }
+
+            foreach (int value in add)
+            {
+                var temp = db.Projects.Find(value);
+                template.Projects.Add(temp);
+            }
+
+            await db.SaveChangesAsync();
+
+            return Ok();
+        }
+
+        [HttpPut]
+        [Route("api/EvaluationTemplates/removeProject/{id}")]
+        public async Task<IHttpActionResult> RemoveProjectsFromUser(int id, int[] remove)
+        {
+            EvaluationTemplate template = await db.EvaluationTemplates.FindAsync(id);
+            if (template == null)
+            {
+                return NotFound();
+            }
+
+            foreach (int value in remove)
+            {
+                var temp = db.Projects.Find(value);
+                template.Projects.Remove(temp);
+            }
+
+            await db.SaveChangesAsync();
+
+            return Ok();
+        }
+
         [ResponseType(typeof(void))]
         [HttpPost]
         [Route("api/EvaluationTemplates/full")]
@@ -83,37 +175,30 @@ namespace Qualitas_Backend.Controllers
             {
                 name = request.TemplateName,
             };
+
             var listOfTopics = new List<TopicTemplate>();
-            foreach (var topic in request.Topics)
+            foreach(var topic in request.Topics)
             {
-                
                 var tempTopic = new TopicTemplate()
                 {
                     name = topic.name,
                     isCritical = topic.critical,
-                    TemplateId = template.id
+                    TemplateId = template.id,
                 };
                 var listOfCriteria = new List<CriteriaTemplate>();
-                foreach (var criteria in request.Criteria)
+                foreach(var criteria in request.Criteria.Where(temp => temp.parentId == topic.id))
                 {
-                    if(criteria.parentId == topic.id)
+                    var tempCriteria = new CriteriaTemplate()
                     {
-                        var tempCriteria = new CriteriaTemplate()
-                        {
-                            name = criteria.name,
-                            points = criteria.points,
-                            TopicId = tempTopic.id
-                        };
-                        listOfCriteria.Add(tempCriteria);
-                        db.CriteriaTemplates.Add(tempCriteria);
-                    }
-                    
+                        name = criteria.name,
+                        points = criteria.points
+                    };
+                    listOfCriteria.Add(tempCriteria);
                 }
-
-                    listOfTopics.Add(tempTopic);
-                db.TopicTemplates.Add(tempTopic);
+                tempTopic.CriteriaTemplates = listOfCriteria;
+                listOfTopics.Add(tempTopic);
             }
-
+            template.TopicTemplates = listOfTopics;
             db.EvaluationTemplates.Add(template);
             await db.SaveChangesAsync();
             return Ok(1);
@@ -159,6 +244,15 @@ namespace Qualitas_Backend.Controllers
                 db.Dispose();
             }
             base.Dispose(disposing);
+        }
+
+        [ResponseType(typeof(void))]
+        [Route("api/EvaluationTemplates/markdeleted/{id}")]
+        public async Task<IHttpActionResult> MarkDeleted([FromUri] int id)
+        {
+            db.EvaluationTemplates.Find(id).isDeleted = true;
+            await db.SaveChangesAsync();
+            return Ok(id);
         }
 
         private bool EvaluationTemplateExists(int id)

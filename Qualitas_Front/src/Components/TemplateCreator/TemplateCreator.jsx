@@ -444,7 +444,7 @@ class TemplateCreator extends Component {
                         }));
                         console.log(outputData);
                         this.props.createTemplate(outputData);
-                        //window.location.href = "/templates"
+                        setTimeout(() => window.location.href = "/templates", 3000);
                     }}>Save</Button>
                 </div>
             </div>

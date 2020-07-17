@@ -7,6 +7,7 @@ namespace Qualitas_Backend.Requests.SubClassesForRequests
 {
     public class Criteria
     {
+        public int? id { get; set; }
         public string name { get; set; }
         public int points { get; set; }
 

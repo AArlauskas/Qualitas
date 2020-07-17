@@ -22,6 +22,30 @@
           <Property Name="name" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="isDeleted" Type="bit" Nullable="false" />
         </EntityType>
+        <EntityType Name="Project">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="name" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="isDeleted" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="ProjectsTeams">
+          <Key>
+            <PropertyRef Name="TeamId" />
+            <PropertyRef Name="ProjectId" />
+          </Key>
+          <Property Name="TeamId" Type="int" Nullable="false" />
+          <Property Name="ProjectId" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="ProjectsUsers">
+          <Key>
+            <PropertyRef Name="UserId" />
+            <PropertyRef Name="ProjectId" />
+          </Key>
+          <Property Name="UserId" Type="int" Nullable="false" />
+          <Property Name="ProjectId" Type="int" Nullable="false" />
+        </EntityType>
         <EntityType Name="sysdiagrams">
           <Key>
             <PropertyRef Name="diagram_id" />
@@ -38,6 +62,14 @@
           </Key>
           <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="name" Type="nvarchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="TemplatesProjects">
+          <Key>
+            <PropertyRef Name="TemplateId" />
+            <PropertyRef Name="ProjectId" />
+          </Key>
+          <Property Name="TemplateId" Type="int" Nullable="false" />
+          <Property Name="ProjectId" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="TopicTemplate">
           <Key>
@@ -74,6 +106,78 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_ProjectsTeams_Project">
+          <End Role="Project" Type="Self.Project" Multiplicity="1" />
+          <End Role="ProjectsTeams" Type="Self.ProjectsTeams" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Project">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="ProjectsTeams">
+              <PropertyRef Name="ProjectId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ProjectsTeams_Team">
+          <End Role="Team" Type="Self.Team" Multiplicity="1" />
+          <End Role="ProjectsTeams" Type="Self.ProjectsTeams" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Team">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="ProjectsTeams">
+              <PropertyRef Name="TeamId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ProjectsUsers_Project">
+          <End Role="Project" Type="Self.Project" Multiplicity="1" />
+          <End Role="ProjectsUsers" Type="Self.ProjectsUsers" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Project">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="ProjectsUsers">
+              <PropertyRef Name="ProjectId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ProjectsUsers_User">
+          <End Role="User" Type="Self.User" Multiplicity="1" />
+          <End Role="ProjectsUsers" Type="Self.ProjectsUsers" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="ProjectsUsers">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TemplatesProjects_EvaluationTemplate">
+          <End Role="EvaluationTemplate" Type="Self.EvaluationTemplate" Multiplicity="1" />
+          <End Role="TemplatesProjects" Type="Self.TemplatesProjects" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="EvaluationTemplate">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="TemplatesProjects">
+              <PropertyRef Name="ProjectId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TemplatesProjects_Project">
+          <End Role="Project" Type="Self.Project" Multiplicity="1" />
+          <End Role="TemplatesProjects" Type="Self.TemplatesProjects" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Project">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="TemplatesProjects">
+              <PropertyRef Name="TemplateId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_TopicTemplate_EvaluationTemplate">
           <End Role="EvaluationTemplate" Type="Self.EvaluationTemplate" Multiplicity="1" />
           <End Role="TopicTemplate" Type="Self.TopicTemplate" Multiplicity="*" />
@@ -101,13 +205,41 @@
         <EntityContainer Name="QualitasModelStoreContainer">
           <EntitySet Name="CriteriaTemplate" EntityType="Self.CriteriaTemplate" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="EvaluationTemplate" EntityType="Self.EvaluationTemplate" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Project" EntityType="Self.Project" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ProjectsTeams" EntityType="Self.ProjectsTeams" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ProjectsUsers" EntityType="Self.ProjectsUsers" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Team" EntityType="Self.Team" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TemplatesProjects" EntityType="Self.TemplatesProjects" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="TopicTemplate" EntityType="Self.TopicTemplate" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="User" EntityType="Self.User" Schema="dbo" store:Type="Tables" />
           <AssociationSet Name="FK_CriteriaTemplate_TopicTemplate" Association="Self.FK_CriteriaTemplate_TopicTemplate">
             <End Role="TopicTemplate" EntitySet="TopicTemplate" />
             <End Role="CriteriaTemplate" EntitySet="CriteriaTemplate" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ProjectsTeams_Project" Association="Self.FK_ProjectsTeams_Project">
+            <End Role="Project" EntitySet="Project" />
+            <End Role="ProjectsTeams" EntitySet="ProjectsTeams" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ProjectsTeams_Team" Association="Self.FK_ProjectsTeams_Team">
+            <End Role="Team" EntitySet="Team" />
+            <End Role="ProjectsTeams" EntitySet="ProjectsTeams" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ProjectsUsers_Project" Association="Self.FK_ProjectsUsers_Project">
+            <End Role="Project" EntitySet="Project" />
+            <End Role="ProjectsUsers" EntitySet="ProjectsUsers" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ProjectsUsers_User" Association="Self.FK_ProjectsUsers_User">
+            <End Role="User" EntitySet="User" />
+            <End Role="ProjectsUsers" EntitySet="ProjectsUsers" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TemplatesProjects_EvaluationTemplate" Association="Self.FK_TemplatesProjects_EvaluationTemplate">
+            <End Role="EvaluationTemplate" EntitySet="EvaluationTemplate" />
+            <End Role="TemplatesProjects" EntitySet="TemplatesProjects" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TemplatesProjects_Project" Association="Self.FK_TemplatesProjects_Project">
+            <End Role="Project" EntitySet="Project" />
+            <End Role="TemplatesProjects" EntitySet="TemplatesProjects" />
           </AssociationSet>
           <AssociationSet Name="FK_TopicTemplate_EvaluationTemplate" Association="Self.FK_TopicTemplate_EvaluationTemplate">
             <End Role="EvaluationTemplate" EntitySet="EvaluationTemplate" />
@@ -129,6 +261,7 @@
           <Property Name="id" Type="Int32" Nullable="false" />
           <Property Name="name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
           <NavigationProperty Name="Users" Relationship="Self.FK_User_Team" FromRole="Team" ToRole="User" />
+          <NavigationProperty Name="Projects" Relationship="QualitasModel.ProjectsTeams" FromRole="Team" ToRole="Project" />
         </EntityType>
         <EntityType Name="User">
           <Key>
@@ -144,6 +277,7 @@
           <Property Name="IsDeleted" Type="Boolean" Nullable="false" />
           <Property Name="TeamId" Type="Int32" />
           <NavigationProperty Name="Team" Relationship="Self.FK_User_Team" FromRole="User" ToRole="Team" />
+          <NavigationProperty Name="Projects" Relationship="QualitasModel.ProjectsUsers" FromRole="User" ToRole="Project" />
         </EntityType>
         <Association Name="FK_User_Team">
           <End Role="Team" Type="Self.Team" Multiplicity="0..1" />
@@ -176,6 +310,19 @@
             <End Role="EvaluationTemplate" EntitySet="EvaluationTemplates" />
             <End Role="TopicTemplate" EntitySet="TopicTemplates" />
           </AssociationSet>
+          <EntitySet Name="Projects" EntityType="QualitasModel.Project" />
+          <AssociationSet Name="ProjectsTeams" Association="QualitasModel.ProjectsTeams">
+            <End Role="Project" EntitySet="Projects" />
+            <End Role="Team" EntitySet="Teams" />
+          </AssociationSet>
+          <AssociationSet Name="ProjectsUsers" Association="QualitasModel.ProjectsUsers">
+            <End Role="Project" EntitySet="Projects" />
+            <End Role="User" EntitySet="Users" />
+          </AssociationSet>
+          <AssociationSet Name="TemplatesProjects" Association="QualitasModel.TemplatesProjects">
+            <End Role="EvaluationTemplate" EntitySet="EvaluationTemplates" />
+            <End Role="Project" EntitySet="Projects" />
+          </AssociationSet>
         </EntityContainer>
         <EntityType Name="CriteriaTemplate">
           <Key>
@@ -195,6 +342,7 @@
           <Property Name="name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="TopicTemplates" Relationship="QualitasModel.FK_TopicTemplate_EvaluationTemplate" FromRole="EvaluationTemplate" ToRole="TopicTemplate" />
           <Property Name="isDeleted" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="Projects" Relationship="QualitasModel.TemplatesProjects" FromRole="EvaluationTemplate" ToRole="Project" />
         </EntityType>
         <EntityType Name="sysdiagram">
           <Key>
@@ -240,6 +388,29 @@
               <PropertyRef Name="TemplateId" />
             </Dependent>
           </ReferentialConstraint>
+        </Association>
+        <EntityType Name="Project">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Teams" Relationship="QualitasModel.ProjectsTeams" FromRole="Project" ToRole="Team" />
+          <NavigationProperty Name="Users" Relationship="QualitasModel.ProjectsUsers" FromRole="Project" ToRole="User" />
+          <NavigationProperty Name="EvaluationTemplates" Relationship="QualitasModel.TemplatesProjects" FromRole="Project" ToRole="EvaluationTemplate" />
+          <Property Name="isDeleted" Type="Boolean" Nullable="false" />
+        </EntityType>
+        <Association Name="ProjectsTeams">
+          <End Type="QualitasModel.Project" Role="Project" Multiplicity="*" />
+          <End Type="QualitasModel.Team" Role="Team" Multiplicity="*" />
+        </Association>
+        <Association Name="ProjectsUsers">
+          <End Type="QualitasModel.Project" Role="Project" Multiplicity="*" />
+          <End Type="QualitasModel.User" Role="User" Multiplicity="*" />
+        </Association>
+        <Association Name="TemplatesProjects">
+          <End Type="QualitasModel.EvaluationTemplate" Role="EvaluationTemplate" Multiplicity="*" />
+          <End Type="QualitasModel.Project" Role="Project" Multiplicity="*" />
         </Association>
       </Schema>
     </edmx:ConceptualModels>
@@ -310,6 +481,39 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="Projects">
+            <EntityTypeMapping TypeName="QualitasModel.Project">
+              <MappingFragment StoreEntitySet="Project">
+                <ScalarProperty Name="isDeleted" ColumnName="isDeleted" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <AssociationSetMapping Name="ProjectsTeams" TypeName="QualitasModel.ProjectsTeams" StoreEntitySet="ProjectsTeams">
+            <EndProperty Name="Team">
+              <ScalarProperty Name="id" ColumnName="TeamId" />
+            </EndProperty>
+            <EndProperty Name="Project">
+              <ScalarProperty Name="id" ColumnName="ProjectId" />
+            </EndProperty>
+          </AssociationSetMapping>
+          <AssociationSetMapping Name="ProjectsUsers" TypeName="QualitasModel.ProjectsUsers" StoreEntitySet="ProjectsUsers">
+            <EndProperty Name="User">
+              <ScalarProperty Name="id" ColumnName="UserId" />
+            </EndProperty>
+            <EndProperty Name="Project">
+              <ScalarProperty Name="id" ColumnName="ProjectId" />
+            </EndProperty>
+          </AssociationSetMapping>
+          <AssociationSetMapping Name="TemplatesProjects" TypeName="QualitasModel.TemplatesProjects" StoreEntitySet="TemplatesProjects">
+            <EndProperty Name="Project">
+              <ScalarProperty Name="id" ColumnName="TemplateId" />
+            </EndProperty>
+            <EndProperty Name="EvaluationTemplate">
+              <ScalarProperty Name="id" ColumnName="ProjectId" />
+            </EndProperty>
+          </AssociationSetMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

@@ -18,6 +18,7 @@ namespace Qualitas_Backend.Models
         public Team()
         {
             this.Users = new HashSet<User>();
+            this.Projects = new HashSet<Project>();
         }
     
         public int id { get; set; }
@@ -25,5 +26,7 @@ namespace Qualitas_Backend.Models
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<User> Users { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Project> Projects { get; set; }
     }
 }

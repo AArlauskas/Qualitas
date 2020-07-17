@@ -31,5 +31,6 @@ namespace Qualitas_Backend.Models
         public virtual DbSet<EvaluationTemplate> EvaluationTemplates { get; set; }
         public virtual DbSet<sysdiagram> sysdiagrams { get; set; }
         public virtual DbSet<TopicTemplate> TopicTemplates { get; set; }
+        public virtual DbSet<Project> Projects { get; set; }
     }
 }

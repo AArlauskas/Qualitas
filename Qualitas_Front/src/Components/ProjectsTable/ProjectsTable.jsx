@@ -21,20 +21,20 @@ class ProjectsTable extends Component {
     state = {}
 
     componentDidMount() {
-        let names = this.props.templateNames;
-        let lookup = names.reduce(function (acc, cur, i) {
-            acc[cur.id] = cur.name;
-            return acc;
-        }, {});
+        // let names = this.props.templateNames;
+        // let lookup = names.reduce(function (acc, cur, i) {
+        //     acc[cur.id] = cur.name;
+        //     return acc;
+        // }, {});
 
         let columns = [
             { title: "Project name", field: "name" },
-            {
-                title: "Template",
-                field: "templateId",
-                render: rowData => <a href={"/EditTemplate/" + rowData.templateId}>{rowData.templateName} </a>,
-                lookup: lookup
-            }
+            // {
+            //     title: "Template",
+            //     field: "templateId",
+            //     render: rowData => <a href={"/EditTemplate/" + rowData.templateId}>{rowData.templateName} </a>,
+            //     lookup: lookup
+            // }
         ];
         this.setState({ columns: columns })
     }

@@ -1,23 +1,27 @@
 import React, { Component } from 'react';
 import ProjectDetails from '../../Components/ProjectDetails/ProjectDetails';
 import { connect } from "react-redux";
-import projects from '../../Constants/Projects';
-import dependencies from "../../Constants/Dependencies";
-import users from "../../Constants/Users";
+import { FetchProjectToEdit, FetchUserList, AddToProjectUser, RemoveFromProjectUser } from '../../API/API';
 
 class ProjectDetailsDisplay extends Component {
-    state = {}
+    state = {
+        project: [],
+        users: []
+    }
+    componentDidMount() {
+        let id = parseInt(window.location.href.split("/ProjectDetails/")[1]);
+        FetchProjectToEdit(id).then(response => this.setState({ project: response }));
+        FetchUserList().then(response => this.setState({ users: response }));
+    }
     render() {
-        let project = fetchProject();
-        let ProjectUsers = fetchProjectUsers();
-        let AllUsers = fetchAllUsers();
         return (
             <div>
-                {ProjectUsers === undefined || AllUsers === undefined ? null :
+                {this.state.project.length === 0 || this.state.users.length === 0 ? null :
                     <ProjectDetails
-                        project={project}
-                        projectUsers={ProjectUsers}
-                        allUsers={AllUsers} />}
+                        project={this.state.project}
+                        users={this.state.users}
+                        addProjectMembers={addProjectMembers}
+                        removeProjectMembers={removeProjectMembers} />}
             </div>
         );
     }
@@ -29,38 +33,12 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => ({
 });
 
-const fetchProject = () => {
-    let id = parseInt(window.location.href.split("/ProjectDetails/")[1]);
-    let project = projects.find(temp => temp.id === id);
-    return project;
+const addProjectMembers = async (id, data) => {
+    await AddToProjectUser(id, data);
 }
 
-const fetchProjectUsers = () => {
-    let id = parseInt(window.location.href.split("/ProjectDetails/")[1]);
-    let userDependency = dependencies.filter(temp => temp.projectId === id);
-    let ProjectUsers = [];
-    userDependency.forEach(dep => {
-        let user = users.find(temp => temp.id === dep.userId);
-        ProjectUsers.push({
-            id: user.id,
-            firstname: user.firstname,
-            lastname: user.lastname
-        });
-
-    });
-    return ProjectUsers;
-}
-
-const fetchAllUsers = () => {
-    let AllUsers = [];
-    users.filter(user => user.role === "user").forEach(user => {
-        AllUsers.push({
-            id: user.id,
-            firstname: user.firstname,
-            lastname: user.lastname
-        });
-    });
-    return AllUsers;
+const removeProjectMembers = async (id, data) => {
+    await RemoveFromProjectUser(id, data);
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(ProjectDetailsDisplay);

@@ -4,7 +4,7 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="0141b8a5f8b74017a0e9d2fdb499ac65" Name="Diagram1">
+      <Diagram DiagramId="0141b8a5f8b74017a0e9d2fdb499ac65" Name="Diagram1" ZoomLevel="97">
         <EntityTypeShape EntityType="QualitasModel.Team" Width="1.5" PointX="0.75" PointY="1.625" IsExpanded="true" />
         <EntityTypeShape EntityType="QualitasModel.User" Width="1.5" PointX="3" PointY="1" IsExpanded="true" />
         <AssociationConnector Association="QualitasModel.FK_User_Team" ManuallyRouted="false" />
@@ -14,6 +14,10 @@
         <EntityTypeShape EntityType="QualitasModel.TopicTemplate" Width="1.5" PointX="3" PointY="4.875" />
         <AssociationConnector Association="QualitasModel.FK_CriteriaTemplate_TopicTemplate" />
         <AssociationConnector Association="QualitasModel.FK_TopicTemplate_EvaluationTemplate" />
+        <EntityTypeShape EntityType="QualitasModel.Project" Width="1.5" PointX="3" PointY="8.25" />
+        <AssociationConnector Association="QualitasModel.ProjectsTeams" />
+        <AssociationConnector Association="QualitasModel.ProjectsUsers" />
+        <AssociationConnector Association="QualitasModel.TemplatesProjects" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

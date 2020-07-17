@@ -64,5 +64,38 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
+    <EntitySetMapping Name="Projects">
+      <EntityTypeMapping TypeName="QualitasModel.Project">
+        <MappingFragment StoreEntitySet="Project">
+          <ScalarProperty Name="isDeleted" ColumnName="isDeleted" />
+          <ScalarProperty Name="name" ColumnName="name" />
+          <ScalarProperty Name="id" ColumnName="id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <AssociationSetMapping Name="ProjectsTeams" TypeName="QualitasModel.ProjectsTeams" StoreEntitySet="ProjectsTeams">
+      <EndProperty Name="Team">
+        <ScalarProperty Name="id" ColumnName="TeamId" />
+      </EndProperty>
+      <EndProperty Name="Project">
+        <ScalarProperty Name="id" ColumnName="ProjectId" />
+      </EndProperty>
+    </AssociationSetMapping>
+    <AssociationSetMapping Name="ProjectsUsers" TypeName="QualitasModel.ProjectsUsers" StoreEntitySet="ProjectsUsers">
+      <EndProperty Name="User">
+        <ScalarProperty Name="id" ColumnName="UserId" />
+      </EndProperty>
+      <EndProperty Name="Project">
+        <ScalarProperty Name="id" ColumnName="ProjectId" />
+      </EndProperty>
+    </AssociationSetMapping>
+    <AssociationSetMapping Name="TemplatesProjects" TypeName="QualitasModel.TemplatesProjects" StoreEntitySet="TemplatesProjects">
+      <EndProperty Name="Project">
+        <ScalarProperty Name="id" ColumnName="TemplateId" />
+      </EndProperty>
+      <EndProperty Name="EvaluationTemplate">
+        <ScalarProperty Name="id" ColumnName="ProjectId" />
+      </EndProperty>
+    </AssociationSetMapping>
   </EntityContainerMapping>
 </Mapping>

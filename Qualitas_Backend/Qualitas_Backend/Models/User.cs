@@ -14,6 +14,12 @@ namespace Qualitas_Backend.Models
     
     public partial class User
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public User()
+        {
+            this.Projects = new HashSet<Project>();
+        }
+    
         public int id { get; set; }
         public string username { get; set; }
         public string password { get; set; }
@@ -25,5 +31,7 @@ namespace Qualitas_Backend.Models
         public Nullable<int> TeamId { get; set; }
     
         public virtual Team Team { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Project> Projects { get; set; }
     }
 }

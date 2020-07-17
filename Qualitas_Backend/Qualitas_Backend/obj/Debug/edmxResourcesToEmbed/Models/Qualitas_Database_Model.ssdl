@@ -17,6 +17,30 @@
     <Property Name="name" Type="nvarchar" MaxLength="50" Nullable="false" />
     <Property Name="isDeleted" Type="bit" Nullable="false" />
   </EntityType>
+  <EntityType Name="Project">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="name" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="isDeleted" Type="bit" Nullable="false" />
+  </EntityType>
+  <EntityType Name="ProjectsTeams">
+    <Key>
+      <PropertyRef Name="TeamId" />
+      <PropertyRef Name="ProjectId" />
+    </Key>
+    <Property Name="TeamId" Type="int" Nullable="false" />
+    <Property Name="ProjectId" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="ProjectsUsers">
+    <Key>
+      <PropertyRef Name="UserId" />
+      <PropertyRef Name="ProjectId" />
+    </Key>
+    <Property Name="UserId" Type="int" Nullable="false" />
+    <Property Name="ProjectId" Type="int" Nullable="false" />
+  </EntityType>
   <EntityType Name="sysdiagrams">
     <Key>
       <PropertyRef Name="diagram_id" />
@@ -33,6 +57,14 @@
     </Key>
     <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="name" Type="nvarchar" MaxLength="50" Nullable="false" />
+  </EntityType>
+  <EntityType Name="TemplatesProjects">
+    <Key>
+      <PropertyRef Name="TemplateId" />
+      <PropertyRef Name="ProjectId" />
+    </Key>
+    <Property Name="TemplateId" Type="int" Nullable="false" />
+    <Property Name="ProjectId" Type="int" Nullable="false" />
   </EntityType>
   <EntityType Name="TopicTemplate">
     <Key>
@@ -69,6 +101,78 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
+  <Association Name="FK_ProjectsTeams_Project">
+    <End Role="Project" Type="Self.Project" Multiplicity="1" />
+    <End Role="ProjectsTeams" Type="Self.ProjectsTeams" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Project">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="ProjectsTeams">
+        <PropertyRef Name="ProjectId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_ProjectsTeams_Team">
+    <End Role="Team" Type="Self.Team" Multiplicity="1" />
+    <End Role="ProjectsTeams" Type="Self.ProjectsTeams" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Team">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="ProjectsTeams">
+        <PropertyRef Name="TeamId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_ProjectsUsers_Project">
+    <End Role="Project" Type="Self.Project" Multiplicity="1" />
+    <End Role="ProjectsUsers" Type="Self.ProjectsUsers" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Project">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="ProjectsUsers">
+        <PropertyRef Name="ProjectId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_ProjectsUsers_User">
+    <End Role="User" Type="Self.User" Multiplicity="1" />
+    <End Role="ProjectsUsers" Type="Self.ProjectsUsers" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="User">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="ProjectsUsers">
+        <PropertyRef Name="UserId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_TemplatesProjects_EvaluationTemplate">
+    <End Role="EvaluationTemplate" Type="Self.EvaluationTemplate" Multiplicity="1" />
+    <End Role="TemplatesProjects" Type="Self.TemplatesProjects" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="EvaluationTemplate">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="TemplatesProjects">
+        <PropertyRef Name="ProjectId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_TemplatesProjects_Project">
+    <End Role="Project" Type="Self.Project" Multiplicity="1" />
+    <End Role="TemplatesProjects" Type="Self.TemplatesProjects" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Project">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="TemplatesProjects">
+        <PropertyRef Name="TemplateId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
   <Association Name="FK_TopicTemplate_EvaluationTemplate">
     <End Role="EvaluationTemplate" Type="Self.EvaluationTemplate" Multiplicity="1" />
     <End Role="TopicTemplate" Type="Self.TopicTemplate" Multiplicity="*" />
@@ -96,13 +200,41 @@
   <EntityContainer Name="QualitasModelStoreContainer">
     <EntitySet Name="CriteriaTemplate" EntityType="Self.CriteriaTemplate" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="EvaluationTemplate" EntityType="Self.EvaluationTemplate" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Project" EntityType="Self.Project" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="ProjectsTeams" EntityType="Self.ProjectsTeams" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="ProjectsUsers" EntityType="Self.ProjectsUsers" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Team" EntityType="Self.Team" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="TemplatesProjects" EntityType="Self.TemplatesProjects" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="TopicTemplate" EntityType="Self.TopicTemplate" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="User" EntityType="Self.User" Schema="dbo" store:Type="Tables" />
     <AssociationSet Name="FK_CriteriaTemplate_TopicTemplate" Association="Self.FK_CriteriaTemplate_TopicTemplate">
       <End Role="TopicTemplate" EntitySet="TopicTemplate" />
       <End Role="CriteriaTemplate" EntitySet="CriteriaTemplate" />
+    </AssociationSet>
+    <AssociationSet Name="FK_ProjectsTeams_Project" Association="Self.FK_ProjectsTeams_Project">
+      <End Role="Project" EntitySet="Project" />
+      <End Role="ProjectsTeams" EntitySet="ProjectsTeams" />
+    </AssociationSet>
+    <AssociationSet Name="FK_ProjectsTeams_Team" Association="Self.FK_ProjectsTeams_Team">
+      <End Role="Team" EntitySet="Team" />
+      <End Role="ProjectsTeams" EntitySet="ProjectsTeams" />
+    </AssociationSet>
+    <AssociationSet Name="FK_ProjectsUsers_Project" Association="Self.FK_ProjectsUsers_Project">
+      <End Role="Project" EntitySet="Project" />
+      <End Role="ProjectsUsers" EntitySet="ProjectsUsers" />
+    </AssociationSet>
+    <AssociationSet Name="FK_ProjectsUsers_User" Association="Self.FK_ProjectsUsers_User">
+      <End Role="User" EntitySet="User" />
+      <End Role="ProjectsUsers" EntitySet="ProjectsUsers" />
+    </AssociationSet>
+    <AssociationSet Name="FK_TemplatesProjects_EvaluationTemplate" Association="Self.FK_TemplatesProjects_EvaluationTemplate">
+      <End Role="EvaluationTemplate" EntitySet="EvaluationTemplate" />
+      <End Role="TemplatesProjects" EntitySet="TemplatesProjects" />
+    </AssociationSet>
+    <AssociationSet Name="FK_TemplatesProjects_Project" Association="Self.FK_TemplatesProjects_Project">
+      <End Role="Project" EntitySet="Project" />
+      <End Role="TemplatesProjects" EntitySet="TemplatesProjects" />
     </AssociationSet>
     <AssociationSet Name="FK_TopicTemplate_EvaluationTemplate" Association="Self.FK_TopicTemplate_EvaluationTemplate">
       <End Role="EvaluationTemplate" EntitySet="EvaluationTemplate" />

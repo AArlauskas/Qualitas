@@ -15,6 +15,7 @@ import Remove from '@material-ui/icons/Remove';
 import SaveAlt from '@material-ui/icons/SaveAlt';
 import Search from '@material-ui/icons/Search';
 import ViewColumn from '@material-ui/icons/ViewColumn';
+import WorkIcon from '@material-ui/icons/Work';
 
 class TemplateTable extends Component {
     state = {
@@ -53,18 +54,32 @@ class TemplateTable extends Component {
                         actionsColumnIndex: -1,
                         pageSize: 10
                     }}
-                    actions={[{
-                        icon: () => <Edit />,
-                        tooltip: "Edit template",
-                        onClick: (event, rowData) => {
-                            new Promise((resolve) => {
-                                setTimeout(() => {
-                                    resolve();
-                                    window.location.href = "/EditTemplate/" + rowData.id
-                                }, 600);
-                            })
-                        }
-                    }]}
+                    actions={[
+                        {
+                            icon: () => <WorkIcon />,
+                            tooltip: "Template projects",
+                            onClick: (event, rowData) => {
+                                new Promise((resolve) => {
+                                    setTimeout(() => {
+                                        resolve();
+                                        window.location.href = "/TemplateProjects/" + rowData.id
+                                    }, 600);
+                                })
+                            }
+                        },
+                        {
+                            icon: () => <Edit />,
+                            tooltip: "Edit template",
+                            onClick: (event, rowData) => {
+                                new Promise((resolve) => {
+                                    setTimeout(() => {
+                                        resolve();
+                                        window.location.href = "/EditTemplate/" + rowData.id
+                                    }, 600);
+                                })
+                            }
+                        },
+                    ]}
                     editable={{
                         onRowDelete: (oldData) =>
                             new Promise((resolve) => {

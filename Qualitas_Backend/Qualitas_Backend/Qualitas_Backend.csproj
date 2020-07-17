@@ -111,6 +111,7 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\CriteriaTemplatesController.cs" />
     <Compile Include="Controllers\EvaluationTemplatesController.cs" />
+    <Compile Include="Controllers\ProjectsController.cs" />
     <Compile Include="Controllers\TeamsController.cs" />
     <Compile Include="Controllers\TopicTemplatesController.cs" />
     <Compile Include="Controllers\UsersController.cs" />
@@ -121,6 +122,9 @@
       <DependentUpon>Qualitas_Database_Model.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\EvaluationTemplate.cs">
+      <DependentUpon>Qualitas_Database_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Project.cs">
       <DependentUpon>Qualitas_Database_Model.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Qualitas_Database_Model.Context.cs">
@@ -151,13 +155,17 @@
       <DependentUpon>Qualitas_Database_Model.tt</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Requests\ChangeProjectNameRequest.cs" />
     <Compile Include="Requests\CreateFullEvaluationTemplateRequest.cs" />
     <Compile Include="Requests\CreateUserRequest.cs" />
     <Compile Include="Requests\LoginRequest.cs" />
     <Compile Include="Requests\SubClassesForRequests\Criteria.cs" />
     <Compile Include="Requests\SubClassesForRequests\Topic.cs" />
+    <Compile Include="Responses\GetFullEvaluationTemplateResponse.cs" />
     <Compile Include="Responses\LoginResponse.cs" />
+    <Compile Include="Responses\ProjectsListItem.cs" />
     <Compile Include="Responses\TeamListResponse.cs" />
+    <Compile Include="Responses\TemplateProjectsResponse.cs" />
     <Compile Include="Responses\UserListResponse.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -178,6 +186,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Responses\SubClassesForResponses\" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />

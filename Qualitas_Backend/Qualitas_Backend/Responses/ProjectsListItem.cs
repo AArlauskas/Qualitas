@@ -9,5 +9,7 @@ namespace Qualitas_Backend.Responses
     {
         public int id { get; set; }
         public string name { get; set;}
+        public List<TemplateListResponse> templates { get; set; }
+        public List<TeamListResponse> teams { get; set; }
     }
 }

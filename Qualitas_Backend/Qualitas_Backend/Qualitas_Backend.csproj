@@ -165,6 +165,7 @@
     <Compile Include="Responses\LoginResponse.cs" />
     <Compile Include="Responses\ProjectsListItem.cs" />
     <Compile Include="Responses\TeamListResponse.cs" />
+    <Compile Include="Responses\TemplateListResponse.cs" />
     <Compile Include="Responses\TemplateProjectsResponse.cs" />
     <Compile Include="Responses\UserListResponse.cs" />
   </ItemGroup>

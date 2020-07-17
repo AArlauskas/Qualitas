@@ -16,25 +16,30 @@ import SaveAlt from '@material-ui/icons/SaveAlt';
 import Search from '@material-ui/icons/Search';
 import ViewColumn from '@material-ui/icons/ViewColumn';
 import GroupAddIcon from '@material-ui/icons/GroupAdd';
+import { Chip } from '@material-ui/core';
 
 class ProjectsTable extends Component {
     state = {}
 
     componentDidMount() {
-        // let names = this.props.templateNames;
-        // let lookup = names.reduce(function (acc, cur, i) {
-        //     acc[cur.id] = cur.name;
-        //     return acc;
-        // }, {});
-
         let columns = [
-            { title: "Project name", field: "name" },
-            // {
-            //     title: "Template",
-            //     field: "templateId",
-            //     render: rowData => <a href={"/EditTemplate/" + rowData.templateId}>{rowData.templateName} </a>,
-            //     lookup: lookup
-            // }
+            { title: "Project name", field: "name", },
+            {
+                editable: "never",
+                title: "Templates",
+                field: "templates",
+                render: rowData => <div>{rowData.templates.map(template => <Chip key={template.id}
+                    label={template.name}
+                    onClick={() => window.location.href = "/EditTemplate/" + template.id} />)}</div>,
+            },
+            {
+                editable: "never",
+                title: "Teams",
+                field: "teams",
+                render: rowData => <div>{rowData.teams.map(team => <Chip key={team.id}
+                    label={team.name}
+                    onClick={() => window.location.href = "/TeamMembers/" + team.id} />)}</div>,
+            }
         ];
         this.setState({ columns: columns })
     }

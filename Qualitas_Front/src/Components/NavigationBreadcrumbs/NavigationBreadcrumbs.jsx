@@ -1,12 +1,16 @@
 import React from "react";
 import { Breadcrumbs, Link } from "@material-ui/core";
 import { PeopleRounded, DashboardRounded, AssignmentTurnedInOutlined, ArchiveOutlined, WorkRounded, GroupWorkOutlined } from "@material-ui/icons";
+import QLogo from "../../Images/QLogo.png";
 import "./NavigationBreadcrumbs.scss";
 
 const NavigationBreadcrumbs = () => {
     const currentPage = window.location.pathname;
     return (
         <div className="Navigation-Breadcrumbs-Wrapper">
+            <div style={{ marginLeft: 5 }}>
+                <img style={{ width: 50, height: 50 }} src={QLogo} alt="QLoto" />
+            </div>
             <Breadcrumbs separator={<div className={"Separator"}>||</div>} className="Breadcrumbs">
                 <Link
                     href="/projects"
@@ -54,7 +58,7 @@ const NavigationBreadcrumbs = () => {
             <div style={{ marginTop: 5, marginRight: 5 }}>
                 {window.localStorage.getItem("name")}
                 <br />
-                <a onClick={() => window.localStorage.clear()} href="/">Log Out</a>
+                <a style={{ color: "#ce2b27" }} onClick={() => window.localStorage.clear()} href="/">Log Out</a>
             </div>
         </div>
     );

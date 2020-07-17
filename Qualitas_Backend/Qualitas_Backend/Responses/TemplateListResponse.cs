@@ -5,10 +5,9 @@ using System.Web;
 
 namespace Qualitas_Backend.Responses
 {
-    public class TeamListResponse
+    public class TemplateListResponse
     {
         public int id { get; set; }
         public string name { get; set; }
-        public int? userCount { get; set; }
     }
 }

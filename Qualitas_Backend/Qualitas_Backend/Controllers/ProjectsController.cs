@@ -41,6 +41,29 @@ namespace Qualitas_Backend.Controllers
                     id = project.id,
                     name = project.name
                 };
+                var templates = new List<TemplateListResponse>();
+                foreach(var template in project.EvaluationTemplates)
+                {
+                    var tempTemplate = new TemplateListResponse()
+                    {
+                        id = template.id,
+                        name = template.name
+                    };
+                    templates.Add(tempTemplate);
+                }
+                tempProject.templates = templates;
+
+                var teams = new List<TeamListResponse>();
+                foreach (var team in project.Teams)
+                {
+                    var tempTeam = new TeamListResponse()
+                    {
+                        id = team.id,
+                        name = team.name
+                    };
+                    teams.Add(tempTeam);
+                }
+                tempProject.teams = teams;
                 projectList.Add(tempProject);
             });
             return Ok(projectList);

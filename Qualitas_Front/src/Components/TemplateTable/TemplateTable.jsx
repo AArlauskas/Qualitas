@@ -16,11 +16,21 @@ import SaveAlt from '@material-ui/icons/SaveAlt';
 import Search from '@material-ui/icons/Search';
 import ViewColumn from '@material-ui/icons/ViewColumn';
 import WorkIcon from '@material-ui/icons/Work';
+import { Chip } from '@material-ui/core';
 
 class TemplateTable extends Component {
     state = {
         columns: [
             { title: 'Template name', field: 'name' },
+            {
+                title: "Projects",
+                editable: "never",
+                field: "projects",
+                render: rowData => <div>{rowData.Projects.map(project => <Chip key={project.id}
+                    label={project.name}
+                    onClick={() => window.location.href = "/ProjectDetails/" + project.id} />)}</div>,
+
+            }
         ]
     }
     render() {
@@ -45,6 +55,7 @@ class TemplateTable extends Component {
         };
         return (
             <div>
+                {console.log(this.props.templates)}
                 <MaterialTable
                     title="Templates"
                     icons={tableIcons}

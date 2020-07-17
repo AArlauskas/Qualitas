@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 import ProjectsTable from "../../Components/ProjectsTable/ProjectsTable";
 import { fetchProjects, changeProjectName, deleteProject, addProject } from '../../Actions/ProjectsTableActions';
 
+
 class ProjectsDisplay extends Component {
     state = {}
     componentDidMount() {
@@ -10,11 +11,11 @@ class ProjectsDisplay extends Component {
         //this.props.fetchTemplateNames()
     }
     render() {
+
         return (
             <div>
                 <ProjectsTable
                     projects={this.props.projects}
-                    //templateNames={this.props.templateNames}
                     addProject={this.props.addProject}
                     updateProject={this.props.updateProject}
                     deleteProject={this.props.deleteProject}
@@ -31,7 +32,6 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => ({
     fetchProjects: () => dispatch(fetchProjects()),
-    //fetchTemplateNames: () => dispatch(fetchTemplateNames()),
     addProject: (data) => dispatch(addProject(data)),
     updateProject: (data) => dispatch(changeProjectName(data)),
     deleteProject: (data) => dispatch(deleteProject(data))

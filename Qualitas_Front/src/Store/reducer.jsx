@@ -75,16 +75,25 @@ export const reducer = (state = initialState, action) => {
 
         case ActionType.LOAD_TEMPLATE_LIST: {
             let templates = action.payload;
-            let templateNames = [];
-            templates.forEach(template => {
-                templateNames.push({
-                    id: template.id,
-                    name: template.name
-                })
-            });
+            // console.log(templates);
+            // let templateNames = [];
+            // templates.forEach(template => {
+            //     templateNames.push({
+            //         id: template.id,
+            //         name: template.name
+            //     });
+            //     let projects = [];
+            //     template.Projects.forEach(project => {
+            //         projects.push({
+            //             id: project.id,
+            //             name: project.name
+            //         });
+            //     });
+            //     templateNames.Projects = projects;
+            // });
             return {
                 ...state,
-                Templates: templateNames
+                Templates: templates
             }
         }
 

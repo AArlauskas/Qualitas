@@ -38,14 +38,16 @@ namespace Qualitas_Backend.Controllers
                 return NotFound();
             }
 
-            var response = new GetFullEvaluationTemplateResponse();
-            response.id = evaluationTemplate.id;
-            response.TemplateName = evaluationTemplate.name;
-            response.Criteria = new List<Criteria>();
-            response.Topics = new List<Topic>();
-            foreach(var topic in evaluationTemplate.TopicTemplates)
+            var response = new GetFullEvaluationTemplateResponse
             {
-                var tempTopic = new Topic()
+                id = evaluationTemplate.id,
+                TemplateName = evaluationTemplate.name,
+                Criteria = new List<CriteriaRequest>(),
+                Topics = new List<TopicRequest>()
+            };
+            foreach (var topic in evaluationTemplate.TopicTemplates)
+            {
+                var tempTopic = new TopicRequest()
                 {
                     id = topic.id,
                     name = topic.name,
@@ -55,7 +57,7 @@ namespace Qualitas_Backend.Controllers
                 response.Topics.Add(tempTopic);
                 foreach(var criteria in topic.CriteriaTemplates)
                 {
-                    var tempCriteria = new Criteria()
+                    var tempCriteria = new CriteriaRequest()
                     {
                         id = criteria.id,
                         name = criteria.name,

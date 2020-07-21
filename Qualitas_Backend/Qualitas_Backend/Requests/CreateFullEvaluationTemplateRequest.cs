@@ -10,8 +10,8 @@ namespace Qualitas_Backend.Requests
     {
         public string TemplateName { get; set; }
 
-        public Criteria[] Criteria { get; set; }
+        public CriteriaRequest[] Criteria { get; set; }
 
-        public Topic[] Topics { get; set; }
+        public TopicRequest[] Topics { get; set; }
     }
 }

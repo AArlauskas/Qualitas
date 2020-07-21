@@ -19,6 +19,7 @@ namespace Qualitas_Backend.Models
         {
             this.TopicTemplates = new HashSet<TopicTemplate>();
             this.Projects = new HashSet<Project>();
+            this.Evaluations = new HashSet<Evaluation>();
         }
     
         public int id { get; set; }
@@ -29,5 +30,7 @@ namespace Qualitas_Backend.Models
         public virtual ICollection<TopicTemplate> TopicTemplates { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Project> Projects { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Evaluation> Evaluations { get; set; }
     }
 }

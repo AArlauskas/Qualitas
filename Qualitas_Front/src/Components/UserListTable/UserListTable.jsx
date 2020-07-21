@@ -158,6 +158,7 @@ class UserListTable extends Component {
                                 }, 600);
                             }),
                     }}
+                    onRowClick={(event, rowData, togglePanel) => window.location.href = "/userDetails/" + rowData.id}
                 />
             </div>
         );

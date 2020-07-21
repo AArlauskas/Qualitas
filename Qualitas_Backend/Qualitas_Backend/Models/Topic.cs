@@ -12,24 +12,23 @@ namespace Qualitas_Backend.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class TopicTemplate
+    public partial class Topic
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public TopicTemplate()
+        public Topic()
         {
-            this.CriteriaTemplates = new HashSet<CriteriaTemplate>();
-            this.Topics = new HashSet<Topic>();
+            this.Criteria = new HashSet<Criterion>();
         }
     
         public int id { get; set; }
         public string name { get; set; }
         public bool isCritical { get; set; }
-        public int TemplateId { get; set; }
+        public int TopicTemplateId { get; set; }
+        public int EvaluationId { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<CriteriaTemplate> CriteriaTemplates { get; set; }
-        public virtual EvaluationTemplate EvaluationTemplate { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Topic> Topics { get; set; }
+        public virtual ICollection<Criterion> Criteria { get; set; }
+        public virtual Evaluation Evaluation { get; set; }
+        public virtual TopicTemplate TopicTemplate { get; set; }
     }
 }

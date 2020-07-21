@@ -11,8 +11,8 @@ namespace Qualitas_Backend.Responses
         public int id { get; set; }
         public string TemplateName { get; set; }
 
-        public List<Criteria> Criteria { get; set; }
+        public List<CriteriaRequest> Criteria { get; set; }
 
-        public List<Topic> Topics { get; set; }
+        public List<TopicRequest> Topics { get; set; }
     }
 }

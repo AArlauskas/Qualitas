@@ -17,7 +17,6 @@ let index = 4;
 
 class TemplateCreator extends Component {
     UNSAFE_componentWillMount() {
-        console.log(this.props.template)
         this.setState({
             id: this.props.template.id,
             editing: false,

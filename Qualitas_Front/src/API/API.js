@@ -30,6 +30,17 @@ export const FetchUserList = async () => {
         });
 };
 
+export const FetchUserToEdit = async (id) => {
+    return await Api.get("/Users/" + id)
+        .then((response) => {
+            return response.data;
+        })
+        .catch((error) => {
+            throw Error("An error has occurred calling the api: " + error);
+        });
+};
+
+
 export const AddToProjectUser = async (id, data) => {
     return await Api.put("/Projects/adduser/" + id, data)
         .then((response) => {

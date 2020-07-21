@@ -5,7 +5,7 @@ using System.Web;
 
 namespace Qualitas_Backend.Requests.SubClassesForRequests
 {
-    public class Topic
+    public class TopicRequest
     {
         public int id { get; set; }
         public string name { get; set; }

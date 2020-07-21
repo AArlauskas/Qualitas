@@ -17,6 +17,8 @@ import TeamsProjectsDisplay from './Containers/TeamsProjectsDisplay/TeamsProject
 import TeamMembersDisplay from './Containers/TeamMembersDisplay/TeamMembersDisplay';
 import ProjectTeamsDisplay from './Containers/ProjectTeamsDisplay/ProjectTeamsDisplay';
 import ProjectsTemplatesDisplay from './Containers/ProjectsTemplatesDisplay/ProjectsTemplatesDisplay';
+import UserReviewDisplay from './Containers/UserReviewDisplay/UserReviewDisplay';
+import CaseCreatorDisplay from './Containers/CaseCreatorDisplay/CaseCreatorDisplay';
 
 class Routing extends Component {
     state = {}
@@ -70,8 +72,14 @@ class Routing extends Component {
                             <Route path="/users">
                                 <UserListDisplay />
                             </Route>
+                            <Route exact path="/userDetails/:id">
+                                <UserReviewDisplay />
+                            </Route>
                             <Route exact path="/UsersProjects/:id">
                                 <UsersProjectsDisplay />
+                            </Route>
+                            <Route path="/newCase/:userId">
+                                <CaseCreatorDisplay />
                             </Route>
                             <Route>
                                 <Redirect to="/projects" />

@@ -109,16 +109,25 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Controllers\CriteriaController.cs" />
     <Compile Include="Controllers\CriteriaTemplatesController.cs" />
+    <Compile Include="Controllers\EvaluationsController.cs" />
     <Compile Include="Controllers\EvaluationTemplatesController.cs" />
     <Compile Include="Controllers\ProjectsController.cs" />
     <Compile Include="Controllers\TeamsController.cs" />
+    <Compile Include="Controllers\TopicsController.cs" />
     <Compile Include="Controllers\TopicTemplatesController.cs" />
     <Compile Include="Controllers\UsersController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\CriteriaTemplate.cs">
+      <DependentUpon>Qualitas_Database_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Criterion.cs">
+      <DependentUpon>Qualitas_Database_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Evaluation.cs">
       <DependentUpon>Qualitas_Database_Model.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\EvaluationTemplate.cs">
@@ -142,10 +151,19 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Qualitas_Database_Model.edmx</DependentUpon>
     </Compile>
+    <Compile Include="Models\sp_helpdiagramdefinition_Result.cs">
+      <DependentUpon>Qualitas_Database_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\sp_helpdiagrams_Result.cs">
+      <DependentUpon>Qualitas_Database_Model.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\sysdiagram.cs">
       <DependentUpon>Qualitas_Database_Model.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Team.cs">
+      <DependentUpon>Qualitas_Database_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Topic.cs">
       <DependentUpon>Qualitas_Database_Model.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\TopicTemplate.cs">
@@ -159,8 +177,8 @@
     <Compile Include="Requests\CreateFullEvaluationTemplateRequest.cs" />
     <Compile Include="Requests\CreateUserRequest.cs" />
     <Compile Include="Requests\LoginRequest.cs" />
-    <Compile Include="Requests\SubClassesForRequests\Criteria.cs" />
-    <Compile Include="Requests\SubClassesForRequests\Topic.cs" />
+    <Compile Include="Requests\SubClassesForRequests\CriteriaRequest.cs" />
+    <Compile Include="Requests\SubClassesForRequests\TopicRequest.cs" />
     <Compile Include="Responses\GetFullEvaluationTemplateResponse.cs" />
     <Compile Include="Responses\LoginResponse.cs" />
     <Compile Include="Responses\ProjectsListItem.cs" />

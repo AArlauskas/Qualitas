@@ -26,7 +26,7 @@ class TemplateTable extends Component {
                 title: "Projects",
                 editable: "never",
                 field: "projects",
-                render: rowData => <div>{rowData.Projects.map(project => <Chip key={project.id}
+                render: rowData => <div>{rowData.Projects.map(project => <Chip style={{ marginRight: 2, marginTop: 2 }} key={project.id}
                     label={project.name}
                     onClick={() => window.location.href = "/ProjectDetails/" + project.id} />)}</div>,
 

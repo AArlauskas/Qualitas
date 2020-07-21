@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import TeamMembers from '../TeamMembers/TeamMembers';
+import TeamMembers from '../../Components/TeamMembers/TeamMembers';
 import { FetchUserList, GetTeam, AddToTeam, RemoveFromTeam } from '../../API/API';
 
 class TeamMembersDisplay extends Component {

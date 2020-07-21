@@ -50,6 +50,46 @@ export const RemoveFromProjectUser = async (id, data) => {
         });
 }
 
+export const AddToProjectTeam = async (id, data) => {
+    return await Api.put("/Projects/addTeam/" + id, data)
+        .then((response) => {
+            return response.data;
+        })
+        .catch((error) => {
+            throw Error("An error has occurred calling the api: " + error);
+        });
+}
+
+export const RemoveFromProjectTeam = async (id, data) => {
+    return await Api.put("/Projects/removeTeam/" + id, data)
+        .then((response) => {
+            return response.data;
+        })
+        .catch((error) => {
+            throw Error("An error has occurred calling the api: " + error);
+        });
+}
+
+export const AddToProjectTemplate = async (id, data) => {
+    return await Api.put("/Projects/addTemplate/" + id, data)
+        .then((response) => {
+            return response.data;
+        })
+        .catch((error) => {
+            throw Error("An error has occurred calling the api: " + error);
+        });
+}
+
+export const RemoveFromProjectTemplate = async (id, data) => {
+    return await Api.put("/Projects/removeTemplate/" + id, data)
+        .then((response) => {
+            return response.data;
+        })
+        .catch((error) => {
+            throw Error("An error has occurred calling the api: " + error);
+        });
+}
+
 export const ArchiveUser = async (id) => {
     return await Api.post("/Users/archive/" + id)
         .then((response) => {
@@ -192,6 +232,26 @@ export const AddToTeam = async (id, data) => {
 
 export const RemoveFromTeam = async (id, data) => {
     return await Api.put("/Teams/remove/" + id, data)
+        .then((response) => {
+            return response.data;
+        })
+        .catch((error) => {
+            throw Error("An error has occurred calling the api: " + error);
+        });
+}
+
+export const AddToTeamProjects = async (id, data) => {
+    return await Api.put("/Teams/addProject/" + id, data)
+        .then((response) => {
+            return response.data;
+        })
+        .catch((error) => {
+            throw Error("An error has occurred calling the api: " + error);
+        });
+}
+
+export const RemoveFromTeamProjects = async (id, data) => {
+    return await Api.put("/Teams/removeProject/" + id, data)
         .then((response) => {
             return response.data;
         })

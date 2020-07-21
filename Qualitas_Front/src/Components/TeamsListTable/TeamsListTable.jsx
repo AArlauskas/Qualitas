@@ -16,12 +16,20 @@ import SaveAlt from '@material-ui/icons/SaveAlt';
 import Search from '@material-ui/icons/Search';
 import ViewColumn from '@material-ui/icons/ViewColumn';
 import GroupAddIcon from '@material-ui/icons/GroupAdd';
+import WorkIcon from '@material-ui/icons/Work';
+import { Chip } from '@material-ui/core';
 
 class TeamsListTable extends Component {
     state = {
         columns: [
             {
                 title: "name", field: "name"
+            },
+            {
+                title: "projects", field: "projects", editable: "never", filtering: false,
+                render: rowData => <div>{rowData.projects.map(project => <Chip style={{ marginRight: 2, marginTop: 2 }} key={project.id}
+                    label={project.name}
+                    onClick={() => window.location.href = "/EditTemplate/" + project.id} />)}</div>,
             },
             {
                 title: "Number of users", field: "userCount", type: "numeric", editable: "never"
@@ -50,7 +58,6 @@ class TeamsListTable extends Component {
         };
         return (
             <div>
-                {console.log(this.props.teamsList)}
                 <MaterialTable
                     columns={this.state.columns}
                     data={this.props.teamsList}
@@ -61,23 +68,40 @@ class TeamsListTable extends Component {
                         actionsColumnIndex: -1,
                         pageSize: 10
                     }}
-                    actions={[{
-                        icon: () => <GroupAddIcon />,
-                        tooltip: "Team members",
-                        onClick: (event, rowData) => {
-                            new Promise((resolve) => {
-                                setTimeout(() => {
-                                    resolve();
-                                    window.location.href = "/teamMembers/" + rowData.id
-                                }, 600);
-                            })
+                    actions={[
+                        {
+                            icon: () => <WorkIcon />,
+                            tooltip: "Team projects",
+                            onClick: (event, rowData) => {
+                                new Promise((resolve) => {
+                                    setTimeout(() => {
+                                        resolve();
+                                        window.location.href = "/teamProjects/" + rowData.id
+                                    }, 600);
+                                })
+                            }
+                        },
+                        {
+                            icon: () => <GroupAddIcon />,
+                            tooltip: "Team members",
+                            onClick: (event, rowData) => {
+                                new Promise((resolve) => {
+                                    setTimeout(() => {
+                                        resolve();
+                                        window.location.href = "/teamMembers/" + rowData.id
+                                    }, 600);
+                                })
+                            }
                         }
-                    }]}
+                    ]}
                     editable={{
                         onRowAdd: (newData) =>
                             new Promise((resolve) => {
                                 setTimeout(() => {
                                     resolve();
+                                    if (newData.firstname === "") {
+                                        return;
+                                    }
                                     this.props.createTeam(newData);
                                 }, 600);
                             }),
@@ -85,6 +109,9 @@ class TeamsListTable extends Component {
                             new Promise((resolve) => {
                                 setTimeout(() => {
                                     resolve();
+                                    if (newData.firstname === "") {
+                                        return;
+                                    }
                                     if (oldData) {
                                         this.props.updateTeam(newData);
                                     }

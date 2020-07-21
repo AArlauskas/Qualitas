@@ -32,7 +32,7 @@ namespace Qualitas_Backend.Controllers
         public async Task<IHttpActionResult> GetTeamList()
         {
             var list = new List<TeamListResponse>();
-            await db.Teams.Include(team => team.Users).ForEachAsync(team =>
+            await db.Teams.Include(team => team.Users).Include(team => team.Projects).ForEachAsync(team =>
             {
                 var entry = new TeamListResponse
                 {
@@ -40,6 +40,16 @@ namespace Qualitas_Backend.Controllers
                     name = team.name,
                     userCount = team.Users.Where(user => !user.IsDeleted && !user.IsArchived).Count()
                 };
+                entry.projects = new List<ProjectsListItem>();
+                foreach(var project in team.Projects)
+                {
+                    var tempProject = new ProjectsListItem()
+                    {
+                        id = project.id,
+                        name = project.name
+                    };
+                    entry.projects.Add(tempProject);
+                }
 
                 list.Add(entry);
             });
@@ -94,6 +104,48 @@ namespace Qualitas_Backend.Controllers
             foreach (int value in add)
             {
                 db.Users.Find(value).TeamId = null;
+            }
+
+            await db.SaveChangesAsync();
+
+            return Ok();
+        }
+
+        [HttpPut]
+        [Route("api/Teams/addProject/{id}")]
+        public async Task<IHttpActionResult> AddTeamProjects(int id, int[] add)
+        {
+            Team team = await db.Teams.FindAsync(id);
+            if (team == null)
+            {
+                return NotFound();
+            }
+
+            foreach (int value in add)
+            {
+                var tempProject = db.Projects.Find(value);
+                team.Projects.Add(tempProject);
+            }
+
+            await db.SaveChangesAsync();
+
+            return Ok();
+        }
+
+        [HttpPut]
+        [Route("api/Teams/removeProject/{id}")]
+        public async Task<IHttpActionResult> RemoveTeamProjects(int id, int[] add)
+        {
+            Team team = await db.Teams.FindAsync(id);
+            if (team == null)
+            {
+                return NotFound();
+            }
+
+            foreach (int value in add)
+            {
+                var tempProject = db.Projects.Find(value);
+                team.Projects.Remove(tempProject);
             }
 
             await db.SaveChangesAsync();

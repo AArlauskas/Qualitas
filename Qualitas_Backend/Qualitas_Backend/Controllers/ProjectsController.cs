@@ -159,6 +159,90 @@ namespace Qualitas_Backend.Controllers
             return Ok();
         }
 
+        [HttpPut]
+        [Route("api/Projects/addTeam/{id}")]
+        public async Task<IHttpActionResult> AddTeam(int id, int[] add)
+        {
+            Project project = await db.Projects.FindAsync(id);
+            if (project == null)
+            {
+                return NotFound();
+            }
+
+            foreach (int value in add)
+            {
+                var temp = db.Teams.Find(value);
+                project.Teams.Add(temp);
+            }
+
+            await db.SaveChangesAsync();
+
+            return Ok();
+        }
+
+        [HttpPut]
+        [Route("api/Projects/removeTeam/{id}")]
+        public async Task<IHttpActionResult> RemoveTeam(int id, int[] remove)
+        {
+            Project project = await db.Projects.FindAsync(id);
+            if (project == null)
+            {
+                return NotFound();
+            }
+
+            foreach (int value in remove)
+            {
+                var temp = db.Teams.Find(value);
+                project.Teams.Remove(temp);
+            }
+
+            await db.SaveChangesAsync();
+
+            return Ok();
+        }
+
+        [HttpPut]
+        [Route("api/Projects/addTemplate/{id}")]
+        public async Task<IHttpActionResult> AddTemplate(int id, int[] add)
+        {
+            Project project = await db.Projects.FindAsync(id);
+            if (project == null)
+            {
+                return NotFound();
+            }
+
+            foreach (int value in add)
+            {
+                var temp = db.EvaluationTemplates.Find(value);
+                project.EvaluationTemplates.Add(temp);
+            }
+
+            await db.SaveChangesAsync();
+
+            return Ok();
+        }
+
+        [HttpPut]
+        [Route("api/Projects/removeTemplate/{id}")]
+        public async Task<IHttpActionResult> RemoveTemplate(int id, int[] remove)
+        {
+            Project project = await db.Projects.FindAsync(id);
+            if (project == null)
+            {
+                return NotFound();
+            }
+
+            foreach (int value in remove)
+            {
+                var temp = db.EvaluationTemplates.Find(value);
+                project.EvaluationTemplates.Remove(temp);
+            }
+
+            await db.SaveChangesAsync();
+
+            return Ok();
+        }
+
         // POST: api/Projects
         [ResponseType(typeof(Project))]
         public async Task<IHttpActionResult> PostProject(Project project)

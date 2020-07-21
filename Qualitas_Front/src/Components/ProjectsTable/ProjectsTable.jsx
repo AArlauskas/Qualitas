@@ -16,6 +16,8 @@ import SaveAlt from '@material-ui/icons/SaveAlt';
 import Search from '@material-ui/icons/Search';
 import ViewColumn from '@material-ui/icons/ViewColumn';
 import GroupAddIcon from '@material-ui/icons/GroupAdd';
+import GroupWorkIcon from '@material-ui/icons/GroupWork';
+import DashboardIcon from '@material-ui/icons/Dashboard';
 import { Chip } from '@material-ui/core';
 
 class ProjectsTable extends Component {
@@ -28,7 +30,7 @@ class ProjectsTable extends Component {
                 editable: "never",
                 title: "Templates",
                 field: "templates",
-                render: rowData => <div>{rowData.templates.map(template => <Chip key={template.id}
+                render: rowData => <div>{rowData.templates.map(template => <Chip style={{ marginRight: 2, marginTop: 2 }} key={template.id}
                     label={template.name}
                     onClick={() => window.location.href = "/EditTemplate/" + template.id} />)}</div>,
             },
@@ -36,12 +38,12 @@ class ProjectsTable extends Component {
                 editable: "never",
                 title: "Teams",
                 field: "teams",
-                render: rowData => <div>{rowData.teams.map(team => <Chip key={team.id}
+                render: rowData => <div>{rowData.teams.map(team => <Chip style={{ marginRight: 2, marginTop: 2 }} key={team.id}
                     label={team.name}
                     onClick={() => window.location.href = "/TeamMembers/" + team.id} />)}</div>,
             }
         ];
-        this.setState({ columns: columns })
+        this.setState({ columns: columns, open: false })
     }
 
     render() {
@@ -76,23 +78,53 @@ class ProjectsTable extends Component {
                     title="Projects"
                     columns={this.state.columns}
                     data={this.props.projects}
-                    actions={[{
-                        icon: () => <GroupAddIcon />,
-                        tooltip: "Manage users",
-                        onClick: (event, rowData) => {
-                            new Promise((resolve) => {
-                                setTimeout(() => {
-                                    resolve();
-                                    window.location.href = "/ProjectDetails/" + rowData.id
-                                }, 600);
-                            })
+                    actions={[
+                        {
+                            icon: () => <DashboardIcon />,
+                            tooltip: "Manage templates",
+                            onClick: (event, rowData) => {
+                                new Promise((resolve) => {
+                                    setTimeout(() => {
+                                        resolve();
+                                        window.location.href = "/ProjectTemplates/" + rowData.id
+                                    }, 600);
+                                })
+                            }
+                        },
+                        {
+                            icon: () => <GroupWorkIcon />,
+                            tooltip: "Manage teams",
+                            onClick: (event, rowData) => {
+                                new Promise((resolve) => {
+                                    setTimeout(() => {
+                                        resolve();
+                                        window.location.href = "/ProjectTeams/" + rowData.id
+                                    }, 600);
+                                })
+                            }
+                        },
+
+                        {
+                            icon: () => <GroupAddIcon />,
+                            tooltip: "Manage users",
+                            onClick: (event, rowData) => {
+                                new Promise((resolve) => {
+                                    setTimeout(() => {
+                                        resolve();
+                                        window.location.href = "/ProjectDetails/" + rowData.id
+                                    }, 600);
+                                })
+                            }
                         }
-                    }]}
+                    ]}
                     editable={{
                         onRowAdd: (newData) =>
                             new Promise((resolve) => {
                                 setTimeout(() => {
                                     resolve();
+                                    if (newData.name === "") {
+                                        return;
+                                    }
                                     this.props.addProject(newData);
                                 }, 600);
                             }),

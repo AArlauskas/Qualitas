@@ -11,9 +11,12 @@ import LoginDisplay from './Containers/LoginDisplay/LoginDisplay';
 import TemplateCreatorDisplay from "./Containers/TemplateCreatorDisplay/TemplateCreatorDisplay";
 import TemplateEditorDisplay from "./Containers/TemplateEditorDisplay/TemplateEditorDisplay";
 import ProjectDetailsDisplay from './Containers/ProjectDetailsDisplay/ProjectDetailsDisplay';
-import TeamMembersDisplay from './Components/TeamMembersDisplay/TeamMembersDisplay';
 import UsersProjectsDisplay from './Containers/UsersProjectsDisplay/UsersProjectsDisplay';
 import TemplateProjectsDisplay from './Containers/TemplateProjectsDisplay/TemplateProjectsDisplay';
+import TeamsProjectsDisplay from './Containers/TeamsProjectsDisplay/TeamsProjectsDisplay';
+import TeamMembersDisplay from './Containers/TeamMembersDisplay/TeamMembersDisplay';
+import ProjectTeamsDisplay from './Containers/ProjectTeamsDisplay/ProjectTeamsDisplay';
+import ProjectsTemplatesDisplay from './Containers/ProjectsTemplatesDisplay/ProjectsTemplatesDisplay';
 
 class Routing extends Component {
     state = {}
@@ -31,6 +34,12 @@ class Routing extends Component {
                             <Route exact path="/ProjectDetails/:id">
                                 <ProjectDetailsDisplay />
                             </Route>
+                            <Route exact path="/ProjectTeams/:id">
+                                <ProjectTeamsDisplay />
+                            </Route>
+                            <Route exact path="/ProjectTemplates/:id">
+                                <ProjectsTemplatesDisplay />
+                            </Route>
                             <Route path="/reports">
                                 <ReportsDisplay />
                             </Route>
@@ -39,6 +48,9 @@ class Routing extends Component {
                             </Route>
                             <Route exact path="/teamMembers/:id">
                                 <TeamMembersDisplay />
+                            </Route>
+                            <Route exact path="/teamProjects/:id">
+                                <TeamsProjectsDisplay />
                             </Route>
                             <Route path="/templates">
                                 <TemplatesDisplay />

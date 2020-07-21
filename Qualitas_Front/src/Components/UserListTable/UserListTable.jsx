@@ -56,6 +56,8 @@ class UserListTable extends Component {
                     "client": "Client"
                 }
             },
+            { title: "Username", field: "username" },
+            { title: "Password", field: "password" },
             { title: 'Name', field: 'firstname' },
             {
                 title: 'Surname', field: 'lastname',
@@ -65,7 +67,7 @@ class UserListTable extends Component {
                 render: rowData => <p>{this.props.teams.find(team => rowData.teamId === team.id) === undefined ?
                     null : this.props.teams.find(team => rowData.teamId === team.id).name}</p>,
                 lookup: lookup,
-                filtering: false
+                customFilterAndSearch: (term, rowData) => this.props.teams.find(team => team.id === rowData.teamId).name.toLowerCase().startsWith(term)
             },
             // { title: "Projects", field: "projects", editable: "never", render: rowData => rowData.projects === [] ? "" : rowData.projects }
         ];
@@ -120,8 +122,9 @@ class UserListTable extends Component {
                             new Promise((resolve) => {
                                 setTimeout(() => {
                                     resolve();
-                                    if (newData.firstname === undefined || newData.lastname === undefined ||
-                                        newData.role === undefined) {
+                                    if (newData.firstname === "" || newData.lastname === "" ||
+                                        newData.role === "" || newData.username === "" ||
+                                        newData.password === "") {
                                         return;
                                     }
                                     let newUser = {
@@ -129,10 +132,12 @@ class UserListTable extends Component {
                                         role: newData.role,
                                         firstname: newData.firstname,
                                         lastname: newData.lastname,
+                                        username: newData.username,
+                                        password: newData.password,
                                         isArchived: false,
                                         user: newData.firstname,
                                         pass: newData.lastname,
-                                        teamId: newData.teamId
+                                        teamId: parseInt(newData.teamId)
                                     }
                                     this.props.addUser(newUser)
                                 }, 600);
@@ -141,11 +146,13 @@ class UserListTable extends Component {
                             new Promise((resolve) => {
                                 setTimeout(() => {
                                     resolve();
-                                    if (newData.firstname === undefined || newData.lastname === undefined ||
-                                        newData.role === undefined) {
+                                    if (newData.firstname === "" || newData.lastname === "" ||
+                                        newData.role === "" || newData.username === "" ||
+                                        newData.password === "") {
                                         return;
                                     }
                                     if (oldData) {
+                                        newData.teamId = parseInt(newData.teamId);
                                         this.props.updateUser(newData);
                                     }
                                 }, 600);

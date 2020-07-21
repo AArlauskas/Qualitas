@@ -17,8 +17,6 @@ export const reducer = (state = initialState, action) => {
         }
 
         case ActionType.CREATE_USER: {
-            console.log(state.Users);
-            console.log(action.payload);
             return {
                 ...state,
                 Users: [...state.Users, action.payload]

@@ -42,7 +42,8 @@ namespace Qualitas_Backend.Controllers
                 var entry = new UserListResponse
                 {
                     id = user.id,
-                    name = user.username,
+                    username = user.username,
+                    password = user.password,
                     firstname = user.firstname,
                     lastname = user.lastname,
                     isArchived = user.IsArchived,
@@ -147,7 +148,8 @@ namespace Qualitas_Backend.Controllers
             var entry = new UserListResponse
             {
                 id = user.id,
-                name = user.username,
+                username = user.username,
+                password = user.password,
                 firstname = user.firstname,
                 lastname = user.lastname,
                 isArchived = user.IsArchived,
@@ -168,6 +170,8 @@ namespace Qualitas_Backend.Controllers
             db.Users.Find(id).lastname = request.lastname;
             db.Users.Find(id).RoleType = request.role;
             db.Users.Find(id).TeamId = request.teamId;
+            db.Users.Find(id).username = request.username;
+            db.Users.Find(id).password = request.password;
 
             try
             {
@@ -241,8 +245,8 @@ namespace Qualitas_Backend.Controllers
                 RoleType = request.role,
                 IsArchived = false,
                 IsDeleted = false,
-                username = request.firstname,
-                password = request.lastname,
+                username = request.username,
+                password = request.password,
                 TeamId = request.teamId
             };
 

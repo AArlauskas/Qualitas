@@ -7,9 +7,8 @@
     <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="name" Type="nvarchar" MaxLength="50" Nullable="false" />
     <Property Name="points" Type="int" Nullable="false" />
-    <Property Name="score" Type="int" Nullable="false" />
+    <Property Name="score" Type="float" Nullable="false" />
     <Property Name="TopicId" Type="int" Nullable="false" />
-    <Property Name="CriteriaTemplateId" Type="int" Nullable="false" />
     <Property Name="comment" Type="nvarchar(max)" />
   </EntityType>
   <EntityType Name="CriteriaTemplate">
@@ -28,9 +27,6 @@
     <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="name" Type="nvarchar" MaxLength="50" Nullable="false" />
     <Property Name="createdDate" Type="date" Nullable="false" />
-    <Property Name="score" Type="int" Nullable="false" />
-    <Property Name="points" Type="int" Nullable="false" />
-    <Property Name="EvaluationTemplateId" Type="int" Nullable="false" />
     <Property Name="isDeleted" Type="bit" Nullable="false" />
     <Property Name="UserId" Type="int" Nullable="false" />
   </EntityType>
@@ -98,7 +94,6 @@
     <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="name" Type="nvarchar" MaxLength="50" Nullable="false" />
     <Property Name="isCritical" Type="bit" Nullable="false" />
-    <Property Name="TopicTemplateId" Type="int" Nullable="false" />
     <Property Name="EvaluationId" Type="int" Nullable="false" />
   </EntityType>
   <EntityType Name="TopicTemplate">
@@ -124,18 +119,6 @@
     <Property Name="IsDeleted" Type="bit" Nullable="false" />
     <Property Name="TeamId" Type="int" />
   </EntityType>
-  <Association Name="FK_Criteria_CriteriaTemplate">
-    <End Role="CriteriaTemplate" Type="Self.CriteriaTemplate" Multiplicity="1" />
-    <End Role="Criteria" Type="Self.Criteria" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="CriteriaTemplate">
-        <PropertyRef Name="id" />
-      </Principal>
-      <Dependent Role="Criteria">
-        <PropertyRef Name="CriteriaTemplateId" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
   <Association Name="FK_Criteria_Topic">
     <End Role="Topic" Type="Self.Topic" Multiplicity="1" />
     <End Role="Criteria" Type="Self.Criteria" Multiplicity="*" />
@@ -157,18 +140,6 @@
       </Principal>
       <Dependent Role="CriteriaTemplate">
         <PropertyRef Name="TopicId" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_Evaluation_EvaluationTemplate">
-    <End Role="EvaluationTemplate" Type="Self.EvaluationTemplate" Multiplicity="1" />
-    <End Role="Evaluation" Type="Self.Evaluation" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="EvaluationTemplate">
-        <PropertyRef Name="id" />
-      </Principal>
-      <Dependent Role="Evaluation">
-        <PropertyRef Name="EvaluationTemplateId" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -268,18 +239,6 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="FK_Topic_TopicTemplate">
-    <End Role="TopicTemplate" Type="Self.TopicTemplate" Multiplicity="1" />
-    <End Role="Topic" Type="Self.Topic" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="TopicTemplate">
-        <PropertyRef Name="id" />
-      </Principal>
-      <Dependent Role="Topic">
-        <PropertyRef Name="TopicTemplateId" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
   <Association Name="FK_TopicTemplate_EvaluationTemplate">
     <End Role="EvaluationTemplate" Type="Self.EvaluationTemplate" Multiplicity="1" />
     <End Role="TopicTemplate" Type="Self.TopicTemplate" Multiplicity="*" />
@@ -349,10 +308,6 @@
     <EntitySet Name="Topic" EntityType="Self.Topic" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="TopicTemplate" EntityType="Self.TopicTemplate" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="User" EntityType="Self.User" Schema="dbo" store:Type="Tables" />
-    <AssociationSet Name="FK_Criteria_CriteriaTemplate" Association="Self.FK_Criteria_CriteriaTemplate">
-      <End Role="CriteriaTemplate" EntitySet="CriteriaTemplate" />
-      <End Role="Criteria" EntitySet="Criteria" />
-    </AssociationSet>
     <AssociationSet Name="FK_Criteria_Topic" Association="Self.FK_Criteria_Topic">
       <End Role="Topic" EntitySet="Topic" />
       <End Role="Criteria" EntitySet="Criteria" />
@@ -360,10 +315,6 @@
     <AssociationSet Name="FK_CriteriaTemplate_TopicTemplate" Association="Self.FK_CriteriaTemplate_TopicTemplate">
       <End Role="TopicTemplate" EntitySet="TopicTemplate" />
       <End Role="CriteriaTemplate" EntitySet="CriteriaTemplate" />
-    </AssociationSet>
-    <AssociationSet Name="FK_Evaluation_EvaluationTemplate" Association="Self.FK_Evaluation_EvaluationTemplate">
-      <End Role="EvaluationTemplate" EntitySet="EvaluationTemplate" />
-      <End Role="Evaluation" EntitySet="Evaluation" />
     </AssociationSet>
     <AssociationSet Name="FK_Evaluation_User" Association="Self.FK_Evaluation_User">
       <End Role="User" EntitySet="User" />
@@ -395,10 +346,6 @@
     </AssociationSet>
     <AssociationSet Name="FK_Topic_Evaluation" Association="Self.FK_Topic_Evaluation">
       <End Role="Evaluation" EntitySet="Evaluation" />
-      <End Role="Topic" EntitySet="Topic" />
-    </AssociationSet>
-    <AssociationSet Name="FK_Topic_TopicTemplate" Association="Self.FK_Topic_TopicTemplate">
-      <End Role="TopicTemplate" EntitySet="TopicTemplate" />
       <End Role="Topic" EntitySet="Topic" />
     </AssociationSet>
     <AssociationSet Name="FK_TopicTemplate_EvaluationTemplate" Association="Self.FK_TopicTemplate_EvaluationTemplate">

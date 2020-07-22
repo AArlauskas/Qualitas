@@ -23,12 +23,10 @@ namespace Qualitas_Backend.Models
         public int id { get; set; }
         public string name { get; set; }
         public bool isCritical { get; set; }
-        public int TopicTemplateId { get; set; }
         public int EvaluationId { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Criterion> Criteria { get; set; }
         public virtual Evaluation Evaluation { get; set; }
-        public virtual TopicTemplate TopicTemplate { get; set; }
     }
 }

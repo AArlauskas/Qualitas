@@ -10,7 +10,8 @@ const divStyle = {
   width: '100%',
   height: '100%',
   backgroundImage: `url(${background})`,
-  backgroundSize: 'cover'
+  backgroundSize: 'cover',
+  overflowY: "auto"
 };
 
 ReactDOM.render(

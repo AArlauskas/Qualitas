@@ -8,11 +8,13 @@ using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web.Http;
+using System.Web.Http.Cors;
 using System.Web.Http.Description;
 using Qualitas_Backend.Models;
 
 namespace Qualitas_Backend.Controllers
 {
+    [EnableCors(origins: "*", headers: "*", methods: "*")]
     public class TopicTemplatesController : ApiController
     {
         private QualitasEntities db = new QualitasEntities();

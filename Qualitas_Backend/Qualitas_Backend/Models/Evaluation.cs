@@ -23,13 +23,9 @@ namespace Qualitas_Backend.Models
         public int id { get; set; }
         public string name { get; set; }
         public System.DateTime createdDate { get; set; }
-        public int score { get; set; }
-        public int points { get; set; }
-        public int EvaluationTemplateId { get; set; }
         public bool isDeleted { get; set; }
         public int UserId { get; set; }
     
-        public virtual EvaluationTemplate EvaluationTemplate { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Topic> Topics { get; set; }
         public virtual User User { get; set; }

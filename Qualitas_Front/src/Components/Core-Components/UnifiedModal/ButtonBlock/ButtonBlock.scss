@@ -1,0 +1,12 @@
+.buttonBlock {
+    width: 100%;
+    margin: 30px;
+    text-align: center;
+    display: flex;
+    flex-wrap: wrap;
+
+    .innerButton {
+        width: 40%;
+        margin-left: 16%;
+    }
+}

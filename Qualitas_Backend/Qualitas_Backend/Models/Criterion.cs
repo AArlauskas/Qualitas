@@ -17,12 +17,10 @@ namespace Qualitas_Backend.Models
         public int id { get; set; }
         public string name { get; set; }
         public int points { get; set; }
-        public int score { get; set; }
+        public double score { get; set; }
         public int TopicId { get; set; }
-        public int CriteriaTemplateId { get; set; }
         public string comment { get; set; }
     
-        public virtual CriteriaTemplate CriteriaTemplate { get; set; }
         public virtual Topic Topic { get; set; }
     }
 }

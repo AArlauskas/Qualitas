@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import CaseCreator from '../../Components/CaseCreator/CaseCreator';
-import { FetchUserToEdit } from '../../API/API';
+import { FetchUserToEdit, CreateCase } from '../../API/API';
 import { Select } from '@material-ui/core';
 
 class CaseCreatorDisplay extends Component {
@@ -23,7 +23,7 @@ class CaseCreatorDisplay extends Component {
             <div>
                 {this.state.user.length === 0 ? null :
                     <div>
-                        <div style={{ marginTop: 15, marginLeft: 10 }}>
+                        <div style={{ marginTop: 15, marginLeft: 10, textAlign: "center", marginBottom: 30 }}>
                             <Select
                                 style={{ width: 300 }}
                                 native
@@ -48,11 +48,18 @@ class CaseCreatorDisplay extends Component {
                         </div>
                         {this.state.projectId === null || this.state.templateId === null ? null :
                             <CaseCreator
-                                template={this.state.user.Projects.find(temp => temp.id === this.state.projectId).EvaluationTemplates.find(temp => temp.id === this.state.templateId)} />}
+                                userId={this.state.userId}
+                                createCase={createCase}
+                                template={this.state.user.Projects.find(temp => temp.id === this.state.projectId).EvaluationTemplates.find(temp => temp.id === this.state.templateId)} />
+                        }
                     </div>}
             </div>
         );
     }
+}
+
+const createCase = async (data) => {
+    await CreateCase(data);
 }
 
 export default CaseCreatorDisplay;

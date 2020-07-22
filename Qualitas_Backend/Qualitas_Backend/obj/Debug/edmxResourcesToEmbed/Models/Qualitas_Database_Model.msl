@@ -101,7 +101,6 @@
       <EntityTypeMapping TypeName="QualitasModel.Criterion">
         <MappingFragment StoreEntitySet="Criteria">
           <ScalarProperty Name="comment" ColumnName="comment" />
-          <ScalarProperty Name="CriteriaTemplateId" ColumnName="CriteriaTemplateId" />
           <ScalarProperty Name="TopicId" ColumnName="TopicId" />
           <ScalarProperty Name="score" ColumnName="score" />
           <ScalarProperty Name="points" ColumnName="points" />
@@ -115,9 +114,6 @@
         <MappingFragment StoreEntitySet="Evaluation">
           <ScalarProperty Name="UserId" ColumnName="UserId" />
           <ScalarProperty Name="isDeleted" ColumnName="isDeleted" />
-          <ScalarProperty Name="EvaluationTemplateId" ColumnName="EvaluationTemplateId" />
-          <ScalarProperty Name="points" ColumnName="points" />
-          <ScalarProperty Name="score" ColumnName="score" />
           <ScalarProperty Name="createdDate" ColumnName="createdDate" />
           <ScalarProperty Name="name" ColumnName="name" />
           <ScalarProperty Name="id" ColumnName="id" />
@@ -128,7 +124,6 @@
       <EntityTypeMapping TypeName="QualitasModel.Topic">
         <MappingFragment StoreEntitySet="Topic">
           <ScalarProperty Name="EvaluationId" ColumnName="EvaluationId" />
-          <ScalarProperty Name="TopicTemplateId" ColumnName="TopicTemplateId" />
           <ScalarProperty Name="isCritical" ColumnName="isCritical" />
           <ScalarProperty Name="name" ColumnName="name" />
           <ScalarProperty Name="id" ColumnName="id" />

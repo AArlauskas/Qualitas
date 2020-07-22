@@ -398,3 +398,11 @@ export const FetchProjectToEdit = async (id) => {
         });
 };
 
+export const CreateCase = async (data) => {
+    return await Api.post("/Evaluations/", data).then(response => {
+        return response.data;
+    })
+        .catch((error) => {
+            throw Error("An error has occured calling the api: " + error);
+        });
+}

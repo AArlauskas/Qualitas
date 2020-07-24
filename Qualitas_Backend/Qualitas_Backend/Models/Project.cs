@@ -17,6 +17,7 @@ namespace Qualitas_Backend.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Project()
         {
+            this.Evaluations = new HashSet<Evaluation>();
             this.Teams = new HashSet<Team>();
             this.Users = new HashSet<User>();
             this.EvaluationTemplates = new HashSet<EvaluationTemplate>();
@@ -26,6 +27,8 @@ namespace Qualitas_Backend.Models
         public string name { get; set; }
         public bool isDeleted { get; set; }
     
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Evaluation> Evaluations { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Team> Teams { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

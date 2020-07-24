@@ -8,7 +8,7 @@ class ProjectTeamsDisplay extends Component {
         teams: []
     }
     componentDidMount() {
-        let id = parseInt(window.location.href.split("/ProjectTeams/")[1]);
+        let id = window.location.href.toLowerCase().split("/projectteams/")[1];
         FetchProjectToEdit(id).then(response => this.setState({ project: response }));
         FetchTeamsList().then(response => this.setState({ teams: response }));
     }

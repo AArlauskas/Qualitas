@@ -8,7 +8,7 @@ class ProjectsTemplatesDisplay extends Component {
         templates: []
     }
     componentDidMount() {
-        let id = parseInt(window.location.href.split("/ProjectTemplates/")[1]);
+        let id = window.location.href.toLowerCase().split("/projecttemplates/")[1];
         FetchProjectToEdit(id).then(response => this.setState({ project: response }));
         FetchTemplatesList().then(response => this.setState({ templates: response }));
     }

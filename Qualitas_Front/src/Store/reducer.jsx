@@ -4,7 +4,8 @@ const initialState = {
     Users: [],
     Templates: [],
     Projects: [],
-    Teams: []
+    Teams: [],
+    Evaluations: []
 };
 
 export const reducer = (state = initialState, action) => {
@@ -201,6 +202,22 @@ export const reducer = (state = initialState, action) => {
             return {
                 ...state,
                 Teams: state.Teams.filter(team => team.id !== teamId)
+            }
+        }
+
+        case ActionType.LOAD_USERS_EVALUATIONS: {
+            let evaluations = action.payload;
+            return {
+                ...state,
+                Evaluations: evaluations.filter(evaluation => !evaluation.isDeleted)
+            }
+        }
+
+        case ActionType.DELETE_EVALUATION: {
+            let id = action.payload;
+            return {
+                ...state,
+                Teams: state.Evaluations.filter(temp => temp.id !== id)
             }
         }
 

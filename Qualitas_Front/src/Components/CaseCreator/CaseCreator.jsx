@@ -224,6 +224,7 @@ class CaseCreator extends Component {
                             let data = {
                                 name: this.state.caseName,
                                 UserId: this.props.userId,
+                                ProjectId: this.props.projectId,
                                 Topics: this.state.topics
                             };
                             this.props.createCase(data);

@@ -191,6 +191,16 @@ export const FetchTeamsList = async () => {
         });
 };
 
+export const FetchTeam = async (id) => {
+    return await Api.get("/Teams/" + id)
+        .then((response) => {
+            return response.data;
+        })
+        .catch((error) => {
+            throw Error("An error has occurred calling the api: " + error);
+        });
+};
+
 export const CreateTeam = async (data) => {
     return await Api.post("/Teams/", data)
         .then((response) => {
@@ -398,6 +408,16 @@ export const FetchProjectToEdit = async (id) => {
         });
 };
 
+export const FetchCaseToEdit = async (id) => {
+    return await Api.get("/Evaluations/" + id)
+        .then((response) => {
+            return response.data;
+        })
+        .catch((error) => {
+            throw Error("An error has occurred calling the api: " + error);
+        });
+};
+
 export const CreateCase = async (data) => {
     return await Api.post("/Evaluations/", data).then(response => {
         return response.data;
@@ -406,3 +426,23 @@ export const CreateCase = async (data) => {
             throw Error("An error has occured calling the api: " + error);
         });
 }
+
+export const MarkEvaluationDeleted = async (id) => {
+    return await Api.post("/Evaluations/markdeleted/" + id)
+        .then((response) => {
+            return response.data;
+        })
+        .catch((error) => {
+            console.log(id);
+        });
+};
+
+export const UpdateCase = async (id, data) => {
+    return await Api.put("/Evaluations/" + id, data)
+        .then((response) => {
+            return response.data;
+        })
+        .catch((error) => {
+            throw Error("An error has occurred calling the api: " + error);
+        });
+};

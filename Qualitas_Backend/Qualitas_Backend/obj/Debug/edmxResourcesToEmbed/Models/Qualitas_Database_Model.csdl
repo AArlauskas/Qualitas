@@ -115,6 +115,10 @@
       <Parameter Name="new_diagramname" Mode="In" Type="String" />
     </FunctionImport>
     <FunctionImport Name="sp_upgraddiagrams" />
+    <AssociationSet Name="FK_Evaluation_Project" Association="QualitasModel.FK_Evaluation_Project">
+      <End Role="Project" EntitySet="Projects" />
+      <End Role="Evaluation" EntitySet="Evaluations" />
+    </AssociationSet>
   </EntityContainer>
   <EntityType Name="CriteriaTemplate">
     <Key>
@@ -191,6 +195,7 @@
     <NavigationProperty Name="Users" Relationship="QualitasModel.ProjectsUsers" FromRole="Project" ToRole="User" />
     <NavigationProperty Name="EvaluationTemplates" Relationship="QualitasModel.TemplatesProjects" FromRole="Project" ToRole="EvaluationTemplate" />
     <Property Name="isDeleted" Type="Boolean" Nullable="false" />
+    <NavigationProperty Name="Evaluations" Relationship="QualitasModel.FK_Evaluation_Project" FromRole="Project" ToRole="Evaluation" />
   </EntityType>
   <Association Name="ProjectsTeams">
     <End Type="QualitasModel.Project" Role="Project" Multiplicity="*" />
@@ -227,6 +232,8 @@
     <NavigationProperty Name="Topics" Relationship="QualitasModel.FK_Topic_Evaluation" FromRole="Evaluation" ToRole="Topic" />
     <Property Name="UserId" Type="Int32" Nullable="false" />
     <NavigationProperty Name="User" Relationship="QualitasModel.FK_Evaluation_User" FromRole="Evaluation" ToRole="User" />
+    <Property Name="ProjectId" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="Project" Relationship="QualitasModel.FK_Evaluation_Project" FromRole="Evaluation" ToRole="Project" />
   </EntityType>
   <EntityType Name="Topic">
     <Key>
@@ -238,6 +245,7 @@
     <Property Name="EvaluationId" Type="Int32" Nullable="false" />
     <NavigationProperty Name="Criteria" Relationship="QualitasModel.FK_Criteria_Topic" FromRole="Topic" ToRole="Criterion" />
     <NavigationProperty Name="Evaluation" Relationship="QualitasModel.FK_Topic_Evaluation" FromRole="Topic" ToRole="Evaluation" />
+    <Property Name="failed" Type="Boolean" Nullable="false" />
   </EntityType>
   <Association Name="FK_Criteria_Topic">
     <End Type="QualitasModel.Topic" Role="Topic" Multiplicity="1" />
@@ -286,4 +294,16 @@
     <Property Type="String" Name="Owner" Nullable="true" MaxLength="128" />
     <Property Type="Int32" Name="OwnerID" Nullable="false" />
   </ComplexType>
+  <Association Name="FK_Evaluation_Project">
+    <End Type="QualitasModel.Project" Role="Project" Multiplicity="1" />
+    <End Type="QualitasModel.Evaluation" Role="Evaluation" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Project">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="Evaluation">
+        <PropertyRef Name="ProjectId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
 </Schema>

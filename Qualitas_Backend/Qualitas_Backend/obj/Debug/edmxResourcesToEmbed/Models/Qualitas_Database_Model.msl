@@ -112,6 +112,7 @@
     <EntitySetMapping Name="Evaluations">
       <EntityTypeMapping TypeName="QualitasModel.Evaluation">
         <MappingFragment StoreEntitySet="Evaluation">
+          <ScalarProperty Name="ProjectId" ColumnName="ProjectId" />
           <ScalarProperty Name="UserId" ColumnName="UserId" />
           <ScalarProperty Name="isDeleted" ColumnName="isDeleted" />
           <ScalarProperty Name="createdDate" ColumnName="createdDate" />
@@ -123,6 +124,7 @@
     <EntitySetMapping Name="Topics">
       <EntityTypeMapping TypeName="QualitasModel.Topic">
         <MappingFragment StoreEntitySet="Topic">
+          <ScalarProperty Name="failed" ColumnName="failed" />
           <ScalarProperty Name="EvaluationId" ColumnName="EvaluationId" />
           <ScalarProperty Name="isCritical" ColumnName="isCritical" />
           <ScalarProperty Name="name" ColumnName="name" />

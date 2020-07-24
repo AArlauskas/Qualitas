@@ -95,6 +95,16 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Global.asax" />
+    <Content Include="Models\QualitasDatabaseModelDeployed.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>QualitasDatabaseModelDeployed.edmx</DependentUpon>
+      <LastGenOutput>QualitasDatabaseModelDeployed.Context.cs</LastGenOutput>
+    </Content>
+    <Content Include="Models\QualitasDatabaseModelDeployed.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>QualitasDatabaseModelDeployed.edmx</DependentUpon>
+      <LastGenOutput>QualitasDatabaseModelDeployed.cs</LastGenOutput>
+    </Content>
     <Content Include="Models\Qualitas_Database_Model.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>Qualitas_Database_Model.Context.cs</LastGenOutput>
@@ -122,19 +132,34 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\CriteriaTemplate.cs">
-      <DependentUpon>Qualitas_Database_Model.tt</DependentUpon>
+      <DependentUpon>QualitasDatabaseModelDeployed.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Criterion.cs">
-      <DependentUpon>Qualitas_Database_Model.tt</DependentUpon>
+      <DependentUpon>QualitasDatabaseModelDeployed.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Evaluation.cs">
-      <DependentUpon>Qualitas_Database_Model.tt</DependentUpon>
+      <DependentUpon>QualitasDatabaseModelDeployed.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\EvaluationTemplate.cs">
-      <DependentUpon>Qualitas_Database_Model.tt</DependentUpon>
+      <DependentUpon>QualitasDatabaseModelDeployed.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Project.cs">
-      <DependentUpon>Qualitas_Database_Model.tt</DependentUpon>
+      <DependentUpon>QualitasDatabaseModelDeployed.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\QualitasDatabaseModelDeployed.Context.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>QualitasDatabaseModelDeployed.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\QualitasDatabaseModelDeployed.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>QualitasDatabaseModelDeployed.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\QualitasDatabaseModelDeployed.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>QualitasDatabaseModelDeployed.edmx</DependentUpon>
     </Compile>
     <Compile Include="Models\Qualitas_Database_Model.Context.cs">
       <AutoGen>True</AutoGen>
@@ -152,25 +177,25 @@
       <DependentUpon>Qualitas_Database_Model.edmx</DependentUpon>
     </Compile>
     <Compile Include="Models\sp_helpdiagramdefinition_Result.cs">
-      <DependentUpon>Qualitas_Database_Model.tt</DependentUpon>
+      <DependentUpon>QualitasDatabaseModelDeployed.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\sp_helpdiagrams_Result.cs">
-      <DependentUpon>Qualitas_Database_Model.tt</DependentUpon>
+      <DependentUpon>QualitasDatabaseModelDeployed.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\sysdiagram.cs">
-      <DependentUpon>Qualitas_Database_Model.tt</DependentUpon>
+      <DependentUpon>QualitasDatabaseModelDeployed.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Team.cs">
-      <DependentUpon>Qualitas_Database_Model.tt</DependentUpon>
+      <DependentUpon>QualitasDatabaseModelDeployed.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Topic.cs">
-      <DependentUpon>Qualitas_Database_Model.tt</DependentUpon>
+      <DependentUpon>QualitasDatabaseModelDeployed.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\TopicTemplate.cs">
-      <DependentUpon>Qualitas_Database_Model.tt</DependentUpon>
+      <DependentUpon>QualitasDatabaseModelDeployed.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\User.cs">
-      <DependentUpon>Qualitas_Database_Model.tt</DependentUpon>
+      <DependentUpon>QualitasDatabaseModelDeployed.tt</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Requests\ChangeProjectNameRequest.cs" />
@@ -194,6 +219,13 @@
     </EntityDeploy>
     <Content Include="Models\Qualitas_Database_Model.edmx.diagram">
       <DependentUpon>Qualitas_Database_Model.edmx</DependentUpon>
+    </Content>
+    <EntityDeploy Include="Models\QualitasDatabaseModelDeployed.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>QualitasDatabaseModelDeployed.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+    <Content Include="Models\QualitasDatabaseModelDeployed.edmx.diagram">
+      <DependentUpon>QualitasDatabaseModelDeployed.edmx</DependentUpon>
     </Content>
     <None Include="packages.config" />
     <None Include="Web.Debug.config">

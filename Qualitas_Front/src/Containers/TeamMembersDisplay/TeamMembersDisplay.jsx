@@ -13,7 +13,7 @@ class TeamMembersDisplay extends Component {
     }
 
     componentDidMount() {
-        let teamId = parseInt(window.location.href.split("/teamMembers/")[1]);
+        let teamId = window.location.href.toLowerCase().split("/teammembers/")[1];
         FetchUserList().then(response => this.setState({ users: response }));
         GetTeam(teamId).then(response => this.setState({ team: response }));
     }

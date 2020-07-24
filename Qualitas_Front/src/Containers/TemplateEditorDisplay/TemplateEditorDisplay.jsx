@@ -9,7 +9,7 @@ class TemplateCreatorDisplay extends Component {
     }
 
     componentDidMount() {
-        let id = parseInt(window.location.href.split("/EditTemplate/")[1]);
+        let id = window.location.href.toLowerCase().split("/edittemplate/")[1];
         FetchTemplateToEdit(id).then(response => this.setState({ template: response }));
     }
 

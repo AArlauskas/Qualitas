@@ -29,10 +29,13 @@ class TeamsListTable extends Component {
                 title: "projects", field: "projects", editable: "never", filtering: false,
                 render: rowData => <div>{rowData.projects.map(project => <Chip style={{ marginRight: 2, marginTop: 2 }} key={project.id}
                     label={project.name}
-                    onClick={() => window.location.href = "/EditTemplate/" + project.id} />)}</div>,
+                    onClick={() => window.location.href = "/projectReview/" + project.id} />)}</div>,
             },
             {
-                title: "Number of users", field: "userCount", type: "numeric", editable: "never"
+                title: "Number of users", field: "userCount", editable: "never"
+            },
+            {
+                title: "Score", field: "score", editable: "never", render: rowData => rowData.score + "%"
             }
         ]
     }
@@ -124,7 +127,8 @@ class TeamsListTable extends Component {
                                     this.props.deleteTeam(oldData.id);
                                 }, 600);
                             })
-                    }} />
+                    }}
+                    onRowClick={(event, rowData, togglePanel) => event.target.tagName === "SPAN" ? null : window.location.href = "/teamDetails/" + rowData.id} />
             </div>
         );
     }

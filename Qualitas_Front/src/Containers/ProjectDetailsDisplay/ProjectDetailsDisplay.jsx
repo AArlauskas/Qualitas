@@ -9,7 +9,7 @@ class ProjectDetailsDisplay extends Component {
         users: []
     }
     componentDidMount() {
-        let id = parseInt(window.location.href.split("/ProjectDetails/")[1]);
+        let id = window.location.href.toLowerCase().split("/projectdetails/")[1];
         FetchProjectToEdit(id).then(response => this.setState({ project: response }));
         FetchUserList().then(response => this.setState({ users: response }));
     }

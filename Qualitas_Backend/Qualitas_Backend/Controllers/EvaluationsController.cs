@@ -22,7 +22,7 @@ namespace Qualitas_Backend.Controllers
         // GET: api/Evaluations
         public IQueryable<Evaluation> GetEvaluations()
         {
-            return db.Evaluations;
+            return db.Evaluations.Where(temp => !temp.isDeleted);
         }
 
         // GET: api/Evaluations/5
@@ -52,7 +52,16 @@ namespace Qualitas_Backend.Controllers
                 return BadRequest();
             }
 
-            db.Entry(evaluation).State = EntityState.Modified;
+            db.Evaluations.Find(id).name = evaluation.name;
+            foreach(var topic in evaluation.Topics)
+            {
+                db.Topics.Find(topic.id).failed = topic.failed;
+                foreach(var criteria in topic.Criteria)
+                {
+                    db.Criteria.Find(criteria.id).score = criteria.score;
+                    db.Criteria.Find(criteria.id).comment = criteria.comment;
+                }
+            }
 
             try
             {
@@ -71,6 +80,15 @@ namespace Qualitas_Backend.Controllers
             }
 
             return StatusCode(HttpStatusCode.NoContent);
+        }
+
+        [ResponseType(typeof(void))]
+        [Route("api/Evaluations/markdeleted/{id}")]
+        public async Task<IHttpActionResult> MarkDeleted([FromUri] int id)
+        {
+            db.Evaluations.Find(id).isDeleted = true;
+            await db.SaveChangesAsync();
+            return Ok(id);
         }
 
         // POST: api/Evaluations

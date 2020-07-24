@@ -40,7 +40,7 @@ class ProjectsTable extends Component {
                 field: "teams",
                 render: rowData => <div>{rowData.teams.map(team => <Chip style={{ marginRight: 2, marginTop: 2 }} key={team.id}
                     label={team.name}
-                    onClick={() => window.location.href = "/TeamMembers/" + team.id} />)}</div>,
+                    onClick={() => window.location.href = "/TeamDetails/" + team.id} />)}</div>,
             }
         ];
         this.setState({ columns: columns, open: false })
@@ -145,6 +145,7 @@ class ProjectsTable extends Component {
                                 }, 600);
                             })
                     }}
+                    onRowClick={(event, rowData, togglePanel) => event.target.tagName === "SPAN" ? null : window.location.href = "/projectReview/" + rowData.id}
                 />
             </div>
         );

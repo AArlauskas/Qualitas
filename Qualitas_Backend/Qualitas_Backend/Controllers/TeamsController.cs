@@ -51,6 +51,38 @@ namespace Qualitas_Backend.Controllers
                     entry.projects.Add(tempProject);
                 }
 
+                int points = 0;
+                double score = 0;
+
+                foreach(var user in team.Users.Where(user => !user.IsArchived && !user.IsDeleted))
+                {
+                    foreach(var evaluation in user.Evaluations.Where(temp => !temp.isDeleted))
+                    {
+                        foreach(var topic in evaluation.Topics)
+                        {
+                            foreach(var criteria in topic.Criteria)
+                            {
+                                points += criteria.points;
+                                score += criteria.score;
+                            }
+                        }
+                    }
+                }
+                double average = 0;
+                try
+                {
+                   average  = (score / points)*100;
+                    if(double.IsNaN(average))
+                    {
+                        average = 0;
+                    }
+                }
+                catch
+                {
+                    average = 0;
+                }
+                entry.score = (int)average;
+
                 list.Add(entry);
             });
             return Ok(list);

@@ -19,6 +19,9 @@ import ProjectTeamsDisplay from './Containers/ProjectTeamsDisplay/ProjectTeamsDi
 import ProjectsTemplatesDisplay from './Containers/ProjectsTemplatesDisplay/ProjectsTemplatesDisplay';
 import UserReviewDisplay from './Containers/UserReviewDisplay/UserReviewDisplay';
 import CaseCreatorDisplay from './Containers/CaseCreatorDisplay/CaseCreatorDisplay';
+import CaseEditorDisplay from './Containers/CaseEditorDisplay/CaseEditorDisplay';
+import TeamReviewDisplay from './Containers/TeamReviewDisplay/TeamReviewDisplay';
+import ProjectsReviewDisplay from './Containers/ProjectsReviewDisplay/ProjectsReviewDisplay';
 
 class Routing extends Component {
     state = {}
@@ -32,6 +35,9 @@ class Routing extends Component {
                         <Switch>
                             <Route path="/projects">
                                 <ProjectsDisplay />
+                            </Route>
+                            <Route exact path="/ProjectReview/:id">
+                                <ProjectsReviewDisplay />
                             </Route>
                             <Route exact path="/ProjectDetails/:id">
                                 <ProjectDetailsDisplay />
@@ -53,6 +59,9 @@ class Routing extends Component {
                             </Route>
                             <Route exact path="/teamProjects/:id">
                                 <TeamsProjectsDisplay />
+                            </Route>
+                            <Route exact path="/teamDetails/:id">
+                                <TeamReviewDisplay />
                             </Route>
                             <Route path="/templates">
                                 <TemplatesDisplay />
@@ -78,8 +87,11 @@ class Routing extends Component {
                             <Route exact path="/UsersProjects/:id">
                                 <UsersProjectsDisplay />
                             </Route>
-                            <Route path="/newCase/:userId">
+                            <Route exact path="/newCase/:userId">
                                 <CaseCreatorDisplay />
+                            </Route>
+                            <Route exact path="/editCase/:id">
+                                <CaseEditorDisplay />
                             </Route>
                             <Route>
                                 <Redirect to="/projects" />

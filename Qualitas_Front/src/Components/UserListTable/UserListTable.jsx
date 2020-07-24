@@ -17,6 +17,7 @@ import Search from '@material-ui/icons/Search';
 import ViewColumn from '@material-ui/icons/ViewColumn';
 import ArchiveIcon from '@material-ui/icons/Archive';
 import WorkIcon from '@material-ui/icons/Work';
+import { TextField } from '@material-ui/core';
 
 const tableIcons = {
     Add: forwardRef((props, ref) => <AddBox {...props} ref={ref} />),
@@ -57,7 +58,18 @@ class UserListTable extends Component {
                 }
             },
             { title: "Username", field: "username" },
-            { title: "Password", field: "password" },
+            {
+                title: "Password", field: "password", render: rowData => {
+                    let password = "";
+                    for (var i = 0; i < rowData.password.length; i++) {
+                        password = password.concat("•");
+                    }
+                    return password;
+                },
+                editComponent: props => (
+                    <TextField type="password" value={props.value} onChange={e => props.onChange(e.target.value)} />
+                )
+            },
             { title: 'Name', field: 'firstname' },
             {
                 title: 'Surname', field: 'lastname',

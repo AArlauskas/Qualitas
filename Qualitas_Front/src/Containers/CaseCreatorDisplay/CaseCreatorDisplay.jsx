@@ -6,12 +6,12 @@ import { Select } from '@material-ui/core';
 class CaseCreatorDisplay extends Component {
     state = {
         user: [],
-        userId: parseInt(window.location.href.split("/newCase/")[1]),
+        userId: window.location.href.toLowerCase().split("/newcase/")[1],
         projectId: null,
         templateId: null
     }
     componentDidMount() {
-        let id = parseInt(window.location.href.split("/newCase/")[1]);
+        let id = window.location.href.toLowerCase().split("/newcase/")[1];
         FetchUserToEdit(id).then(response => this.setState({ user: response })).then(() => {
             this.setState({ projectId: this.state.user.Projects[0].id });
             this.setState({ templateId: this.state.user.Projects[0].EvaluationTemplates[0].id });
@@ -48,6 +48,7 @@ class CaseCreatorDisplay extends Component {
                         </div>
                         {this.state.projectId === null || this.state.templateId === null ? null :
                             <CaseCreator
+                                projectId={this.state.projectId}
                                 userId={this.state.userId}
                                 createCase={createCase}
                                 template={this.state.user.Projects.find(temp => temp.id === this.state.projectId).EvaluationTemplates.find(temp => temp.id === this.state.templateId)} />

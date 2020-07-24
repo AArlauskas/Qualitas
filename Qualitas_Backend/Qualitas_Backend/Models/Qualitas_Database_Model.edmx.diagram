@@ -25,6 +25,7 @@
         <AssociationConnector Association="QualitasModel.FK_Topic_Evaluation" />
         
         <AssociationConnector Association="QualitasModel.FK_Evaluation_User" />
+        <AssociationConnector Association="QualitasModel.FK_Evaluation_Project" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

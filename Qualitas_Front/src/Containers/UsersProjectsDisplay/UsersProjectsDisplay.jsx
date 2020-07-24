@@ -8,7 +8,7 @@ class UsersProjectsDisplay extends Component {
         projects: []
     }
     componentDidMount() {
-        let id = parseInt(window.location.href.split("/UsersProjects/")[1]);
+        let id = window.location.href.toLowerCase().split("/usersprojects/")[1];
         FetchProjectsList().then(response => this.setState({ projects: response }));
         FetchUserForProjects(id).then(response => this.setState({ user: response }));
     }

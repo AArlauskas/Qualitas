@@ -8,7 +8,7 @@ class TemplateProjectsDisplay extends Component {
         template: []
     }
     componentDidMount() {
-        let id = parseInt(window.location.href.split("/TemplateProjects/")[1]);
+        let id = window.location.href.toLowerCase().split("/templateprojects/")[1];
         FetchProjectsList().then(response => this.setState({ projects: response }));
         FetchTemplateProjects(id).then(response => this.setState({ template: response }));
     }

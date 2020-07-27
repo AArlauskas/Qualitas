@@ -59,7 +59,7 @@ class UserListTable extends Component {
             },
             { title: "Username", field: "username" },
             {
-                title: "Password", field: "password", render: rowData => {
+                title: "Password", field: "password", filtering: false, render: rowData => {
                     let password = "";
                     for (var i = 0; i < rowData.password.length; i++) {
                         password = password.concat("•");
@@ -78,8 +78,7 @@ class UserListTable extends Component {
                 title: "Team", field: "teamId",
                 render: rowData => <p>{this.props.teams.find(team => rowData.teamId === team.id) === undefined ?
                     null : this.props.teams.find(team => rowData.teamId === team.id).name}</p>,
-                lookup: lookup,
-                customFilterAndSearch: (term, rowData) => this.props.teams.find(team => team.id === rowData.teamId).name.toLowerCase().startsWith(term)
+                lookup: lookup
             },
             // { title: "Projects", field: "projects", editable: "never", render: rowData => rowData.projects === [] ? "" : rowData.projects }
         ];
@@ -170,7 +169,7 @@ class UserListTable extends Component {
                                 }, 600);
                             }),
                     }}
-                    onRowClick={(event, rowData, togglePanel) => window.location.href = "/userDetails/" + rowData.id}
+                    onRowClick={(event, rowData, togglePanel) => rowData.role === "user" ? window.location.href = "/userDetails/" + rowData.id : null}
                 />
             </div>
         );

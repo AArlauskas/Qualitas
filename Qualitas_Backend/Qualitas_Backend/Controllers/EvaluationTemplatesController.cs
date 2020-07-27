@@ -105,25 +105,45 @@ namespace Qualitas_Backend.Controllers
 
         // PUT: api/EvaluationTemplates/5
         [ResponseType(typeof(void))]
+        [HttpPut]
+        [Route("api/EvaluationTemplates/full/{id}")]
         public async Task<IHttpActionResult> PutEvaluationTemplate(int id, CreateFullEvaluationTemplateRequest request)
         {
-            try
+            var template = new EvaluationTemplate()
             {
-                await db.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!EvaluationTemplateExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
+                name = request.TemplateName,
+            };
 
-            return StatusCode(HttpStatusCode.NoContent);
+            var listOfTopics = new List<TopicTemplate>();
+            foreach (var topic in request.Topics)
+            {
+                var tempTopic = new TopicTemplate()
+                {
+                    name = topic.name,
+                    isCritical = topic.critical,
+                    TemplateId = template.id,
+                };
+                var listOfCriteria = new List<CriteriaTemplate>();
+                foreach (var criteria in request.Criteria.Where(temp => temp.parentId == topic.id))
+                {
+                    var tempCriteria = new CriteriaTemplate()
+                    {
+                        name = criteria.name,
+                        points = criteria.points
+                    };
+                    listOfCriteria.Add(tempCriteria);
+                }
+                tempTopic.CriteriaTemplates = listOfCriteria;
+                listOfTopics.Add(tempTopic);
+            }
+            template.TopicTemplates = listOfTopics;
+
+            var originalTemplate = db.EvaluationTemplates.Find(id);
+            template.Projects = originalTemplate.Projects;
+            db.EvaluationTemplates.Remove(db.EvaluationTemplates.Find(originalTemplate.id));
+            db.EvaluationTemplates.Add(template);
+            await db.SaveChangesAsync();
+            return Ok(1);
         }
 
         [HttpPut]

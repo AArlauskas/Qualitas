@@ -442,6 +442,7 @@ class TemplateCreator extends Component {
                         this.state.criteria.forEach(criteria => outputData.Criteria.push({
                             id: criteria.id,
                             name: criteria.name,
+                            points: criteria.points,
                             parentId: criteria.parentId
                         }));
                         this.props.editTemplate(outputData.id, outputData);

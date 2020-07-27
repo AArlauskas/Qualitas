@@ -36,19 +36,23 @@ class TeamReviewList extends Component {
     state = {
         columns: [
             {
-                title: "Name", field: "name", render: rowData => rowData.firstname + " " + rowData.lastname
+                title: "Name", field: "name", render: rowData => rowData.firstname + " " + rowData.lastname,
+                customFilterAndSearch: (term, rowData) => rowData.firstname.toLowerCase().startsWith(term.toLowerCase()) || rowData.lastname.toLowerCase().startsWith(term.toLowerCase())
             },
             {
                 title: "Projects", field: "projects", editable: "never",
                 render: rowData => <div>{rowData.Projects.map(project => <Chip style={{ marginRight: 2, marginTop: 2 }} key={project.id}
                     label={project.name}
-                    onClick={() => window.location.href = "/projectReview/" + project.id} />)}</div>
+                    onClick={() => window.location.href = "/projectReview/" + project.id} />)}</div>,
+                customFilterAndSearch: (term, rowData) => rowData.Projects.some(project => project.name.toLowerCase().startsWith(term.toLowerCase()))
             },
             {
-                title: "Score", field: "score", render: rowData => UsersScore(rowData) + "%"
+                title: "Score", field: "score", render: rowData => UsersScore(rowData) + "%",
+                customFilterAndSearch: (term, rowData) => UsersScore(rowData) === parseInt(term)
             },
             {
-                title: "Evaluated cases", field: "casesCount", render: rowData => rowData.Evaluations.length, filtering: false
+                title: "Evaluated cases", field: "casesCount", render: rowData => rowData.Evaluations.length,
+                customFilterAndSearch: (term, rowData) => rowData.Evaluations.length === parseInt(term)
             }
         ]
     }

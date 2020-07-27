@@ -26,10 +26,11 @@ class TeamsListTable extends Component {
                 title: "name", field: "name"
             },
             {
-                title: "projects", field: "projects", editable: "never", filtering: false,
+                title: "projects", field: "projects", editable: "never",
                 render: rowData => <div>{rowData.projects.map(project => <Chip style={{ marginRight: 2, marginTop: 2 }} key={project.id}
                     label={project.name}
                     onClick={() => window.location.href = "/projectReview/" + project.id} />)}</div>,
+                customFilterAndSearch: (term, rowData) => rowData.projects.some(project => project.name.toLowerCase().startsWith(term.toLowerCase()))
             },
             {
                 title: "Number of users", field: "userCount", editable: "never"

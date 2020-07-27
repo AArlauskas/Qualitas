@@ -341,7 +341,7 @@ export const CreateTemplate = async (data) => {
 }
 
 export const EditTemplate = async (id, data) => {
-    return await Api.put("/EvaluationTemplates/full" + id, data).then(response => {
+    return await Api.put("/EvaluationTemplates/full/" + id, data).then(response => {
         return response.data;
     })
         .catch((error) => {

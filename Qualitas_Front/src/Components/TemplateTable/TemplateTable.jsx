@@ -21,7 +21,7 @@ import { Chip } from '@material-ui/core';
 class TemplateTable extends Component {
     state = {
         columns: [
-            { title: 'Template name', field: 'name' },
+            { title: 'Template name', field: 'name', customFilterAndSearch: (term, rowData) => rowData.name.toLowerCase().startsWith(term.toLowerCase()) },
             {
                 title: "Projects",
                 editable: "never",
@@ -29,7 +29,7 @@ class TemplateTable extends Component {
                 render: rowData => <div>{rowData.Projects.map(project => <Chip style={{ marginRight: 2, marginTop: 2 }} key={project.id}
                     label={project.name}
                     onClick={() => window.location.href = "/ProjectDetails/" + project.id} />)}</div>,
-
+                customFilterAndSearch: (term, rowData) => rowData.Projects.some(project => project.name.toLowerCase().startsWith(term.toLowerCase()))
             }
         ]
     }
@@ -63,7 +63,8 @@ class TemplateTable extends Component {
                     columns={this.state.columns}
                     options={{
                         actionsColumnIndex: -1,
-                        pageSize: 10
+                        pageSize: 10,
+                        filtering: true
                     }}
                     actions={[
                         {

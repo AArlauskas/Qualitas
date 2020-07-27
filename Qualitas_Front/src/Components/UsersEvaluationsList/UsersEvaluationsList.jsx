@@ -27,7 +27,12 @@ const CaseScore = (evaluation) => {
         sumOfPoints = sumOfPoints + criteria.points;
     }));
 
-    return Math.trunc(sumOfScores / sumOfPoints * 100);
+    let average = Math.trunc(sumOfScores / sumOfPoints * 100);
+
+    if (sumOfPoints === 0) {
+        return 0;
+    }
+    else return average;
 }
 
 const date = new Date();

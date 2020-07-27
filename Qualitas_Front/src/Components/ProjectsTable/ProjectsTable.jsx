@@ -25,7 +25,7 @@ class ProjectsTable extends Component {
 
     componentDidMount() {
         let columns = [
-            { title: "Project name", field: "name", },
+            { title: "Project name", field: "name", customFilterAndSearch: (term, rowData) => rowData.name.toLowerCase().startsWith(term.toLowerCase()) },
             {
                 editable: "never",
                 title: "Templates",
@@ -33,6 +33,7 @@ class ProjectsTable extends Component {
                 render: rowData => <div>{rowData.templates.map(template => <Chip style={{ marginRight: 2, marginTop: 2 }} key={template.id}
                     label={template.name}
                     onClick={() => window.location.href = "/EditTemplate/" + template.id} />)}</div>,
+                customFilterAndSearch: (term, rowData) => rowData.templates.some(template => template.name.toLowerCase().startsWith(term.toLowerCase()))
             },
             {
                 editable: "never",
@@ -41,6 +42,7 @@ class ProjectsTable extends Component {
                 render: rowData => <div>{rowData.teams.map(team => <Chip style={{ marginRight: 2, marginTop: 2 }} key={team.id}
                     label={team.name}
                     onClick={() => window.location.href = "/TeamDetails/" + team.id} />)}</div>,
+                customFilterAndSearch: (term, rowData) => rowData.teams.some(team => team.name.toLowerCase().startsWith(term.toLowerCase()))
             }
         ];
         this.setState({ columns: columns, open: false })

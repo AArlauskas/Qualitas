@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { FetchCaseToEdit, UpdateCase } from '../../API/API';
 import CaseEditor from '../../Components/CaseEditor/CaseEditor';
+import LoadingScreen from '../../Components/LoadingScreen/LoadingScreen';
 
 class CaseEditorDisplay extends Component {
     state = {
@@ -13,7 +14,7 @@ class CaseEditorDisplay extends Component {
     render() {
         return (
             <div>
-                {this.state.Case.length === 0 ? null :
+                {this.state.Case.length === 0 ? <LoadingScreen /> :
                     <CaseEditor
                         case={this.state.Case}
                         updateCase={updateCase} />}

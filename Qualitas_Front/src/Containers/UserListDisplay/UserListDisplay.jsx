@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import UserListTable from '../../Components/UserListTable/UserListTable';
 import { connect } from "react-redux";
 import { fetchUserData, addUser, updateUser, archiveUser, fetchTeamNames } from '../../Actions/UserListActions';
+import LoadingScreen from '../../Components/LoadingScreen/LoadingScreen';
 
 
 class UserListDisplay extends Component {
@@ -22,7 +23,7 @@ class UserListDisplay extends Component {
                     updateUser={this.props.updateUser}
                     archiveUser={this.props.archiveUser} />
                 :
-                null
+                <LoadingScreen />
         );
     }
 }

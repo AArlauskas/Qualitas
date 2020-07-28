@@ -4,6 +4,7 @@ import { connect } from "react-redux";
 import { fetchUsersEvaluations, deleteEvaluation } from '../../Actions/UserEvaluationListActions';
 import UsersEvaluationsList from '../../Components/UsersEvaluationsList/UsersEvaluationsList';
 import { FetchUserToEdit } from '../../API/API';
+import LoadingScreen from '../../Components/LoadingScreen/LoadingScreen';
 
 const OverallScore = (evaluations) => {
     let sumOfPoints = 0;
@@ -13,7 +14,12 @@ const OverallScore = (evaluations) => {
         sumOfScore = sumOfScore + criteria.score;
     })));
 
-    return Math.trunc(sumOfScore / sumOfPoints * 100);
+    let average = Math.trunc(sumOfScore / sumOfPoints * 100);
+    if (isNaN(average)) {
+        average = 0;
+    }
+
+    return average;
 }
 
 class UserReviewDisplay extends Component {
@@ -28,7 +34,7 @@ class UserReviewDisplay extends Component {
     render() {
         return (
             <div>
-                {this.state.User.length === 0 ? null :
+                {this.state.User.length === 0 ? <LoadingScreen /> :
                     <div>
                         <div style={{ textAlign: "center" }}>
                             {console.log(this.state.User)}
@@ -37,7 +43,7 @@ class UserReviewDisplay extends Component {
                             <h2>Overall Score: {OverallScore(this.state.User.Evaluations) + "%"}</h2>
                         </div>
                         <div style={{ marginTop: 20, marginBottom: 100 }}>
-                            <Button color="primary" variant="outlined" href={"/newCase/" + window.location.href.toLowerCase().split("/userdetails/")[1]} style={{ marginBottom: 10 }}>Evaluate case</Button>
+                            <Button disabled={this.state.User.Projects.length === 0} color="primary" variant="outlined" href={"/newCase/" + window.location.href.toLowerCase().split("/userdetails/")[1]} style={{ marginBottom: 10 }}>Evaluate case</Button>
                             <UsersEvaluationsList
                                 evaluations={this.props.evaluations}
                                 deleteEvaluation={this.props.deleteEvaluation} />

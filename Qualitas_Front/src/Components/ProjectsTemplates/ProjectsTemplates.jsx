@@ -10,7 +10,7 @@ class ProjectsTemplates extends Component {
         this.props.templates.forEach(template => {
             dataSource.push({
                 key: template.id,
-                title: template.name,
+                title: "labas",
             });
         });
         this.props.project.EvaluationTemplates.forEach(template => {
@@ -42,6 +42,7 @@ class ProjectsTemplates extends Component {
         }
         return (
             <div>
+                {console.log(this.props)}
                 <div style={{ textAlign: "center" }}>
                     <h2>Project's name: {this.props.project.name}</h2>
                 </div>

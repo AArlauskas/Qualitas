@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import UsersProjects from '../../Components/UsersProjects/UsersProjects';
 import { FetchProjectsList, FetchUserForProjects, AddProjectToUser, RemoveProjectFromUser } from '../../API/API';
+import LoadingScreen from '../../Components/LoadingScreen/LoadingScreen';
 
 class UsersProjectsDisplay extends Component {
     state = {
@@ -15,7 +16,7 @@ class UsersProjectsDisplay extends Component {
     render() {
         return (
             <div>
-                {this.state.user.length === 0 || this.state.projects.length === 0 ? null :
+                {this.state.user.length === 0 || this.state.projects.length === 0 ? <LoadingScreen /> :
                     <UsersProjects
                         projects={this.state.projects}
                         user={this.state.user}

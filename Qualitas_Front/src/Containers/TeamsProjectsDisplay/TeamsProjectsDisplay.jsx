@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import TeamsProjects from '../../Components/TeamsProjects/TeamsProjects';
 import { FetchProjectsList, GetTeam, AddToTeamProjects, RemoveFromTeamProjects } from '../../API/API';
+import LoadingScreen from '../../Components/LoadingScreen/LoadingScreen';
 
 class TeamsProjectsDisplay extends Component {
     state = {
@@ -16,7 +17,7 @@ class TeamsProjectsDisplay extends Component {
         return (
             <div>
                 {this.state.projects.length === 0 || this.state.team.length === 0 ?
-                    <p>labas</p> : <TeamsProjects
+                    <LoadingScreen /> : <TeamsProjects
                         team={this.state.team}
                         projects={this.state.projects}
                         addProjects={addTeamProjects}

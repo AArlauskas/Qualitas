@@ -3,6 +3,7 @@ import { Button } from '@material-ui/core';
 import TemplateTable from '../../Components/TemplateTable/TemplateTable';
 import { connect } from "react-redux";
 import { fetchTemplates, deleteTemplate } from '../../Actions/TemplateDisplayActions';
+import LoadingScreen from '../../Components/LoadingScreen/LoadingScreen';
 
 class TemplatesDisplay extends Component {
     state = {}
@@ -12,10 +13,10 @@ class TemplatesDisplay extends Component {
     render() {
         return (
             <div>
-                <Button color="primary" variant="outlined" href="/newTemplate" style={{ marginBottom: 10 }}>Create new template</Button>
-                <TemplateTable
-                    templates={this.props.templates}
-                    deleteTemplate={this.props.deleteTemplate} />
+                {this.props.templates.length === 0 ? <LoadingScreen /> : <div><Button color="primary" variant="outlined" href="/newTemplate" style={{ marginBottom: 10 }}>Create new template</Button>
+                    <TemplateTable
+                        templates={this.props.templates}
+                        deleteTemplate={this.props.deleteTemplate} /></div>}
             </div>
         );
     }

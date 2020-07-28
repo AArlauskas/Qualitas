@@ -56,7 +56,7 @@ class CaseEditor extends Component {
     render() {
         return (
             <div>
-                <div style={{ marginLeft: 500, marginRight: 500, background: "rgba(200, 200, 200, 0.5)" }}>
+                <div style={{ marginLeft: "25%", marginRight: "25%", background: "rgba(200, 200, 200, 0.5)" }}>
                     {console.log(this.state)}
                     {console.log(this.props)}
                     <UnifiedModal open={this.state.modalOpen} title="Comment">

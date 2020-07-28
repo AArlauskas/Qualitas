@@ -1,6 +1,6 @@
 import axios from "axios";
 
-let baseUri = "https://localhost:44326/api"
+let baseUri = "http://infomedia-001-site1.ftempurl.com/api"
 let Api = axios.create({
     baseURL: baseUri,
     headers: {
@@ -282,7 +282,7 @@ export const RemoveFromTeamProjects = async (id, data) => {
 }
 
 export const FetchTemplatesList = async () => {
-    return await Api.get("/EvaluationTemplates/")
+    return await Api.get("/EvaluationTemplates/list")
         .then((response) => {
             return response.data;
         })

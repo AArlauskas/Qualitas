@@ -54,7 +54,7 @@ class TemplateCreator extends Component {
     render() {
         return (
             <div>
-                <div style={{ marginLeft: 500, marginTop: 25, marginRight: 500, background: "rgba(200, 200, 200, 0.5)", textAlign: "center" }}>
+                <div style={{ marginLeft: "25%", marginRight: "25%", marginTop: 25, background: "rgba(200, 200, 200, 0.5)", textAlign: "center" }}>
                     <TextField focused={true} style={{ paddingBottom: 15, width: 250 }} defaultValue={this.state.templateName} label="Template name" onChange={e => this.setState({ templateName: e.target.value })} />
                     <div className="ButtonBlock" >
                         <Button color="secondary" variant="contained" onClick={() => {

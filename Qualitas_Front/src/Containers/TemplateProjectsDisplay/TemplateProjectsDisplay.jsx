@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import TemplateProjects from '../../Components/TemplateProjects/TemplateProjects';
 import { FetchProjectsList, FetchTemplateProjects, AddToTemplateProject, RemoveFromTemplateProject } from '../../API/API';
+import LoadingScreen from '../../Components/LoadingScreen/LoadingScreen';
 
 class TemplateProjectsDisplay extends Component {
     state = {
@@ -16,7 +17,7 @@ class TemplateProjectsDisplay extends Component {
         return (
             <div>
                 {this.state.projects.length === 0 || this.state.template.length === 0 ?
-                    null :
+                    <LoadingScreen /> :
                     <TemplateProjects
                         projects={this.state.projects}
                         template={this.state.template}

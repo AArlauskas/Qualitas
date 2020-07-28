@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from "react-redux";
 import ArchivedUserListTable from '../../Components/ArchivedUserListTable/ArchivedUserListTable';
 import { fetchArchivedUserData, unarchiveUser, deleteUser } from '../../Actions/ArchivedUserListActions';
+import LoadingScrren from "../../Components/LoadingScreen/LoadingScreen";
 
 class ArchiveDisplay extends Component {
     state = {}
@@ -11,7 +12,7 @@ class ArchiveDisplay extends Component {
     render() {
         return (
             <div>
-                {this.props.archivedUserData.length === 0 ? null :
+                {this.props.archivedUserData.length === 0 ? <LoadingScrren /> :
                     <ArchivedUserListTable
                         archivedUserData={this.props.archivedUserData}
                         unarchiveUser={this.props.unarchiveUser}

@@ -27,7 +27,7 @@ namespace Qualitas_Backend.Controllers
         public async Task<IHttpActionResult> GetUsers()
         {
             var list = new List<UserListResponse>();
-            await db.Users.Where(user => !user.IsDeleted).ForEachAsync(user =>
+            await db.Users.Include(user => user.Projects).Where(user => !user.IsDeleted).ForEachAsync(user =>
             {
                 var projects = new List<ProjectsListItem>();
                 foreach(var project in user.Projects)

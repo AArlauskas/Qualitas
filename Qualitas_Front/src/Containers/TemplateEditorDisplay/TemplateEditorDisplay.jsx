@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from "react-redux";
 import TemplateEditor from '../../Components/TemplateEditor/TemplateEditor';
 import { FetchTemplateToEdit, EditTemplate } from '../../API/API';
+import LoadingScreen from '../../Components/LoadingScreen/LoadingScreen';
 
 class TemplateCreatorDisplay extends Component {
     state = {
@@ -16,7 +17,7 @@ class TemplateCreatorDisplay extends Component {
     render() {
         return (
             <div>
-                {this.state.template.length === 0 ? null : <TemplateEditor
+                {this.state.template.length === 0 ? <LoadingScreen /> : <TemplateEditor
                     template={this.state.template}
                     editTemplate={editTemplate} />}
             </div>

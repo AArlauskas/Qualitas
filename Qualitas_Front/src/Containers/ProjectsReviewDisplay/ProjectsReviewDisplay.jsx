@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import ProjectsReview from '../../Components/ProjectsReview/ProjectsReview';
 import { FetchProjectToEdit } from '../../API/API';
+import LoadingScreen from '../../Components/LoadingScreen/LoadingScreen';
 
 class ProjectsReviewDisplay extends Component {
     state = {
@@ -13,7 +14,7 @@ class ProjectsReviewDisplay extends Component {
     render() {
         return (
             <div>
-                {this.state.Project.length === 0 ? null : <div>
+                {this.state.Project.length === 0 ? <LoadingScreen /> : <div>
                     <div style={{ textAlign: "center" }}>
                         {console.log(this.state.Project)}
                         <h2>Project's name: {this.state.Project.name}</h2>

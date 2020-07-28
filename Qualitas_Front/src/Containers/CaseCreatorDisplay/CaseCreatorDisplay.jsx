@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import CaseCreator from '../../Components/CaseCreator/CaseCreator';
 import { FetchUserToEdit, CreateCase } from '../../API/API';
 import { Select } from '@material-ui/core';
+import LoadingScreen from '../../Components/LoadingScreen/LoadingScreen';
 
 class CaseCreatorDisplay extends Component {
     state = {
@@ -21,7 +22,7 @@ class CaseCreatorDisplay extends Component {
     render() {
         return (
             <div>
-                {this.state.user.length === 0 ? null :
+                {this.state.user.length === 0 ? <LoadingScreen /> :
                     <div>
                         <div style={{ marginTop: 15, marginLeft: 10, textAlign: "center", marginBottom: 30 }}>
                             <Select

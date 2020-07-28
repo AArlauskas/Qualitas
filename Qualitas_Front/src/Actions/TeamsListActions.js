@@ -10,10 +10,12 @@ export const fetchTeamsList = () => async (dispatch) => {
 };
 
 export const createTeam = (data) => async (dispatch) => {
-    let team = await CreateTeam(data);
+    await CreateTeam(data);
+    let createdTeam = data;
+    createdTeam.projects = [];
     dispatch({
         type: ActionType.CREATE_TEAM,
-        payload: await team
+        payload: createdTeam
     })
 };
 

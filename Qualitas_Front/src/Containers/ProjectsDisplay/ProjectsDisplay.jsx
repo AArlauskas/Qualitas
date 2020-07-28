@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from "react-redux";
 import ProjectsTable from "../../Components/ProjectsTable/ProjectsTable";
 import { fetchProjects, changeProjectName, deleteProject, addProject } from '../../Actions/ProjectsTableActions';
+import LoadingScreen from '../../Components/LoadingScreen/LoadingScreen';
 
 
 class ProjectsDisplay extends Component {
@@ -14,12 +15,13 @@ class ProjectsDisplay extends Component {
 
         return (
             <div>
-                <ProjectsTable
-                    projects={this.props.projects}
-                    addProject={this.props.addProject}
-                    updateProject={this.props.updateProject}
-                    deleteProject={this.props.deleteProject}
-                />
+                {this.props.projects.length === 0 ? <LoadingScreen /> :
+                    <ProjectsTable
+                        projects={this.props.projects}
+                        addProject={this.props.addProject}
+                        updateProject={this.props.updateProject}
+                        deleteProject={this.props.deleteProject}
+                    />}
             </div>
         );
     }

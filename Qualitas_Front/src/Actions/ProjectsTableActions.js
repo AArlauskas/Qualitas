@@ -21,10 +21,13 @@ export const addProject = (data) => async (dispatch) => {
     let createdProject = {
         name: data.name,
     }
+    let updatedData = data;
+    updatedData.teams = [];
+    updatedData.templates = [];
     await CreateProject(createdProject);
     dispatch({
         type: ActionType.CREATE_PROJECT,
-        payload: createdProject
+        payload: updatedData
     })
 }
 
@@ -37,7 +40,7 @@ export const changeProjectName = (data) => async (dispatch) => {
     await UpadateProjectName(updatedProject.id, updatedProject);
     dispatch({
         type: ActionType.UPDATE_PROJECT,
-        payload: updatedProject
+        payload: data
     })
 }
 

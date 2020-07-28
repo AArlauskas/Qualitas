@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import ProjectDetails from '../../Components/ProjectDetails/ProjectDetails';
 import { connect } from "react-redux";
 import { FetchProjectToEdit, FetchUserList, AddToProjectUser, RemoveFromProjectUser } from '../../API/API';
+import LoadingScreen from '../../Components/LoadingScreen/LoadingScreen';
 
 class ProjectDetailsDisplay extends Component {
     state = {
@@ -16,7 +17,7 @@ class ProjectDetailsDisplay extends Component {
     render() {
         return (
             <div>
-                {this.state.project.length === 0 || this.state.users.length === 0 ? null :
+                {this.state.project.length === 0 || this.state.users.length === 0 ? <LoadingScreen /> :
                     <ProjectDetails
                         project={this.state.project}
                         users={this.state.users}

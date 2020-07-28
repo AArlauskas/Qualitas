@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import ProjectTeams from '../../Components/ProjectTeams/ProjectTeams';
 import { FetchProjectToEdit, FetchTeamsList, AddToProjectTeam, RemoveFromProjectTeam } from '../../API/API';
+import LoadingScreen from '../../Components/LoadingScreen/LoadingScreen';
 
 class ProjectTeamsDisplay extends Component {
     state = {
@@ -15,7 +16,7 @@ class ProjectTeamsDisplay extends Component {
     render() {
         return (
             <div>
-                {this.state.project.length === 0 || this.state.teams.length === 0 ? null :
+                {this.state.project.length === 0 || this.state.teams.length === 0 ? <LoadingScreen /> :
                     <ProjectTeams
                         project={this.state.project}
                         teams={this.state.teams}

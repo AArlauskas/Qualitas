@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import TeamMembers from '../../Components/TeamMembers/TeamMembers';
 import { FetchUserList, GetTeam, AddToTeam, RemoveFromTeam } from '../../API/API';
+import LoadingScreen from '../../Components/LoadingScreen/LoadingScreen';
 
 class TeamMembersDisplay extends Component {
 
@@ -26,7 +27,7 @@ class TeamMembersDisplay extends Component {
                         users={this.state.users}
                         team={this.state.team}
                         addTeamMembers={addTeamMembers}
-                        removeTeamMembers={removeTeamMembers} /> : null}
+                        removeTeamMembers={removeTeamMembers} /> : <LoadingScreen />}
             </div>
         );
     }

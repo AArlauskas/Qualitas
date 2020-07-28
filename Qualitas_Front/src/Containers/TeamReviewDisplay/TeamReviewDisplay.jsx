@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import TeamReviewList from '../../Components/TeamReviewList/TeamReviewList';
 import { FetchTeam } from '../../API/API';
+import LoadingScreen from '../../Components/LoadingScreen/LoadingScreen';
 
 class TeamReviewDisplay extends Component {
     state = {
@@ -14,7 +15,7 @@ class TeamReviewDisplay extends Component {
         return (
             <div>
                 {console.log(this.state.Team)}
-                {this.state.Team.length === 0 ? null :
+                {this.state.Team.length === 0 ? <LoadingScreen /> :
                     <div>
                         <div style={{ textAlign: "center" }}>
                             <h2>Team: {this.state.Team.name}</h2>

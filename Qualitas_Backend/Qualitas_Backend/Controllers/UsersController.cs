@@ -20,7 +20,7 @@ namespace Qualitas_Backend.Controllers
     [EnableCors(origins: "*", headers: "*", methods: "*")]
     public class UsersController : ApiController
     {
-        private QualitasEntities db = new QualitasEntities();
+        private DB_QualitasHostedEntities db = new DB_QualitasHostedEntities();
 
         // GET: api/Users
         [ResponseType(typeof(List<UserListResponse>))]

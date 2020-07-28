@@ -17,7 +17,7 @@ namespace Qualitas_Backend.Controllers
     [EnableCors(origins: "*", headers: "*", methods: "*")]
     public class TopicTemplatesController : ApiController
     {
-        private QualitasEntities db = new QualitasEntities();
+        private DB_QualitasHostedEntities db = new DB_QualitasHostedEntities();
 
         // GET: api/TopicTemplates
         public IQueryable<TopicTemplate> GetTopicTemplates()

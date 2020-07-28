@@ -20,12 +20,43 @@ namespace Qualitas_Backend.Controllers
     [EnableCors(origins: "*", headers: "*", methods: "*")]
     public class EvaluationTemplatesController : ApiController
     {
-        private QualitasEntities db = new QualitasEntities();
+        private DB_QualitasHostedEntities db = new DB_QualitasHostedEntities();
 
         // GET: api/EvaluationTemplates
         public IQueryable<EvaluationTemplate> GetEvaluationTemplates()
         {
             return db.EvaluationTemplates.Include(template => template.TopicTemplates).Where(template => !template.isDeleted);
+        }
+
+        [HttpGet]
+        [Route("api/EvaluationTemplates/list")]
+        public async Task<IHttpActionResult> GetEvaluationList()
+        {
+            var list = new List<EvaluationTemplateListItem>();
+            foreach(var template in db.EvaluationTemplates.Where(temp => !temp.isDeleted))
+            {
+                var tempTemplate = new EvaluationTemplateListItem()
+                {
+                    id = template.id,
+                    name = template.name
+                };
+
+                var listOfProjects = new List<ProjectsListItem>();
+
+                foreach(var project in template.Projects.Where(temp => !temp.isDeleted))
+                {
+                    var tempProject = new ProjectsListItem()
+                    {
+                        id = project.id,
+                        name = project.name,
+                    };
+                    listOfProjects.Add(tempProject);
+                }
+                tempTemplate.Projects = listOfProjects;
+                list.Add(tempTemplate);
+            }
+
+            return Ok(list);
         }
 
         // GET: api/EvaluationTemplates/5
@@ -137,10 +168,10 @@ namespace Qualitas_Backend.Controllers
                 listOfTopics.Add(tempTopic);
             }
             template.TopicTemplates = listOfTopics;
-
+            db.EvaluationTemplates.Find(id).isDeleted = true;
             var originalTemplate = db.EvaluationTemplates.Find(id);
             template.Projects = originalTemplate.Projects;
-            db.EvaluationTemplates.Remove(db.EvaluationTemplates.Find(originalTemplate.id));
+
             db.EvaluationTemplates.Add(template);
             await db.SaveChangesAsync();
             return Ok(1);

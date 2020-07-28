@@ -1,0 +1,9 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<parameters>
+  <parameter name="QualitasEntities-Web.config Connection String" description="QualitasEntities Connection String used in web.config by the application to access the database." defaultValue="metadata=res://*/Models.Qualitas_Database_Model.csdl|res://*/Models.Qualitas_Database_Model.ssdl|res://*/Models.Qualitas_Database_Model.msl;provider=System.Data.SqlClient;provider connection string=&quot;data source=.\SQLEXPRESS;initial catalog=Qualitas;integrated security=True;MultipleActiveResultSets=True;App=EntityFramework&quot;" tags="SqlConnectionString">
+    <parameterEntry kind="XmlFile" scope="C:\\Users\\Aurimas\\Desktop\\Qualitas\\Qualitas_Backend\\Qualitas_Backend\\obj\\Release\\Package\\PackageTmp\\Web\.config$" match="/configuration/connectionStrings/add[@name='QualitasEntities']/@connectionString" />
+  </parameter>
+  <parameter name="DB_QualitasHostedEntities-Web.config Connection String" description="DB_QualitasHostedEntities Connection String used in web.config by the application to access the database." defaultValue="metadata=res://*/Models.QualitasDatabaseModelDeployed.csdl|res://*/Models.QualitasDatabaseModelDeployed.ssdl|res://*/Models.QualitasDatabaseModelDeployed.msl;provider=System.Data.SqlClient;provider connection string=&quot;data source=SQL5063.site4now.net;initial catalog=DB_A64F90_Qualitas;persist security info=True;user id=DB_A64F90_Qualitas_admin;password=Qualitas123;MultipleActiveResultSets=True;App=EntityFramework&quot;" tags="SqlConnectionString">
+    <parameterEntry kind="XmlFile" scope="C:\\Users\\Aurimas\\Desktop\\Qualitas\\Qualitas_Backend\\Qualitas_Backend\\obj\\Release\\Package\\PackageTmp\\Web\.config$" match="/configuration/connectionStrings/add[@name='DB_QualitasHostedEntities']/@connectionString" />
+  </parameter>
+</parameters>

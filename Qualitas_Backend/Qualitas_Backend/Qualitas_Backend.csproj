@@ -204,6 +204,7 @@
     <Compile Include="Requests\LoginRequest.cs" />
     <Compile Include="Requests\SubClassesForRequests\CriteriaRequest.cs" />
     <Compile Include="Requests\SubClassesForRequests\TopicRequest.cs" />
+    <Compile Include="Responses\EvaluationTemplateListItem.cs" />
     <Compile Include="Responses\GetFullEvaluationTemplateResponse.cs" />
     <Compile Include="Responses\LoginResponse.cs" />
     <Compile Include="Responses\ProjectsListItem.cs" />
@@ -228,6 +229,7 @@
       <DependentUpon>QualitasDatabaseModelDeployed.edmx</DependentUpon>
     </Content>
     <None Include="packages.config" />
+    <None Include="Properties\PublishProfiles\CustomProfile.pubxml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

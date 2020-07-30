@@ -7,7 +7,7 @@ export default class ProjectDetails extends React.Component {
         super(props);
         const dataSource = [];
         const targetKeys = [];
-        this.props.users.filter(user => !user.isArcived && !user.isDeleted).forEach(user => {
+        this.props.users.forEach(user => {
             dataSource.push({
                 key: user.id,
                 title: user.firstname + " " + user.lastname,
@@ -17,6 +17,7 @@ export default class ProjectDetails extends React.Component {
             targetKeys.push(user.id);
         });
         console.log(dataSource);
+        console.log(targetKeys);
         this.state = {
             dataSource: dataSource,
             selectedKeys: [],

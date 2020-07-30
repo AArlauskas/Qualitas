@@ -4,7 +4,7 @@ import { PeopleRounded, DashboardRounded, AssignmentTurnedInOutlined, ArchiveOut
 import QLogo from "../../Images/QLogo.png";
 import "./NavigationBreadcrumbs.scss";
 
-const NavigationBreadcrumbs = () => {
+const NavigationBreadcrumbsAdmin = () => {
     const currentPage = window.location.pathname;
     return (
         <div className="Navigation-Breadcrumbs-Wrapper">
@@ -64,4 +64,4 @@ const NavigationBreadcrumbs = () => {
     );
 };
 
-export default NavigationBreadcrumbs;
+export default NavigationBreadcrumbsAdmin;

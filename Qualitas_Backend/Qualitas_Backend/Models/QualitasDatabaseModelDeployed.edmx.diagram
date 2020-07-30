@@ -25,6 +25,7 @@
         <AssociationConnector Association="DB_QualitasHostedModel.ProjectsTeams" ManuallyRouted="false" />
         <AssociationConnector Association="DB_QualitasHostedModel.ProjectsUsers" ManuallyRouted="false" />
         <AssociationConnector Association="DB_QualitasHostedModel.TemplatesProjects" ManuallyRouted="false" />
+        <AssociationConnector Association="DB_QualitasHostedModel.FK_Evaluation_Evaluators" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

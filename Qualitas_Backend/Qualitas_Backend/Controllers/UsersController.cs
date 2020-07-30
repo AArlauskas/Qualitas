@@ -23,44 +23,140 @@ namespace Qualitas_Backend.Controllers
         private DB_QualitasHostedEntities db = new DB_QualitasHostedEntities();
 
         // GET: api/Users
-        [ResponseType(typeof(List<UserListResponse>))]
         public async Task<IHttpActionResult> GetUsers()
         {
-            var list = new List<UserListResponse>();
-            await db.Users.Include(user => user.Projects).Where(user => !user.IsDeleted).ForEachAsync(user =>
+            var users = db.Users.Where(user => !user.IsDeleted).Select(user => new
             {
-                var projects = new List<ProjectsListItem>();
-                foreach(var project in user.Projects)
+                user.id,
+                user.username,
+                user.password,
+                user.firstname,
+                user.lastname,
+                isArchived = user.IsArchived,
+                role = user.RoleType,
+                teamId = user.TeamId,
+                teamName = user.Team.name,
+                projects = user.Projects.Where(project => !project.isDeleted).Select(project => new
                 {
-                    var item = new ProjectsListItem()
+                    project.id,
+                    project.name,
+                }),
+                average = (int?)(user.Evaluations.Where(evaluation => !evaluation.isDeleted).Select(evaluation => evaluation.Topics.
+                        Select(topic => topic.Criteria.Select(criteria => (double?)criteria.score).ToList().Sum()).Sum()).Sum() /
+                        user.Evaluations.Where(evaluation => !evaluation.isDeleted).Select(evaluation => evaluation.Topics.
+                        Select(topic => topic.Criteria.Select(criteria => (int?)criteria.points).ToList().Sum()).Sum()).Sum() * 100)
+            });
+
+            return Ok(users);
+        }
+
+        [HttpGet]
+        [Route("api/Users/simple")]
+        public async Task<IHttpActionResult> GetUserListSimple()
+        {
+            var users = db.Users.Where(user => !user.IsArchived && !user.IsDeleted).Select(user => new
+            {
+                user.id,
+                firstname = user.firstname,
+                lastname = user.lastname,
+            });
+
+            return Ok(users);
+        }
+
+        [HttpGet]
+        [Route("api/Users/credentials/{id}")]
+        public async Task<IHttpActionResult> GetUserCredentials(int id)
+        {
+            var users = await db.Users.Select(user => new
+            {
+                user.id,
+                user.username,
+                user.password
+            }).FirstOrDefaultAsync(user => user.id == id);
+
+            if(users == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(users);
+        }
+
+        [HttpGet]
+        [Route("api/Users/Teams/simple/{id}")]
+        public async Task<IHttpActionResult> GetUserListSimpleForTeam(int id)
+        {
+            var users = db.Users.Where(user => !user.IsArchived && !user.IsDeleted).Where(user => user.TeamId == id || user.TeamId == null).Select(user => new
+            {
+                user.id,
+                firstname = user.firstname,
+                lastname = user.lastname,
+            });
+
+            return Ok(users);
+        }
+
+        [HttpGet]
+        [Route("api/Users/Projects/Templates/{id}")]
+        public async Task<IHttpActionResult> GetUserListSimpleForProjectsTemplates(int id)
+        {
+            var users = await db.Users.Where(user => !user.IsArchived && !user.IsDeleted).Select(user => new
+            {
+                user.id,
+                firstname = user.firstname,
+                lastname = user.lastname,
+                Projects = user.Projects.Where(project => !project.isDeleted).Select(project => new
+                {
+                    project.id,
+                    project.name,
+                    EvaluationTemplates = project.EvaluationTemplates.Where(template => !template.isDeleted).Select(template => new
                     {
-                        id = project.id,
-                        name = project.name
-                    };
-                    projects.Add(item);
-                }
-                var entry = new UserListResponse
-                {
+                        template.id,
+                        template.name
+                    })
+                })
+            }).FirstOrDefaultAsync(user => user.id == id);
+
+            return Ok(users);
+        }
+
+        [HttpGet]
+        [Route("api/Users/review/{id}")]
+        public async Task<IHttpActionResult> GetUserReview(int id)
+        {
+            var users = await db.Users
+                .Select(user => new {
                     id = user.id,
-                    username = user.username,
-                    password = user.password,
                     firstname = user.firstname,
                     lastname = user.lastname,
-                    isArchived = user.IsArchived,
-                    role = user.RoleType,
-                    teamId = user.TeamId,
-                    projects = projects
-                };
+                    teamName = user.Team.name,
+                    valid = user.Projects.Any(project => project.Evaluations.Count() > 0),
+                    projectCount = user.Projects.Where(project => !project.isDeleted).Count(),
+                    Evaluations = user.Evaluations.Where(evaluation => !evaluation.isDeleted).Select(evaluation => new
+                    {
+                        evaluation.id,
+                        evaluation.name,
+                        projectName = evaluation.Project.name,
+                        projectId = evaluation.Project.id,
+                        evaluation.createdDate,
+                        evaluator = evaluation.Evaluator.firstname + " " + evaluation.Evaluator.lastname,
+                        average = (int?)(evaluation.Topics.Select(topic => topic.Criteria.Select(criteria => (double?)criteria.score).ToList().Sum()).Sum() /
+                        evaluation.Topics.Select(topic => topic.Criteria.Select(criteria => (int?)criteria.points).ToList().Sum()).Sum() * 100)
 
-                list.Add(entry);
-            });
-            return Ok(list);
+                    })
+                }).FirstOrDefaultAsync(temp => temp.id == id);
+            if (users == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(users);
         }
 
         [ResponseType(typeof(LoginResponse))]
-        [HttpGet]
+        [HttpPost]
         [Route("api/Users/login")]
-
         public async Task<IHttpActionResult> Login(LoginRequest request)
         {
             try
@@ -159,6 +255,33 @@ namespace Qualitas_Backend.Controllers
             };
 
             return Ok(entry);
+        }
+
+        [ResponseType(typeof(void))]
+        [HttpPut]
+        [Route("api/Users/credentials/{id}")]
+        public async Task<IHttpActionResult> ChangeCredentials (int id, ChangeCredentialsRequest request)
+        {
+            db.Users.Find(id).username = request.username;
+            db.Users.Find(id).password = request.password;
+
+            try
+            {
+                await db.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!UserExists(id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            return StatusCode(HttpStatusCode.NoContent);
         }
 
         // PUT: api/Users/5

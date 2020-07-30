@@ -30,6 +30,7 @@
     <Property Name="isDeleted" Type="bit" Nullable="false" />
     <Property Name="UserId" Type="int" Nullable="false" />
     <Property Name="ProjectId" Type="int" Nullable="false" />
+    <Property Name="EvaluatorId" Type="int" />
   </EntityType>
   <EntityType Name="EvaluationTemplate">
     <Key>
@@ -142,6 +143,18 @@
       </Principal>
       <Dependent Role="CriteriaTemplate">
         <PropertyRef Name="TopicId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Evaluation_Evaluators">
+    <End Role="User" Type="Self.User" Multiplicity="0..1" />
+    <End Role="Evaluation" Type="Self.Evaluation" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="User">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="Evaluation">
+        <PropertyRef Name="EvaluatorId" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -329,6 +342,10 @@
     <AssociationSet Name="FK_CriteriaTemplate_TopicTemplate" Association="Self.FK_CriteriaTemplate_TopicTemplate">
       <End Role="TopicTemplate" EntitySet="TopicTemplate" />
       <End Role="CriteriaTemplate" EntitySet="CriteriaTemplate" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Evaluation_Evaluators" Association="Self.FK_Evaluation_Evaluators">
+      <End Role="User" EntitySet="User" />
+      <End Role="Evaluation" EntitySet="Evaluation" />
     </AssociationSet>
     <AssociationSet Name="FK_Evaluation_Project" Association="Self.FK_Evaluation_Project">
       <End Role="Project" EntitySet="Project" />

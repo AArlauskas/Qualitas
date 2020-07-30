@@ -1,21 +1,20 @@
 import React, { Component } from 'react';
 import UserListTable from '../../Components/UserListTable/UserListTable';
 import { connect } from "react-redux";
-import { fetchUserData, addUser, updateUser, archiveUser, fetchTeamNames } from '../../Actions/UserListActions';
+import { fetchUserData, addUser, updateUser, archiveUser } from '../../Actions/UserListActions';
 import LoadingScreen from '../../Components/LoadingScreen/LoadingScreen';
 
 
 class UserListDisplay extends Component {
     componentDidMount() {
         this.props.fetchUserData();
-        this.props.fetchTeamNames();
     }
     state = {
         type: "user"
     }
     render() {
         return (
-            this.props.teams.length !== 0 ?
+            this.props.userData.length !== 0 ?
                 <UserListTable
                     userData={this.props.userData}
                     teams={this.props.teams}
@@ -36,7 +35,6 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => ({
     fetchUserData: () => dispatch(fetchUserData()),
-    fetchTeamNames: () => dispatch(fetchTeamNames()),
     addUser: (data) => dispatch(addUser(data)),
     updateUser: (data) => dispatch(updateUser(data)),
     archiveUser: (oldData) => dispatch(archiveUser(oldData))

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import TeamsProjects from '../../Components/TeamsProjects/TeamsProjects';
-import { FetchProjectsList, GetTeam, AddToTeamProjects, RemoveFromTeamProjects } from '../../API/API';
+import { AddToTeamProjects, RemoveFromTeamProjects, FetchProjectsSimple, FetchTeamsProjects } from '../../API/API';
 import LoadingScreen from '../../Components/LoadingScreen/LoadingScreen';
 
 class TeamsProjectsDisplay extends Component {
@@ -10,8 +10,8 @@ class TeamsProjectsDisplay extends Component {
     }
     componentDidMount() {
         let id = window.location.href.toLowerCase().split("/teamprojects/")[1];
-        FetchProjectsList().then(response => this.setState({ projects: response }));
-        GetTeam(id).then(response => this.setState({ team: response }));
+        FetchProjectsSimple().then(response => this.setState({ projects: response }));
+        FetchTeamsProjects(id).then(response => this.setState({ team: response }));
     }
     render() {
         return (

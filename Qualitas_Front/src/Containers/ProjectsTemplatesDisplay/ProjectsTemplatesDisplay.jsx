@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import ProjectsTemplates from '../../Components/ProjectsTemplates/ProjectsTemplates';
-import { FetchProjectToEdit, FetchTemplatesList, AddToProjectTemplate, RemoveFromProjectTemplate } from '../../API/API';
+import { FetchProjectTemplates, FetchTemplatesList, AddToProjectTemplate, RemoveFromProjectTemplate } from '../../API/API';
 import LoadingScreen from '../../Components/LoadingScreen/LoadingScreen';
 
 class ProjectsTemplatesDisplay extends Component {
@@ -10,7 +10,7 @@ class ProjectsTemplatesDisplay extends Component {
     }
     componentDidMount() {
         let id = window.location.href.toLowerCase().split("/projecttemplates/")[1];
-        FetchProjectToEdit(id).then(response => this.setState({ project: response }));
+        FetchProjectTemplates(id).then(response => this.setState({ project: response }));
         FetchTemplatesList().then(response => this.setState({ templates: response }));
     }
     render() {

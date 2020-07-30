@@ -10,9 +10,11 @@ export const fetchTeamsList = () => async (dispatch) => {
 };
 
 export const createTeam = (data) => async (dispatch) => {
-    await CreateTeam(data);
+    let id = await CreateTeam(data);
     let createdTeam = data;
     createdTeam.projects = [];
+    createdTeam.average = 0;
+    createdTeam.id = id;
     dispatch({
         type: ActionType.CREATE_TEAM,
         payload: createdTeam

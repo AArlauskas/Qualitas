@@ -19,22 +19,6 @@ import { KeyboardDatePicker, MuiPickersUtilsProvider } from '@material-ui/picker
 import DateFnsUtils from '@date-io/date-fns';
 import { Chip } from '@material-ui/core';
 
-const CaseScore = (evaluation) => {
-    let sumOfScores = 0;
-    let sumOfPoints = 0;
-    evaluation.Topics.forEach(topic => topic.Criteria.forEach(criteria => {
-        sumOfScores = sumOfScores + criteria.score;
-        sumOfPoints = sumOfPoints + criteria.points;
-    }));
-
-    let average = Math.trunc(sumOfScores / sumOfPoints * 100);
-
-    if (sumOfPoints === 0) {
-        return 0;
-    }
-    else return average;
-}
-
 const date = new Date();
 class UsersEvaluationsList extends Component {
     state = {
@@ -48,10 +32,11 @@ class UsersEvaluationsList extends Component {
                 title: "Date", field: "createdDate", filtering: false, render: rowData => rowData.createdDate.split("T")[0]
             },
             {
-                title: "Project", field: "project", render: rowData => <Chip label={rowData.Project.name} onClick={() => window.location.href = "/ProjectReview/" + rowData.Project.id} />
+                title: "Project", field: "project", render: rowData => <Chip label={rowData.projectName} onClick={() => window.location.href = "/ProjectReview/" + rowData.projectId} />
             },
             {
-                title: "Score", field: "score", render: rowData => CaseScore(rowData) + "%", filtering: false
+                title: "Score", field: "score", render: rowData => rowData.average === null ? "0%" : rowData.average + "%",
+                customFilterAndSearch: (term, rowData) => parseInt(term) === 0 ? rowData.average === null : rowData.average === parseInt(term)
             },
             {
                 title: "Evaluator", field: "evaluator"
@@ -61,7 +46,7 @@ class UsersEvaluationsList extends Component {
     render() {
 
         const filterByDate = () => {
-            let data = this.props.evaluations;
+            let data = this.props.evaluations.Evaluations;
             let correctData = [];
             data.forEach(evalutation => {
                 let createdDate = new Date(evalutation.createdDate);

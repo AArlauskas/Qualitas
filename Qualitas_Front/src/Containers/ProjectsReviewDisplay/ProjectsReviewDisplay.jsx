@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import ProjectsReview from '../../Components/ProjectsReview/ProjectsReview';
-import { FetchProjectToEdit } from '../../API/API';
+import { FetchProjectToReview } from '../../API/API';
 import LoadingScreen from '../../Components/LoadingScreen/LoadingScreen';
 
 class ProjectsReviewDisplay extends Component {
@@ -9,7 +9,7 @@ class ProjectsReviewDisplay extends Component {
     }
     componentDidMount() {
         let id = window.location.href.toLowerCase().split("/projectreview/")[1];
-        FetchProjectToEdit(id).then(response => this.setState({ Project: response }))
+        FetchProjectToReview(id).then(response => this.setState({ Project: response }))
     }
     render() {
         return (

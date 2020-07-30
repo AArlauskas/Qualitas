@@ -10,10 +10,10 @@ class ProjectsTemplates extends Component {
         this.props.templates.forEach(template => {
             dataSource.push({
                 key: template.id,
-                title: "labas",
+                title: template.name,
             });
         });
-        this.props.project.EvaluationTemplates.forEach(template => {
+        this.props.project.Templates.forEach(template => {
             targetKeys.push(template.id);
         });
         this.state = {

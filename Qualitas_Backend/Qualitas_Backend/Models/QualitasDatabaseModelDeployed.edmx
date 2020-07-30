@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="DB_QualitasHostedModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="DB_QualitasHostedModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="Criteria">
           <Key>
             <PropertyRef Name="id" />
@@ -35,6 +35,7 @@
           <Property Name="isDeleted" Type="bit" Nullable="false" />
           <Property Name="UserId" Type="int" Nullable="false" />
           <Property Name="ProjectId" Type="int" Nullable="false" />
+          <Property Name="EvaluatorId" Type="int" />
         </EntityType>
         <EntityType Name="EvaluationTemplate">
           <Key>
@@ -147,6 +148,18 @@
             </Principal>
             <Dependent Role="CriteriaTemplate">
               <PropertyRef Name="TopicId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Evaluation_Evaluators">
+          <End Role="User" Type="Self.User" Multiplicity="0..1" />
+          <End Role="Evaluation" Type="Self.Evaluation" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Evaluation">
+              <PropertyRef Name="EvaluatorId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -335,6 +348,10 @@
             <End Role="TopicTemplate" EntitySet="TopicTemplate" />
             <End Role="CriteriaTemplate" EntitySet="CriteriaTemplate" />
           </AssociationSet>
+          <AssociationSet Name="FK_Evaluation_Evaluators" Association="Self.FK_Evaluation_Evaluators">
+            <End Role="User" EntitySet="User" />
+            <End Role="Evaluation" EntitySet="Evaluation" />
+          </AssociationSet>
           <AssociationSet Name="FK_Evaluation_Project" Association="Self.FK_Evaluation_Project">
             <End Role="Project" EntitySet="Project" />
             <End Role="Evaluation" EntitySet="Evaluation" />
@@ -380,8 +397,7 @@
             <End Role="User" EntitySet="User" />
           </AssociationSet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="DB_QualitasHostedModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -420,6 +436,8 @@
           <NavigationProperty Name="Project" Relationship="Self.FK_Evaluation_Project" FromRole="Evaluation" ToRole="Project" />
           <NavigationProperty Name="User" Relationship="Self.FK_Evaluation_User" FromRole="Evaluation" ToRole="User" />
           <NavigationProperty Name="Topics" Relationship="Self.FK_Topic_Evaluation" FromRole="Evaluation" ToRole="Topic" />
+          <Property Name="EvaluatorId" Type="Int32" />
+          <NavigationProperty Name="Evaluator" Relationship="DB_QualitasHostedModel.FK_Evaluation_Evaluators" FromRole="Evaluation" ToRole="User" />
         </EntityType>
         <EntityType Name="EvaluationTemplate">
           <Key>
@@ -501,6 +519,7 @@
           <NavigationProperty Name="Evaluations" Relationship="Self.FK_Evaluation_User" FromRole="User" ToRole="Evaluation" />
           <NavigationProperty Name="Team" Relationship="Self.FK_User_Team" FromRole="User" ToRole="Team" />
           <NavigationProperty Name="Projects" Relationship="Self.ProjectsUsers" FromRole="User" ToRole="Project" />
+          <NavigationProperty Name="Evaluated" Relationship="DB_QualitasHostedModel.FK_Evaluation_Evaluators" FromRole="User" ToRole="Evaluation" />
         </EntityType>
         <Association Name="FK_Criteria_Topic">
           <End Role="Topic" Type="Self.Topic" Multiplicity="1" />
@@ -679,6 +698,10 @@
             <Parameter Name="new_diagramname" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="sp_upgraddiagrams" />
+          <AssociationSet Name="FK_Evaluation_Evaluators" Association="DB_QualitasHostedModel.FK_Evaluation_Evaluators">
+            <End Role="User" EntitySet="Users" />
+            <End Role="Evaluation" EntitySet="Evaluations" />
+          </AssociationSet>
         </EntityContainer>
         <ComplexType Name="sp_helpdiagramdefinition_Result">
           <Property Type="Int32" Name="version" Nullable="true" />
@@ -691,6 +714,18 @@
           <Property Type="String" Name="Owner" Nullable="true" MaxLength="128" />
           <Property Type="Int32" Name="OwnerID" Nullable="false" />
         </ComplexType>
+        <Association Name="FK_Evaluation_Evaluators">
+          <End Type="DB_QualitasHostedModel.User" Role="User" Multiplicity="0..1" />
+          <End Type="DB_QualitasHostedModel.Evaluation" Role="Evaluation" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Evaluation">
+              <PropertyRef Name="EvaluatorId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -722,6 +757,7 @@
           <EntitySetMapping Name="Evaluations">
             <EntityTypeMapping TypeName="DB_QualitasHostedModel.Evaluation">
               <MappingFragment StoreEntitySet="Evaluation">
+                <ScalarProperty Name="EvaluatorId" ColumnName="EvaluatorId" />
                 <ScalarProperty Name="id" ColumnName="id" />
                 <ScalarProperty Name="name" ColumnName="name" />
                 <ScalarProperty Name="createdDate" ColumnName="createdDate" />

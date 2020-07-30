@@ -33,40 +33,65 @@ namespace Qualitas_Backend.Controllers
         [Route("api/Projects/list")]
         public async Task<IHttpActionResult> GetProjectsList()
         {
-            var projectList = new List<ProjectsListItem>();
-            await db.Projects.Where(project => !project.isDeleted).ForEachAsync(project =>
+            var projects = db.Projects.Where(project => !project.isDeleted).Select(project => new
             {
-                var tempProject = new ProjectsListItem()
+                project.id,
+                project.name,
+                templates = project.EvaluationTemplates.Where(template => !template.isDeleted).Select(template => new
                 {
-                    id = project.id,
-                    name = project.name
-                };
-                var templates = new List<TemplateListResponse>();
-                foreach(var template in project.EvaluationTemplates)
+                    template.id,
+                    template.name
+                }),
+                teams = project.Teams.Select(team => new
                 {
-                    var tempTemplate = new TemplateListResponse()
-                    {
-                        id = template.id,
-                        name = template.name
-                    };
-                    templates.Add(tempTemplate);
-                }
-                tempProject.templates = templates;
-
-                var teams = new List<TeamListResponse>();
-                foreach (var team in project.Teams)
-                {
-                    var tempTeam = new TeamListResponse()
-                    {
-                        id = team.id,
-                        name = team.name
-                    };
-                    teams.Add(tempTeam);
-                }
-                tempProject.teams = teams;
-                projectList.Add(tempProject);
+                    team.id,
+                    team.name
+                })
             });
-            return Ok(projectList);
+
+            return Ok(projects);
+        }
+
+        [HttpGet]
+        [Route("api/Projects/simple")]
+        public async Task<IHttpActionResult> GetProjectListSimple()
+        {
+            var projects = db.Projects.Where(project => !project.isDeleted).Select(project => new
+            {
+                project.id,
+                project.name
+            });
+
+            return Ok(projects);
+        }
+
+        [HttpGet]
+        [Route("api/Projects/review/{id}")]
+        public async Task<IHttpActionResult> GetProjectReview(int id)
+        {
+            var projects = await db.Projects
+                .Select(project => new {
+                    id = project.id,
+                    name = project.name,
+                    Users = project.Users.Where(user => !user.IsArchived || !user.IsDeleted).Select(user => new
+                    {
+                        user.id,
+                        user.firstname,
+                        user.lastname,
+                        teamName = user.Team.name,
+                        teamId = (int?)user.Team.id,
+                        average = (int?)(user.Evaluations.Where(evaluation => !evaluation.isDeleted).Select(evaluation => evaluation.Topics.
+                        Select(topic => topic.Criteria.Select(criteria => (double?)criteria.score).ToList().Sum()).Sum()).Sum() /
+                        user.Evaluations.Where(evaluation => !evaluation.isDeleted).Select(evaluation => evaluation.Topics.
+                        Select(topic => topic.Criteria.Select(criteria => (int?)criteria.points).ToList().Sum()).Sum()).Sum() * 100)
+                    })
+                }).FirstOrDefaultAsync(temp => temp.id == id);
+            if (projects == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(projects);
         }
 
         // GET: api/Projects/5
@@ -74,6 +99,75 @@ namespace Qualitas_Backend.Controllers
         public async Task<IHttpActionResult> GetProject(int id)
         {
             Project project = await db.Projects.FindAsync(id);
+            if (project == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(project);
+        }
+
+        [ResponseType(typeof(Project))]
+        [HttpGet]
+        [Route("api/Projects/Templates/{id}")]
+        public async Task<IHttpActionResult> GetProjectsTemplates(int id)
+        {
+            var project = await db.Projects
+                .Select(temp => new {
+                    id = temp.id,
+                    nane = temp.name,
+                    Templates = temp.EvaluationTemplates.Where(template => !template.isDeleted).Select(template => new
+                    {
+                        id = template.id,
+                        name = template.name
+                    })
+                }).FirstOrDefaultAsync(temp => temp.id == id);
+            if (project == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(project);
+        }
+
+        [ResponseType(typeof(Project))]
+        [HttpGet]
+        [Route("api/Projects/Users/{id}")]
+        public async Task<IHttpActionResult> GetProjectUsers(int id)
+        {
+            var project = await db.Projects
+                .Select(temp => new { 
+                    id =  temp.id,
+                    nane = temp.name,
+                    Users = temp.Users.Where(user => !user.IsDeleted && !user.IsArchived).Select(user => new
+                    {
+                        id = user.id,
+                        name = user.firstname + " " + user.lastname
+                    })
+                }).FirstOrDefaultAsync(temp => temp.id == id);
+            if (project == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(project);
+        }
+
+        [ResponseType(typeof(Project))]
+        [HttpGet]
+        [Route("api/Projects/Teams/{id}")]
+        public async Task<IHttpActionResult> GetProjectTeams(int id)
+        {
+            var project = await db.Projects
+                .Select(temp => new {
+                    id = temp.id,
+                    nane = temp.name,
+                    Teams = temp.Teams.Select(team => new
+                    {
+                        id = team.id,
+                        name = team.name
+                    })
+                }).FirstOrDefaultAsync(temp => temp.id == id);
             if (project == null)
             {
                 return NotFound();
@@ -255,7 +349,7 @@ namespace Qualitas_Backend.Controllers
             db.Projects.Add(project);
             await db.SaveChangesAsync();
 
-            return CreatedAtRoute("DefaultApi", new { id = project.id }, project);
+            return Ok(project.id);
         }
 
         // DELETE: api/Projects/5

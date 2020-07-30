@@ -21,10 +21,11 @@ export const addProject = (data) => async (dispatch) => {
     let createdProject = {
         name: data.name,
     }
+    let id = await CreateProject(createdProject);
     let updatedData = data;
     updatedData.teams = [];
     updatedData.templates = [];
-    await CreateProject(createdProject);
+    updatedData.id = id;
     dispatch({
         type: ActionType.CREATE_PROJECT,
         payload: updatedData

@@ -26,68 +26,121 @@ namespace Qualitas_Backend.Controllers
             return db.Teams;
         }
 
+        [HttpGet]
+        [Route("api/Teams/simple")]
+        public async Task<IHttpActionResult> GetTeamListSimple()
+        {
+            var teams = db.Teams.Select(team => new
+            {
+                team.id,
+                team.name
+            });
+
+            return Ok(teams);
+        }
+
+
         [ResponseType(typeof(List<TeamListResponse>))]
         [HttpGet]
         [Route("api/Teams/list")]
         public async Task<IHttpActionResult> GetTeamList()
         {
-            var list = new List<TeamListResponse>();
-            await db.Teams.Include(team => team.Users).Include(team => team.Projects).ForEachAsync(team =>
+            var teams = db.Teams.Select(team => new
             {
-                var entry = new TeamListResponse
+                team.id,
+                team.name,
+                userCount = team.Users.Where(user => !user.IsArchived && !user.IsDeleted).Count(),
+                projects = team.Projects.Where(project => !project.isDeleted).Select(project => new
                 {
+                    project.id,
+                    project.name
+                }),
+                average = (int?)(team.Users.Where(user => !user.IsDeleted && !user.IsArchived).Select(user => user.Evaluations.Where(evaluation => !evaluation.isDeleted).Select(evaluation => evaluation.Topics.Select(topic => topic.Criteria.
+                Select(criteria => (double?)criteria.score).ToList().Sum()).Sum()).Sum()).Sum() / team.Users.Where(user => !user.IsDeleted && !user.IsArchived).Select(user => user.Evaluations.Where(evaluation => !evaluation.isDeleted).Select(evaluation => evaluation.Topics.Select(topic => topic.Criteria.
+                Select(criteria => (int?)criteria.points).ToList().Sum()).Sum()).Sum()).Sum() * 100),
+            });
+
+            return Ok(teams);
+        }
+
+        [HttpGet]
+        [Route("api/Teams/review/{id}")]
+        public async Task<IHttpActionResult> GetTeamReview (int id)
+        {
+            var teams = await db.Teams
+                .Select(team => new {
                     id = team.id,
                     name = team.name,
-                    userCount = team.Users.Where(user => !user.IsDeleted && !user.IsArchived).Count()
-                };
-                entry.projects = new List<ProjectsListItem>();
-                foreach(var project in team.Projects)
-                {
-                    var tempProject = new ProjectsListItem()
+                    Users = team.Users.Where(user => !user.IsArchived || !user.IsDeleted).Select(user => new
+                    {
+                        user.id,
+                        user.firstname,
+                        user.lastname,
+                        Projects = user.Projects.Where(project => !project.isDeleted).Select(project => new
+                        {
+                            project.id,
+                            project.name
+                        }),
+                        evaluationsCount = user.Evaluations.Where(evaluation => !evaluation.isDeleted).Count(),
+                        average = (int?)(user.Evaluations.Where(evaluation => !evaluation.isDeleted).Select(evaluation => evaluation.Topics.
+                        Select(topic => topic.Criteria.Select(criteria => (double?)criteria.score).ToList().Sum()).Sum()).Sum() /
+                        user.Evaluations.Where(evaluation => !evaluation.isDeleted).Select(evaluation => evaluation.Topics.
+                        Select(topic => topic.Criteria.Select(criteria => (int?)criteria.points).ToList().Sum()).Sum()).Sum() * 100)
+                    })
+                }).FirstOrDefaultAsync(temp => temp.id == id);
+            if (teams == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(teams);
+        }
+
+        [ResponseType(typeof(Project))]
+        [HttpGet]
+        [Route("api/Teams/Projects/{id}")]
+        public async Task<IHttpActionResult> GetTeamsProjects(int id)
+        {
+            var team = await db.Teams
+                .Select(temp => new {
+                    id = temp.id,
+                    nane = temp.name,
+                    Projects = temp.Projects.Select(project => new
                     {
                         id = project.id,
                         name = project.name
-                    };
-                    entry.projects.Add(tempProject);
-                }
+                    })
+                }).FirstOrDefaultAsync(temp => temp.id == id);
+            if (team == null)
+            {
+                return NotFound();
+            }
 
-                int points = 0;
-                double score = 0;
-
-                foreach(var user in team.Users.Where(user => !user.IsArchived && !user.IsDeleted))
-                {
-                    foreach(var evaluation in user.Evaluations.Where(temp => !temp.isDeleted))
-                    {
-                        foreach(var topic in evaluation.Topics)
-                        {
-                            foreach(var criteria in topic.Criteria)
-                            {
-                                points += criteria.points;
-                                score += criteria.score;
-                            }
-                        }
-                    }
-                }
-                double average = 0;
-                try
-                {
-                   average  = (score / points)*100;
-                    if(double.IsNaN(average))
-                    {
-                        average = 0;
-                    }
-                }
-                catch
-                {
-                    average = 0;
-                }
-                entry.score = (int)average;
-
-                list.Add(entry);
-            });
-            return Ok(list);
+            return Ok(team);
         }
 
+        [ResponseType(typeof(Project))]
+        [HttpGet]
+        [Route("api/Teams/users/{id}")]
+        public async Task<IHttpActionResult> GetTeamsUsers(int id)
+        {
+            var team = await db.Teams
+                .Select(temp => new {
+                    id = temp.id,
+                    nane = temp.name,
+                    Users = temp.Users.Where(user => !user.IsArchived && !user.IsDeleted).Select(user => new
+                    {
+                        id = user.id,
+                        name = user.firstname + user.lastname
+                    })
+                }).FirstOrDefaultAsync(temp => temp.id == id);
+            if (team == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(team);
+        }
 
 
         // GET: api/Teams/5
@@ -252,7 +305,7 @@ namespace Qualitas_Backend.Controllers
                 name = team.name,
                 userCount = 0
             };
-            return Ok(response);
+            return Ok(response.id);
         }
 
         // DELETE: api/Teams/5

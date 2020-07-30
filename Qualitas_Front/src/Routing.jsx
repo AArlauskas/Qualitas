@@ -5,7 +5,6 @@ import ReportsDisplay from "./Containers/ReportsDisplay/ReportsDisplay";
 import TeamsDisplay from "./Containers/TeamsDisplay/TeamsDisplay";
 import TemplatesDisplay from "./Containers/TemplatesDisplay/TemplatesDisplay";
 import ArchiveDisplay from "./Containers/ArchiveDisplay/ArchiveDisplay";
-import NavigationBreadcrumbs from './Components/NavigationBreadcrumbs/NavigationBreadcrumbs';
 import UserListDisplay from './Containers/UserListDisplay/UserListDisplay';
 import LoginDisplay from './Containers/LoginDisplay/LoginDisplay';
 import TemplateCreatorDisplay from "./Containers/TemplateCreatorDisplay/TemplateCreatorDisplay";
@@ -22,15 +21,20 @@ import CaseCreatorDisplay from './Containers/CaseCreatorDisplay/CaseCreatorDispl
 import CaseEditorDisplay from './Containers/CaseEditorDisplay/CaseEditorDisplay';
 import TeamReviewDisplay from './Containers/TeamReviewDisplay/TeamReviewDisplay';
 import ProjectsReviewDisplay from './Containers/ProjectsReviewDisplay/ProjectsReviewDisplay';
+import EvaluationsDisplay from './Containers/User/EvaluationsDisplay/EvaluationsDisplay';
+import NavigationBreadcrumbsAdmin from './Components/NavigationBreadcrumbsAdmin/NavigationBreadcrumbsAdmin';
+import CredentialsDisplay from './Containers/User/CredentialsDisplay/CredentialsDisplay';
+import NavigationBreadcrumbsUser from './Components/User/NavigationBreadcrumbsUser';
+import CaseViewDisplay from './Containers/User/CaseViewDisplay/CaseViewDisplay';
 
 class Routing extends Component {
     state = {}
     render() {
-        return (
-            <div>
-                {window.localStorage.getItem("role") === "admin" ? <NavigationBreadcrumbs /> : null}
-
-                {window.localStorage.getItem("role") === "admin" ?
+        let role = window.localStorage.getItem('role');
+        if (role === "admin") {
+            return (
+                <div>
+                    <NavigationBreadcrumbsAdmin />
                     <React.Fragment>
                         <Switch>
                             <Route path="/projects">
@@ -97,20 +101,55 @@ class Routing extends Component {
                                 <Redirect to="/projects" />
                             </Route>
                         </Switch>
-                    </React.Fragment> :
-                    <React.Fragment>
-                        <Switch>
-                            <Route path="/">
-                                <LoginDisplay />
-                            </Route>
-                            <Route>
-                                <Redirect to="/" />
-                            </Route>
-                        </Switch>
-                    </React.Fragment>}
+                    </React.Fragment>
+                </div>
+            );
+        }
+        else if (role === "user") {
+            return (
+                <div>
+                    <NavigationBreadcrumbsUser />
+                    <Switch>
+                        <Route path="/evaluations">
+                            <EvaluationsDisplay />
+                        </Route>
+                        <Route path="/credentials">
+                            <CredentialsDisplay />
+                        </Route>
+                        <Route exact path="/viewCase/:id">
+                            <CaseViewDisplay />
+                        </Route>
+                        <Route>
+                            <Redirect to="/evaluations" />
+                        </Route>
+                    </Switch>
+                </div>
+            );
+        }
+        else if (role === "client") {
+            return (
+                <Switch>
+                    <Route path="/client">
 
-            </div>
-        );
+                    </Route>
+                </Switch>
+            );
+        }
+        else {
+            return (
+                <React.Fragment>
+                    <Switch>
+                        <Route path="/">
+                            <LoginDisplay />
+                        </Route>
+                        <Route>
+                            <Redirect to="/" />
+                        </Route>
+                    </Switch>
+                </React.Fragment>
+            );
+        }
+
     }
 }
 

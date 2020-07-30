@@ -225,6 +225,7 @@ class CaseCreator extends Component {
                                 name: this.state.caseName,
                                 UserId: this.props.userId,
                                 ProjectId: this.props.projectId,
+                                EvaluatorId: window.localStorage.getItem("id"),
                                 Topics: this.state.topics
                             };
                             this.props.createCase(data);

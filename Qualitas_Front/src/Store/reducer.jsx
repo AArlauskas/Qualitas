@@ -209,7 +209,7 @@ export const reducer = (state = initialState, action) => {
             let evaluations = action.payload;
             return {
                 ...state,
-                Evaluations: evaluations.filter(evaluation => !evaluation.isDeleted)
+                Evaluations: evaluations
             }
         }
 

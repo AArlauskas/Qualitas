@@ -16,32 +16,21 @@ import SaveAlt from '@material-ui/icons/SaveAlt';
 import Search from '@material-ui/icons/Search';
 import ViewColumn from '@material-ui/icons/ViewColumn';
 
-const UsersScore = (user) => {
-    let score = 0;
-    let points = 0;
-    user.Evaluations.forEach(evaluation => evaluation.Topics.forEach(topic => topic.Criteria.forEach(criteria => {
-        score += criteria.score;
-        points += criteria.points;
-    })));
-
-    let average = Math.trunc((score / points) * 100);
-    if (isNaN(average)) {
-        average = 0;
-    }
-    return average;
-}
-
 class ProjectsReview extends Component {
     state = {
         columns: [
             {
-                title: "Name", field: "name", render: rowData => rowData.firstname + " " + rowData.lastname
+                title: "Name", field: "name", render: rowData => rowData.firstname + " " + rowData.lastname,
+                customFilterAndSearch: (term, rowData) => rowData.firstname.toLowerCase().startsWith(term.toLowerCase()) ||
+                    rowData.lastname.toLowerCase().startsWith(term.toLowerCase())
             },
             {
-                title: "Team", field: "team", render: rowData => rowData.Team === null ? "" : <a href={"/teamDetails/" + rowData.Team.id}>{rowData.Team.name}</a>
+                title: "Team", field: "team", render: rowData => rowData.teamId === null ? "" : <a href={"/teamDetails/" + rowData.teamId}>{rowData.teamName}</a>,
+                customFilterAndSearch: (term, rowData) => rowData.teamName === null ? false : rowData.teamName.toLowerCase().startsWith(term.toLowerCase())
             },
             {
-                title: "Score", field: "score", render: rowData => UsersScore(rowData) + "%"
+                title: "Score", field: "score", render: rowData => rowData.average === null ? "0%" : rowData.average + "%",
+                customFilterAndSearch: (term, rowData) => parseInt(term) === 0 ? rowData.average === null : rowData.average === parseInt(term)
             },
         ]
     }

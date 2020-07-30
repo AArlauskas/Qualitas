@@ -23,10 +23,10 @@ class TeamsListTable extends Component {
     state = {
         columns: [
             {
-                title: "name", field: "name"
+                title: "Name", field: "name"
             },
             {
-                title: "projects", field: "projects", editable: "never",
+                title: "Projects", field: "projects", editable: "never",
                 render: rowData => <div>{rowData.projects.map(project => <Chip style={{ marginRight: 2, marginTop: 2 }} key={project.id}
                     label={project.name}
                     onClick={() => window.location.href = "/projectReview/" + project.id} />)}</div>,
@@ -36,7 +36,7 @@ class TeamsListTable extends Component {
                 title: "Number of users", field: "userCount", editable: "never"
             },
             {
-                title: "Score", field: "score", editable: "never", render: rowData => rowData.score + "%"
+                title: "Score", field: "average", editable: "never", render: rowData => rowData.average === null ? "0%" : rowData.average + "%"
             }
         ]
     }

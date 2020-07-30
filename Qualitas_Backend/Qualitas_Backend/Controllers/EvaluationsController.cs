@@ -29,13 +29,37 @@ namespace Qualitas_Backend.Controllers
         [ResponseType(typeof(Evaluation))]
         public async Task<IHttpActionResult> GetEvaluation(int id)
         {
-            Evaluation evaluation = await db.Evaluations.FindAsync(id);
-            if (evaluation == null)
+            var evaluationResult = await db.Evaluations.Where(evaluation => !evaluation.isDeleted).Select(evaluation => new
+            {
+                evaluation.id,
+                evaluation.name,
+                evaluation.createdDate,
+                userId = evaluation.User.id,
+                projectId = evaluation.Project.id,
+                evaluator = evaluation.Evaluator.firstname + " " + evaluation.Evaluator.lastname,
+                Topics = evaluation.Topics.Select(topic => new
+                {
+                    topic.id,
+                    topic.name,
+                    topic.failed,
+                    topic.isCritical,
+                    Criteria = topic.Criteria.Select(criteria => new
+                    {
+                        criteria.id,
+                        criteria.name,
+                        criteria.points,
+                        criteria.score,
+                        criteria.comment
+                    })
+                }),
+            }).FirstOrDefaultAsync(evaluation => evaluation.id == id);
+
+            if(evaluationResult == null)
             {
                 return NotFound();
             }
 
-            return Ok(evaluation);
+            return Ok(evaluationResult);
         }
 
         // PUT: api/Evaluations/5

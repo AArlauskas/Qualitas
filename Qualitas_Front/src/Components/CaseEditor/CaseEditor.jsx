@@ -56,9 +56,8 @@ class CaseEditor extends Component {
     render() {
         return (
             <div>
+                {console.log(this.state)}
                 <div style={{ marginLeft: "25%", marginRight: "25%", background: "rgba(200, 200, 200, 0.5)" }}>
-                    {console.log(this.state)}
-                    {console.log(this.props)}
                     <UnifiedModal open={this.state.modalOpen} title="Comment">
                         <DefaultTextArea defaultValue={this.state.modalOpen ? this.state.topics.find(topic => topic.id === this.state.commentTopicId)
                             .criteria.find(criteria => criteria.id === this.state.commentCriteriaId).comment : ""} label="Add comment..." maxLength={250} onChange={e => {
@@ -147,7 +146,7 @@ class CaseEditor extends Component {
                                             <List style={{ color: "green" }}>
                                                 {topic.criteria.map(crit => {
                                                     return (
-                                                        <div>
+                                                        <div key={crit.id}>
                                                             <ListItem button key={crit.id} style={{ paddingLeft: 40 }} >
                                                                 <ListItemText onClick={() => {
                                                                     let tempTopics = [...this.state.topics];
@@ -222,12 +221,12 @@ class CaseEditor extends Component {
                                 id: this.state.id,
                                 name: this.state.caseName,
                                 createdDate: this.props.case.createdDate,
-                                UserId: this.props.case.UserId,
-                                ProjectId: this.props.case.ProjectId,
+                                UserId: this.props.case.userId,
+                                ProjectId: this.props.case.projectId,
                                 Topics: this.state.topics
                             };
                             this.props.updateCase(this.state.id, data);
-                            setTimeout(() => window.location.href = "/UserDetails/" + this.props.case.UserId, 3000);
+                            setTimeout(() => window.location.href = "/userDetails/" + this.props.case.userId, 3000);
 
                         }} >Save</Button>
                 </div>

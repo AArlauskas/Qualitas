@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import TeamMembers from '../../Components/TeamMembers/TeamMembers';
-import { FetchUserList, GetTeam, AddToTeam, RemoveFromTeam } from '../../API/API';
+import { AddToTeam, RemoveFromTeam, FetchTeamsUsers, FetchUsersForTeamSimple } from '../../API/API';
 import LoadingScreen from '../../Components/LoadingScreen/LoadingScreen';
 
 class TeamMembersDisplay extends Component {
@@ -15,15 +15,16 @@ class TeamMembersDisplay extends Component {
 
     componentDidMount() {
         let teamId = window.location.href.toLowerCase().split("/teammembers/")[1];
-        FetchUserList().then(response => this.setState({ users: response }));
-        GetTeam(teamId).then(response => this.setState({ team: response }));
+        FetchUsersForTeamSimple(teamId).then(response => this.setState({ users: response }));
+        FetchTeamsUsers(teamId).then(response => this.setState({ team: response }));
     }
 
     render() {
         return (
             <div>
+                {console.log(this.state)}
                 {this.state.users.length !== 0 && this.state.team.id !== undefined ?
-                    <TeamMembers
+                    < TeamMembers
                         users={this.state.users}
                         team={this.state.team}
                         addTeamMembers={addTeamMembers}

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import ProjectDetails from '../../Components/ProjectDetails/ProjectDetails';
 import { connect } from "react-redux";
-import { FetchProjectToEdit, FetchUserList, AddToProjectUser, RemoveFromProjectUser } from '../../API/API';
+import { AddToProjectUser, RemoveFromProjectUser, FetchProjectUsers, FetchUserListSimple } from '../../API/API';
 import LoadingScreen from '../../Components/LoadingScreen/LoadingScreen';
 
 class ProjectDetailsDisplay extends Component {
@@ -11,8 +11,8 @@ class ProjectDetailsDisplay extends Component {
     }
     componentDidMount() {
         let id = window.location.href.toLowerCase().split("/projectdetails/")[1];
-        FetchProjectToEdit(id).then(response => this.setState({ project: response }));
-        FetchUserList().then(response => this.setState({ users: response }));
+        FetchProjectUsers(id).then(response => this.setState({ project: response }));
+        FetchUserListSimple().then(response => this.setState({ users: response }));
     }
     render() {
         return (

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import ProjectTeams from '../../Components/ProjectTeams/ProjectTeams';
-import { FetchProjectToEdit, FetchTeamsList, AddToProjectTeam, RemoveFromProjectTeam } from '../../API/API';
+import { FetchProjectTeams, FetchTeamsSimple, AddToProjectTeam, RemoveFromProjectTeam } from '../../API/API';
 import LoadingScreen from '../../Components/LoadingScreen/LoadingScreen';
 
 class ProjectTeamsDisplay extends Component {
@@ -10,8 +10,8 @@ class ProjectTeamsDisplay extends Component {
     }
     componentDidMount() {
         let id = window.location.href.toLowerCase().split("/projectteams/")[1];
-        FetchProjectToEdit(id).then(response => this.setState({ project: response }));
-        FetchTeamsList().then(response => this.setState({ teams: response }));
+        FetchProjectTeams(id).then(response => this.setState({ project: response }));
+        FetchTeamsSimple().then(response => this.setState({ teams: response }));
     }
     render() {
         return (

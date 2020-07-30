@@ -32,31 +32,18 @@ namespace Qualitas_Backend.Controllers
         [Route("api/EvaluationTemplates/list")]
         public async Task<IHttpActionResult> GetEvaluationList()
         {
-            var list = new List<EvaluationTemplateListItem>();
-            foreach(var template in db.EvaluationTemplates.Where(temp => !temp.isDeleted))
+            var templates = db.EvaluationTemplates.Where(template => !template.isDeleted).Select(template => new
             {
-                var tempTemplate = new EvaluationTemplateListItem()
+                template.id,
+                template.name,
+                Projects = template.Projects.Where(project => !project.isDeleted).Select(project => new
                 {
-                    id = template.id,
-                    name = template.name
-                };
+                    project.id,
+                    project.name
+                })
+            });
 
-                var listOfProjects = new List<ProjectsListItem>();
-
-                foreach(var project in template.Projects.Where(temp => !temp.isDeleted))
-                {
-                    var tempProject = new ProjectsListItem()
-                    {
-                        id = project.id,
-                        name = project.name,
-                    };
-                    listOfProjects.Add(tempProject);
-                }
-                tempTemplate.Projects = listOfProjects;
-                list.Add(tempTemplate);
-            }
-
-            return Ok(list);
+            return Ok(templates);
         }
 
         // GET: api/EvaluationTemplates/5
@@ -100,6 +87,37 @@ namespace Qualitas_Backend.Controllers
             }
 
             return Ok(response);
+        }
+
+        [HttpGet]
+        [Route("api/EvaluationTemplates/case/{id}")]
+        public async Task<IHttpActionResult> GetEvaluationTemplateForCase(int id)
+        {
+            var templates = await db.EvaluationTemplates.Where(temp => !temp.isDeleted).Select(template => new
+            {
+                template.id,
+                template.name,
+                TopicTemplates = template.TopicTemplates.Select(topic => new
+                {
+                    topic.id,
+                    topic.name,
+                    topic.isCritical,
+                    CriteriaTemplates = topic.CriteriaTemplates.Select(criteria => new
+                    {
+                        criteria.id,
+                        criteria.name,
+                        criteria.points,
+                    })
+                })
+
+            }).FirstOrDefaultAsync(template => template.id == id);
+
+            if(templates == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(templates);
         }
 
         [ResponseType(typeof(UserListResponse))]
@@ -300,8 +318,9 @@ namespace Qualitas_Backend.Controllers
         }
 
         [ResponseType(typeof(void))]
+        [HttpPut]
         [Route("api/EvaluationTemplates/markdeleted/{id}")]
-        public async Task<IHttpActionResult> MarkDeleted([FromUri] int id)
+        public async Task<IHttpActionResult> MarkDeleted(int id)
         {
             db.EvaluationTemplates.Find(id).isDeleted = true;
             await db.SaveChangesAsync();

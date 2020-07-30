@@ -11,7 +11,7 @@ class TeamMembers extends Component {
         };
         const dataSource = [];
         const targetKeys = [];
-        let filteredUsers = this.props.users.filter(user => user.isArchived === false).filter(user => user.teamId === null || user.teamId === this.props.team.id);
+        let filteredUsers = this.props.users;
         filteredUsers.forEach(user => {
             dataSource.push({
                 key: user.id,
@@ -19,10 +19,7 @@ class TeamMembers extends Component {
             });
         });
         this.props.team.Users.forEach(user => {
-            console.log(user);
-            if (user.IsArchived === false) {
-                targetKeys.push(user.id);
-            }
+            targetKeys.push(user.id);
         });
         this.state = {
             selectedKeys: [],

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import CaseCreator from '../../Components/CaseCreator/CaseCreator';
-import { FetchUserToEdit, CreateCase } from '../../API/API';
+import { CreateCase, FetchUserProjectsTemplates, FetchTemplateForCase } from '../../API/API';
 import { Select } from '@material-ui/core';
 import LoadingScreen from '../../Components/LoadingScreen/LoadingScreen';
 
@@ -8,20 +8,27 @@ class CaseCreatorDisplay extends Component {
     state = {
         user: [],
         userId: window.location.href.toLowerCase().split("/newcase/")[1],
-        projectId: null,
-        templateId: null
+        projectId: undefined,
+        templateId: undefined,
+        template: []
     }
     componentDidMount() {
         let id = window.location.href.toLowerCase().split("/newcase/")[1];
-        FetchUserToEdit(id).then(response => this.setState({ user: response })).then(() => {
+        FetchUserProjectsTemplates(id).then(response => this.setState({ user: response })).then(() => {
             this.setState({ projectId: this.state.user.Projects[0].id });
             this.setState({ templateId: this.state.user.Projects[0].EvaluationTemplates[0].id });
         });
-
+    }
+    componentDidUpdate() {
+        if (this.state.templateId !== undefined) {
+            console.log("got here");
+            FetchTemplateForCase(this.state.templateId).then(response => this.setState({ template: response }));
+        }
     }
     render() {
         return (
             <div>
+                {console.log(this.state)}
                 {this.state.user.length === 0 ? <LoadingScreen /> :
                     <div>
                         <div style={{ marginTop: 15, marginLeft: 10, textAlign: "center", marginBottom: 30 }}>
@@ -29,8 +36,9 @@ class CaseCreatorDisplay extends Component {
                                 style={{ width: 300 }}
                                 native
                                 label="Select Project"
+                                value={this.state.projectId}
                                 defaultValue={this.state.user.Projects[0].id}
-                                onChange={e => this.setState({ projectId: parseInt(e.target.value) })}>
+                                onChange={e => this.setState({ projectId: parseInt(e.target.value), templateId: this.state.user.Projects[0].EvaluationTemplates[0].id })}>
                                 {this.state.user.Projects.map(project => {
                                     return <option key={project.id} value={project.id}>{project.name}</option>
                                 })}
@@ -40,19 +48,20 @@ class CaseCreatorDisplay extends Component {
                                     style={{ width: 300, marginLeft: 20 }}
                                     native
                                     label="Select Template"
+                                    value={this.state.templateId}
                                     defaultValue={this.state.user.Projects.find(temp => temp.id === this.state.projectId).id}
-                                    onClick={e => this.setState({ templateId: parseInt(e.target.value) })}>
+                                    onChange={e => this.setState({ templateId: parseInt(e.target.value) })}>
                                     {this.state.user.Projects.find(temp => temp.id === this.state.projectId).EvaluationTemplates.map(template => {
                                         return <option key={template.id} value={template.id}>{template.name}</option>
                                     })}
                                 </Select>}
                         </div>
-                        {this.state.projectId === null || this.state.templateId === null ? null :
+                        {this.state.projectId === undefined || this.state.templateId === undefined || this.state.template.length === 0 ? <LoadingScreen /> :
                             <CaseCreator
                                 projectId={this.state.projectId}
                                 userId={this.state.userId}
                                 createCase={createCase}
-                                template={this.state.user.Projects.find(temp => temp.id === this.state.projectId).EvaluationTemplates.find(temp => temp.id === this.state.templateId)} />
+                                template={this.state.template} />
                         }
                     </div>}
             </div>

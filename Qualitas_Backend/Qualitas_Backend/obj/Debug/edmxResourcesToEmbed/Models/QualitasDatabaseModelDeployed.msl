@@ -26,6 +26,7 @@
     <EntitySetMapping Name="Evaluations">
       <EntityTypeMapping TypeName="DB_QualitasHostedModel.Evaluation">
         <MappingFragment StoreEntitySet="Evaluation">
+          <ScalarProperty Name="EvaluatorId" ColumnName="EvaluatorId" />
           <ScalarProperty Name="id" ColumnName="id" />
           <ScalarProperty Name="name" ColumnName="name" />
           <ScalarProperty Name="createdDate" ColumnName="createdDate" />

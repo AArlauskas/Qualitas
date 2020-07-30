@@ -44,11 +44,6 @@ class UserListTable extends Component {
     state = {}
 
     componentDidMount() {
-        let names = this.props.teams;
-        let lookup = names.reduce(function (acc, cur, i) {
-            acc[cur.id] = cur.name;
-            return acc;
-        }, {});
         let columns = [
             {
                 title: "Role", field: "role", lookup: {
@@ -75,12 +70,14 @@ class UserListTable extends Component {
                 title: 'Surname', field: 'lastname',
             },
             {
-                title: "Team", field: "teamId",
-                render: rowData => <p>{this.props.teams.find(team => rowData.teamId === team.id) === undefined ?
-                    null : this.props.teams.find(team => rowData.teamId === team.id).name}</p>,
-                lookup: lookup
+                title: "Team", field: "team",
+                render: rowData => rowData.teamName === null ? "" : <a href={"/teamDetails/" + rowData.teamId}>{rowData.teamName} </a>,
+                customFilterAndSearch: (term, rowData) => rowData.teamName === null ? false : rowData.teamName.toLowerCase().startsWith(term.toLowerCase())
             },
-            // { title: "Projects", field: "projects", editable: "never", render: rowData => rowData.projects === [] ? "" : rowData.projects }
+            {
+                title: "Score", field: "average", render: rowData => rowData.average === null ? "0%" : rowData.average + "%",
+                customFilterAndSearch: (term, rowData) => parseInt(term) === 0 ? rowData.average === null : rowData.average === parseInt(term)
+            }
         ];
 
         this.setState({

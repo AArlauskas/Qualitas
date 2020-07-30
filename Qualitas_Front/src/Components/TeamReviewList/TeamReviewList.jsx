@@ -17,21 +17,6 @@ import Search from '@material-ui/icons/Search';
 import ViewColumn from '@material-ui/icons/ViewColumn';
 import { Chip } from '@material-ui/core';
 
-const UsersScore = (user) => {
-    let score = 0;
-    let points = 0;
-    user.Evaluations.forEach(evaluation => evaluation.Topics.forEach(topic => topic.Criteria.forEach(criteria => {
-        score += criteria.score;
-        points += criteria.points;
-    })));
-
-    let average = Math.trunc((score / points) * 100);
-    if (isNaN(average)) {
-        average = 0;
-    }
-    return average;
-}
-
 class TeamReviewList extends Component {
     state = {
         columns: [
@@ -47,12 +32,12 @@ class TeamReviewList extends Component {
                 customFilterAndSearch: (term, rowData) => rowData.Projects.some(project => project.name.toLowerCase().startsWith(term.toLowerCase()))
             },
             {
-                title: "Score", field: "score", render: rowData => UsersScore(rowData) + "%",
-                customFilterAndSearch: (term, rowData) => UsersScore(rowData) === parseInt(term)
+                title: "Score", field: "score", render: rowData => rowData.average === null ? "0%" : rowData.average + "%",
+                customFilterAndSearch: (term, rowData) => parseInt(term) === 0 ? rowData.average === null : rowData.average === parseInt(term)
             },
             {
-                title: "Evaluated cases", field: "casesCount", render: rowData => rowData.Evaluations.length,
-                customFilterAndSearch: (term, rowData) => rowData.Evaluations.length === parseInt(term)
+                title: "Evaluated cases", field: "evaluationsCount",
+                customFilterAndSearch: (term, rowData) => parseInt(term) === rowData.evaluationsCount
             }
         ]
     }

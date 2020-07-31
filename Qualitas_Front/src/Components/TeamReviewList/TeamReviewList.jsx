@@ -1,5 +1,5 @@
 import React, { Component, forwardRef } from 'react';
-import MaterialTable from 'material-table';
+import MaterialTable, { MTableToolbar } from 'material-table';
 import AddBox from '@material-ui/icons/AddBox';
 import ArrowDownward from '@material-ui/icons/ArrowDownward';
 import Check from '@material-ui/icons/Check';
@@ -16,6 +16,8 @@ import SaveAlt from '@material-ui/icons/SaveAlt';
 import Search from '@material-ui/icons/Search';
 import ViewColumn from '@material-ui/icons/ViewColumn';
 import { Chip } from '@material-ui/core';
+import { KeyboardDatePicker, MuiPickersUtilsProvider } from '@material-ui/pickers';
+import DateFnsUtils from '@date-io/date-fns';
 
 class TeamReviewList extends Component {
     state = {
@@ -32,8 +34,8 @@ class TeamReviewList extends Component {
                 customFilterAndSearch: (term, rowData) => rowData.Projects.some(project => project.name.toLowerCase().startsWith(term.toLowerCase()))
             },
             {
-                title: "Score", field: "score", render: rowData => rowData.average === null ? "0%" : rowData.average + "%",
-                customFilterAndSearch: (term, rowData) => parseInt(term) === 0 ? rowData.average === null : rowData.average === parseInt(term)
+                title: "Score", field: "score", render: rowData => isNaN(Math.trunc((rowData.score / rowData.points) * 100)) ? "0%" : Math.trunc((rowData.score / rowData.points) * 100) + "%",
+                customFilterAndSearch: (term, rowData) => Math.trunc((rowData.score / rowData.points) * 100) === parseInt(term)
             },
             {
                 title: "Evaluated cases", field: "evaluationsCount",
@@ -41,6 +43,13 @@ class TeamReviewList extends Component {
             }
         ]
     }
+
+    componentDidUpdate(prevProps) {
+        if (prevProps.minDate !== this.props.minDate || prevProps.maxDate !== this.props.maxDate) {
+            this.forceUpdate();
+        }
+    }
+
     render() {
         const tableIcons = {
             Add: forwardRef((props, ref) => <AddBox {...props} ref={ref} />),
@@ -74,6 +83,46 @@ class TeamReviewList extends Component {
                         filtering: true,
                         actionsColumnIndex: -1,
                         pageSize: 10
+                    }}
+                    components={{
+                        Toolbar: props => (
+                            <div>
+                                <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                                    <MTableToolbar {...props} />
+                                    <div style={{ marginLeft: 10 }}>
+                                        <KeyboardDatePicker
+                                            disableToolbar
+                                            variant="inline"
+                                            format="yyyy-MM-dd"
+                                            margin="normal"
+                                            label="Start date"
+                                            value={this.props.minDate}
+                                            maxDate={this.state.maxDate}
+                                            onChange={e => this.props.setMinDate(e)}
+                                            KeyboardButtonProps={{
+                                                'aria-label': 'change date',
+                                            }}
+                                        />
+                                        <KeyboardDatePicker
+                                            style={{ marginLeft: 10 }}
+                                            disableToolbar
+                                            variant="inline"
+                                            format="yyyy-MM-dd"
+                                            margin="normal"
+                                            label="End date"
+                                            value={this.props.maxDate}
+                                            minDate={this.props.minDate}
+                                            maxDate={new Date()}
+                                            onChange={e => this.props.setMaxDate(e)}
+                                            KeyboardButtonProps={{
+                                                'aria-label': 'change date',
+                                            }}
+                                        />
+                                    </div>
+                                </MuiPickersUtilsProvider>
+                            </div>
+
+                        ),
                     }}
                     onRowClick={(event, rowData, togglePanel) => event.target.tagName === "SPAN" ? null : window.location.href = "/userDetails/" + rowData.id} />
             </div>

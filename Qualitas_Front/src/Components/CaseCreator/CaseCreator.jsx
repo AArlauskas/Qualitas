@@ -64,7 +64,7 @@ class CaseCreator extends Component {
                     {console.log(this.props)}
                     <UnifiedModal open={this.state.modalOpen} title="Comment">
                         <DefaultTextArea defaultValue={this.state.modalOpen ? this.state.topics.find(topic => topic.id === this.state.commentTopicId)
-                            .criteria.find(criteria => criteria.id === this.state.commentCriteriaId).comment : ""} label="Add comment..." maxLength={250} onChange={e => {
+                            .criteria.find(criteria => criteria.id === this.state.commentCriteriaId).comment : ""} label="Add comment..." maxLength={600} onChange={e => {
                                 let TempTopics = [...this.state.topics];
                                 TempTopics.find(topic => topic.id === this.state.commentTopicId)
                                     .criteria.find(criteria => criteria.id === this.state.commentCriteriaId).comment = e.target.value;

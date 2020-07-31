@@ -23,9 +23,9 @@ namespace Qualitas_Backend.Controllers
         private DB_QualitasHostedEntities db = new DB_QualitasHostedEntities();
 
         // GET: api/Users
-        public async Task<IHttpActionResult> GetUsers()
+        public async Task<IHttpActionResult> GetUsers(DateTime start, DateTime end)
         {
-            var users = db.Users.Where(user => !user.IsDeleted).Select(user => new
+            var users = db.Users.Where(user => !user.IsDeleted).Where(user => !user.IsArchived).Select(user => new
             {
                 user.id,
                 user.username,
@@ -36,15 +36,33 @@ namespace Qualitas_Backend.Controllers
                 role = user.RoleType,
                 teamId = user.TeamId,
                 teamName = user.Team.name,
+                caseCount = user.Evaluations.Where(evaluation => evaluation.createdDate >= start && evaluation.createdDate <= end).Where(temp => !temp.isDeleted).Count(),
                 projects = user.Projects.Where(project => !project.isDeleted).Select(project => new
                 {
                     project.id,
                     project.name,
                 }),
-                average = (int?)(user.Evaluations.Where(evaluation => !evaluation.isDeleted).Select(evaluation => evaluation.Topics.
-                        Select(topic => topic.Criteria.Select(criteria => (double?)criteria.score).ToList().Sum()).Sum()).Sum() /
-                        user.Evaluations.Where(evaluation => !evaluation.isDeleted).Select(evaluation => evaluation.Topics.
-                        Select(topic => topic.Criteria.Select(criteria => (int?)criteria.points).ToList().Sum()).Sum()).Sum() * 100)
+                score = user.Evaluations.Where(evaluation => !evaluation.isDeleted).Where(evaluation => evaluation.createdDate >= start && evaluation.createdDate <= end).Select(evaluation => evaluation.Topics.
+                Select(topic => topic.Criteria.Select(criteria => (double?)criteria.score).ToList().Sum()).Sum()).Sum(),
+
+                points = user.Evaluations.Where(evaluation => !evaluation.isDeleted).Where(evaluation => evaluation.createdDate >= start && evaluation.createdDate <= end).Select(evaluation => evaluation.Topics.
+                Select(topic => topic.Criteria.Select(criteria => (int?)criteria.points).ToList().Sum()).Sum()).Sum()
+            });
+
+            return Ok(users);
+        }
+
+        [HttpGet]
+        [Route("api/Users/archived")]
+        public async Task<IHttpActionResult> GetUsersArchived()
+        {
+            var users = db.Users.Where(user => !user.IsDeleted).Where(user => user.IsArchived).Select(user => new
+            {
+                user.id,
+                user.firstname,
+                user.lastname,
+                isArchived = user.IsArchived,
+                role = user.RoleType
             });
 
             return Ok(users);
@@ -141,9 +159,8 @@ namespace Qualitas_Backend.Controllers
                         projectId = evaluation.Project.id,
                         evaluation.createdDate,
                         evaluator = evaluation.Evaluator.firstname + " " + evaluation.Evaluator.lastname,
-                        average = (int?)(evaluation.Topics.Select(topic => topic.Criteria.Select(criteria => (double?)criteria.score).ToList().Sum()).Sum() /
-                        evaluation.Topics.Select(topic => topic.Criteria.Select(criteria => (int?)criteria.points).ToList().Sum()).Sum() * 100)
-
+                        score = evaluation.Topics.Select(topic => topic.Criteria.Select(criteria => (double?)criteria.score).ToList().Sum()).Sum(),
+                        points = evaluation.Topics.Select(topic => topic.Criteria.Select(criteria => (int?)criteria.points).ToList().Sum()).Sum(),
                     })
                 }).FirstOrDefaultAsync(temp => temp.id == id);
             if (users == null)

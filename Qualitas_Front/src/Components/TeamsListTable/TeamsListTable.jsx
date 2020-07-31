@@ -1,5 +1,5 @@
 import React, { Component, forwardRef } from 'react';
-import MaterialTable from 'material-table';
+import MaterialTable, { MTableToolbar } from 'material-table';
 import AddBox from '@material-ui/icons/AddBox';
 import ArrowDownward from '@material-ui/icons/ArrowDownward';
 import Check from '@material-ui/icons/Check';
@@ -18,6 +18,8 @@ import ViewColumn from '@material-ui/icons/ViewColumn';
 import GroupAddIcon from '@material-ui/icons/GroupAdd';
 import WorkIcon from '@material-ui/icons/Work';
 import { Chip } from '@material-ui/core';
+import { KeyboardDatePicker, MuiPickersUtilsProvider } from '@material-ui/pickers';
+import DateFnsUtils from '@date-io/date-fns';
 
 class TeamsListTable extends Component {
     state = {
@@ -36,10 +38,18 @@ class TeamsListTable extends Component {
                 title: "Number of users", field: "userCount", editable: "never"
             },
             {
-                title: "Score", field: "average", editable: "never", render: rowData => rowData.average === null ? "0%" : rowData.average + "%"
-            }
+                editable: "never", title: "Score", field: "score", render: rowData => isNaN(Math.trunc((rowData.score / rowData.points) * 100)) ? "0%" : Math.trunc((rowData.score / rowData.points) * 100) + "%",
+                customFilterAndSearch: (term, rowData) => Math.trunc((rowData.score / rowData.points) * 100) === parseInt(term)
+            },
         ]
     }
+
+    componentDidUpdate(prevProps) {
+        if (prevProps.minDate !== this.props.minDate || prevProps.maxDate !== this.props.maxDate) {
+            this.forceUpdate();
+        }
+    }
+
     render() {
         const tableIcons = {
             Add: forwardRef((props, ref) => <AddBox {...props} ref={ref} />),
@@ -128,6 +138,46 @@ class TeamsListTable extends Component {
                                     this.props.deleteTeam(oldData.id);
                                 }, 600);
                             })
+                    }}
+                    components={{
+                        Toolbar: props => (
+                            <div>
+                                <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                                    <MTableToolbar {...props} />
+                                    <div style={{ marginLeft: 10 }}>
+                                        <KeyboardDatePicker
+                                            disableToolbar
+                                            variant="inline"
+                                            format="yyyy-MM-dd"
+                                            margin="normal"
+                                            label="Start date"
+                                            value={this.props.minDate}
+                                            maxDate={this.state.maxDate}
+                                            onChange={e => this.props.setMinDate(e)}
+                                            KeyboardButtonProps={{
+                                                'aria-label': 'change date',
+                                            }}
+                                        />
+                                        <KeyboardDatePicker
+                                            style={{ marginLeft: 10 }}
+                                            disableToolbar
+                                            variant="inline"
+                                            format="yyyy-MM-dd"
+                                            margin="normal"
+                                            label="End date"
+                                            value={this.props.maxDate}
+                                            minDate={this.props.minDate}
+                                            maxDate={new Date()}
+                                            onChange={e => this.props.setMaxDate(e)}
+                                            KeyboardButtonProps={{
+                                                'aria-label': 'change date',
+                                            }}
+                                        />
+                                    </div>
+                                </MuiPickersUtilsProvider>
+                            </div>
+
+                        ),
                     }}
                     onRowClick={(event, rowData, togglePanel) => event.target.tagName === "SPAN" ? null : window.location.href = "/teamDetails/" + rowData.id} />
             </div>

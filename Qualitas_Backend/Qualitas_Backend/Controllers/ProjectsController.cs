@@ -31,7 +31,7 @@ namespace Qualitas_Backend.Controllers
         [ResponseType(typeof(List<ProjectsListItem>))]
         [HttpGet]
         [Route("api/Projects/list")]
-        public async Task<IHttpActionResult> GetProjectsList()
+        public async Task<IHttpActionResult> GetProjectsList(DateTime start, DateTime end)
         {
             var projects = db.Projects.Where(project => !project.isDeleted).Select(project => new
             {
@@ -46,7 +46,13 @@ namespace Qualitas_Backend.Controllers
                 {
                     team.id,
                     team.name
-                })
+                }),
+                caseCount = project.Evaluations.Where(evaluation => evaluation.createdDate >= start && evaluation.createdDate <= end).Count(),
+                score = project.Evaluations.Where(evaluation => !evaluation.isDeleted).Where(evaluation => evaluation.createdDate >= start && evaluation.createdDate <= end).Select(evaluation => evaluation.Topics.
+                Select(topic => topic.Criteria.Select(criteria => (double?)criteria.score).ToList().Sum()).Sum()).Sum(),
+
+                points = project.Evaluations.Where(evaluation => !evaluation.isDeleted).Where(evaluation => evaluation.createdDate >= start && evaluation.createdDate <= end).Select(evaluation => evaluation.Topics.
+                Select(topic => topic.Criteria.Select(criteria => (int?)criteria.points).ToList().Sum()).Sum()).Sum()
             });
 
             return Ok(projects);
@@ -67,7 +73,7 @@ namespace Qualitas_Backend.Controllers
 
         [HttpGet]
         [Route("api/Projects/review/{id}")]
-        public async Task<IHttpActionResult> GetProjectReview(int id)
+        public async Task<IHttpActionResult> GetProjectReview(int id, DateTime start, DateTime end)
         {
             var projects = await db.Projects
                 .Select(project => new {
@@ -80,10 +86,13 @@ namespace Qualitas_Backend.Controllers
                         user.lastname,
                         teamName = user.Team.name,
                         teamId = (int?)user.Team.id,
-                        average = (int?)(user.Evaluations.Where(evaluation => !evaluation.isDeleted).Select(evaluation => evaluation.Topics.
-                        Select(topic => topic.Criteria.Select(criteria => (double?)criteria.score).ToList().Sum()).Sum()).Sum() /
-                        user.Evaluations.Where(evaluation => !evaluation.isDeleted).Select(evaluation => evaluation.Topics.
-                        Select(topic => topic.Criteria.Select(criteria => (int?)criteria.points).ToList().Sum()).Sum()).Sum() * 100)
+                        caseCount = user.Evaluations.Where(evaluation => evaluation.createdDate >= start && evaluation.createdDate <= end).Count(),
+
+                        score = user.Evaluations.Where(evaluation => !evaluation.isDeleted).Where(evaluation => evaluation.createdDate >= start && evaluation.createdDate <= end).Select(evaluation => evaluation.Topics.
+                        Select(topic => topic.Criteria.Select(criteria => (double?)criteria.score).ToList().Sum()).Sum()).Sum(),
+
+                        points = user.Evaluations.Where(evaluation => !evaluation.isDeleted).Where(evaluation => evaluation.createdDate >= start && evaluation.createdDate <= end).Select(evaluation => evaluation.Topics.
+                        Select(topic => topic.Criteria.Select(criteria => (int?)criteria.points).ToList().Sum()).Sum()).Sum()
                     })
                 }).FirstOrDefaultAsync(temp => temp.id == id);
             if (projects == null)

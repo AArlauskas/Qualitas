@@ -20,8 +20,23 @@ export const Login = async (data) => {
         });
 };
 
-export const FetchUserList = async () => {
-    return await Api.get("/Users")
+export const FetchUserList = async (start, end) => {
+    return await Api.get("/Users", {
+        params: {
+            start: start,
+            end: end
+        }
+    })
+        .then((response) => {
+            return response.data;
+        })
+        .catch((error) => {
+            throw Error("An error has occurred calling the api: " + error);
+        });
+};
+
+export const FetchArchivedUserList = async () => {
+    return await Api.get("/Users/Archived")
         .then((response) => {
             return response.data;
         })
@@ -241,8 +256,13 @@ export const MarkUserDeleted = async (id) => {
         });
 };
 
-export const FetchTeamsList = async () => {
-    return await Api.get("/Teams/list")
+export const FetchTeamsList = async (start, end) => {
+    return await Api.get("/Teams/list", {
+        params: {
+            start: start,
+            end: end
+        }
+    })
         .then((response) => {
             return response.data;
         })
@@ -261,8 +281,13 @@ export const FetchTeamsSimple = async () => {
         });
 };
 
-export const FetchTeamToReview = async (id) => {
-    return await Api.get("/Teams/review/" + id)
+export const FetchTeamToReview = async (id, start, end) => {
+    return await Api.get("/Teams/review/" + id, {
+        params: {
+            start: start,
+            end: end
+        }
+    })
         .then((response) => {
             return response.data;
         })
@@ -470,8 +495,13 @@ export const DeleteTemplate = async (id) => {
         });
 };
 
-export const FetchProjectsList = async () => {
-    return await Api.get("/Projects/list")
+export const FetchProjectsList = async (start, end) => {
+    return await Api.get("/Projects/list", {
+        params: {
+            start: start,
+            end: end
+        }
+    })
         .then((response) => {
             return response.data;
         })
@@ -539,8 +569,14 @@ export const FetchProjectToEdit = async (id) => {
         });
 };
 
-export const FetchProjectToReview = async (id) => {
-    return await Api.get("/Projects/review/" + id)
+export const FetchProjectToReview = async (id, min, max) => {
+    console.log(min);
+    return await Api.get("/Projects/review/" + id, {
+        params: {
+            start: min,
+            end: max
+        }
+    })
         .then((response) => {
             return response.data;
         })

@@ -1,8 +1,8 @@
 import { ActionType } from "../Constants/ActionType";
 import { FetchUserList, ArchiveUser, CreateUser, UpdateUser, FetchTeamsList } from "../API/API";
 
-export const fetchUserData = () => async (dispatch) => {
-    let userList = await FetchUserList()
+export const fetchUserData = (start, end) => async (dispatch) => {
+    let userList = await FetchUserList(start, end)
     dispatch({
         type: ActionType.LOAD_USERS,
         payload: userList

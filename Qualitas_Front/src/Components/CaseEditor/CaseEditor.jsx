@@ -60,7 +60,7 @@ class CaseEditor extends Component {
                 <div style={{ marginLeft: "25%", marginRight: "25%", background: "rgba(200, 200, 200, 0.5)" }}>
                     <UnifiedModal open={this.state.modalOpen} title="Comment">
                         <DefaultTextArea defaultValue={this.state.modalOpen ? this.state.topics.find(topic => topic.id === this.state.commentTopicId)
-                            .criteria.find(criteria => criteria.id === this.state.commentCriteriaId).comment : ""} label="Add comment..." maxLength={250} onChange={e => {
+                            .criteria.find(criteria => criteria.id === this.state.commentCriteriaId).comment : ""} label="Add comment..." maxLength={600} onChange={e => {
                                 let TempTopics = [...this.state.topics];
                                 TempTopics.find(topic => topic.id === this.state.commentTopicId)
                                     .criteria.find(criteria => criteria.id === this.state.commentCriteriaId).comment = e.target.value;

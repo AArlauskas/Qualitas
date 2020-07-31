@@ -95,7 +95,7 @@ export default function Credentials(props) {
                                     props.updateCredentials(data);
                                     setTimeout(() => {
                                         window.localStorage.clear();
-                                        window.location.reload(false);
+                                        window.location.href = "/";
                                     }, 1500)
                                 }}
                             >

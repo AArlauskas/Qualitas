@@ -3,10 +3,10 @@ import templates from "../Constants/Templates";
 import { FetchProjectsList, CreateProject, DeleteProject, UpadateProjectName } from "../API/API";
 require('react-virtualized-transfer/lib/css')
 
-export const fetchProjects = () => async (dispatch) => {
+export const fetchProjects = (start, end) => async (dispatch) => {
     dispatch({
         type: ActionType.LOAD_PROJECTS,
-        payload: await FetchProjectsList()
+        payload: await FetchProjectsList(start, end)
     });
 };
 
@@ -26,6 +26,7 @@ export const addProject = (data) => async (dispatch) => {
     updatedData.teams = [];
     updatedData.templates = [];
     updatedData.id = id;
+    updatedData.caseCount = 0;
     dispatch({
         type: ActionType.CREATE_PROJECT,
         payload: updatedData

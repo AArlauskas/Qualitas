@@ -43,7 +43,7 @@ namespace Qualitas_Backend.Controllers
         [ResponseType(typeof(List<TeamListResponse>))]
         [HttpGet]
         [Route("api/Teams/list")]
-        public async Task<IHttpActionResult> GetTeamList()
+        public async Task<IHttpActionResult> GetTeamList(DateTime start, DateTime end)
         {
             var teams = db.Teams.Select(team => new
             {
@@ -55,17 +55,18 @@ namespace Qualitas_Backend.Controllers
                     project.id,
                     project.name
                 }),
-                average = (int?)(team.Users.Where(user => !user.IsDeleted && !user.IsArchived).Select(user => user.Evaluations.Where(evaluation => !evaluation.isDeleted).Select(evaluation => evaluation.Topics.Select(topic => topic.Criteria.
-                Select(criteria => (double?)criteria.score).ToList().Sum()).Sum()).Sum()).Sum() / team.Users.Where(user => !user.IsDeleted && !user.IsArchived).Select(user => user.Evaluations.Where(evaluation => !evaluation.isDeleted).Select(evaluation => evaluation.Topics.Select(topic => topic.Criteria.
-                Select(criteria => (int?)criteria.points).ToList().Sum()).Sum()).Sum()).Sum() * 100),
-            });
+                score = team.Users.Where(user => !user.IsDeleted && !user.IsArchived).Select(user => user.Evaluations.Where(evaluation => evaluation.createdDate >= start && evaluation.createdDate <= end).Where(evaluation => !evaluation.isDeleted).Select(evaluation => evaluation.Topics.Select(topic => topic.Criteria.
+                Select(criteria => (double?)criteria.score).ToList().Sum()).Sum()).Sum()).Sum(),
+                points = team.Users.Where(user => !user.IsDeleted && !user.IsArchived).Select(user => user.Evaluations.Where(evaluation => evaluation.createdDate >= start && evaluation.createdDate <= end).Where(evaluation => !evaluation.isDeleted).Select(evaluation => evaluation.Topics.Select(topic => topic.Criteria.
+                Select(criteria => (int?)criteria.points).ToList().Sum()).Sum()).Sum()).Sum()
+            }) ;
 
             return Ok(teams);
         }
 
         [HttpGet]
         [Route("api/Teams/review/{id}")]
-        public async Task<IHttpActionResult> GetTeamReview (int id)
+        public async Task<IHttpActionResult> GetTeamReview (int id, DateTime start, DateTime end)
         {
             var teams = await db.Teams
                 .Select(team => new {
@@ -81,11 +82,12 @@ namespace Qualitas_Backend.Controllers
                             project.id,
                             project.name
                         }),
-                        evaluationsCount = user.Evaluations.Where(evaluation => !evaluation.isDeleted).Count(),
-                        average = (int?)(user.Evaluations.Where(evaluation => !evaluation.isDeleted).Select(evaluation => evaluation.Topics.
-                        Select(topic => topic.Criteria.Select(criteria => (double?)criteria.score).ToList().Sum()).Sum()).Sum() /
-                        user.Evaluations.Where(evaluation => !evaluation.isDeleted).Select(evaluation => evaluation.Topics.
-                        Select(topic => topic.Criteria.Select(criteria => (int?)criteria.points).ToList().Sum()).Sum()).Sum() * 100)
+                        evaluationsCount = user.Evaluations.Where(evaluation => evaluation.createdDate >= start && evaluation.createdDate <= end).Where(evaluation => !evaluation.isDeleted).Count(),
+                        score = user.Evaluations.Where(evaluation => !evaluation.isDeleted).Where(evaluation => evaluation.createdDate >= start && evaluation.createdDate <= end).Select(evaluation => evaluation.Topics.
+                        Select(topic => topic.Criteria.Select(criteria => (double?)criteria.score).ToList().Sum()).Sum()).Sum(),
+
+                        points = user.Evaluations.Where(evaluation => !evaluation.isDeleted).Where(evaluation => evaluation.createdDate >= start && evaluation.createdDate <= end).Select(evaluation => evaluation.Topics.
+                        Select(topic => topic.Criteria.Select(criteria => (int?)criteria.points).ToList().Sum()).Sum()).Sum()
                     })
                 }).FirstOrDefaultAsync(temp => temp.id == id);
             if (teams == null)

@@ -4,13 +4,20 @@ import { connect } from "react-redux";
 import { fetchUserData, addUser, updateUser, archiveUser } from '../../Actions/UserListActions';
 import LoadingScreen from '../../Components/LoadingScreen/LoadingScreen';
 
-
+let date = new Date();
 class UserListDisplay extends Component {
-    componentDidMount() {
-        this.props.fetchUserData();
-    }
     state = {
-        type: "user"
+        type: "user",
+        minDate: new Date(date.getFullYear(), date.getMonth(), 1),
+        maxDate: new Date(),
+    }
+    componentDidMount() {
+        this.props.fetchUserData(this.state.minDate, this.state.maxDate);
+    }
+    componentDidUpdate(prevProps, prevState) {
+        if (prevState.minDate !== this.state.minDate || prevState.maxDate !== this.state.maxDate) {
+            this.props.fetchUserData(this.state.minDate, this.state.maxDate);
+        }
     }
     render() {
         return (
@@ -20,7 +27,11 @@ class UserListDisplay extends Component {
                     teams={this.props.teams}
                     addUser={this.props.addUser}
                     updateUser={this.props.updateUser}
-                    archiveUser={this.props.archiveUser} />
+                    archiveUser={this.props.archiveUser}
+                    minDate={this.state.minDate}
+                    maxDate={this.state.maxDate}
+                    setMinDate={(date) => this.setState({ minDate: date })}
+                    setMaxDate={(date) => this.setState({ maxDate: date })} />
                 :
                 <LoadingScreen />
         );
@@ -34,7 +45,7 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-    fetchUserData: () => dispatch(fetchUserData()),
+    fetchUserData: (start, end) => dispatch(fetchUserData(start, end)),
     addUser: (data) => dispatch(addUser(data)),
     updateUser: (data) => dispatch(updateUser(data)),
     archiveUser: (oldData) => dispatch(archiveUser(oldData))

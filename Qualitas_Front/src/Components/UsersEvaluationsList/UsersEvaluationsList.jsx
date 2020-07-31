@@ -32,10 +32,11 @@ class UsersEvaluationsList extends Component {
                 title: "Date", field: "createdDate", filtering: false, render: rowData => rowData.createdDate.split("T")[0]
             },
             {
-                title: "Project", field: "project", render: rowData => <Chip label={rowData.projectName} onClick={() => window.location.href = "/ProjectReview/" + rowData.projectId} />
+                title: "Project", field: "project", render: rowData => <Chip label={rowData.projectName} onClick={() => window.location.href = "/ProjectReview/" + rowData.projectId} />,
+                customFilterAndSearch: (term, rowData) => rowData.Projects.some(project => project.name.toLowerCase().startsWith(term.toLowerCase()))
             },
             {
-                title: "Score", field: "score", render: rowData => rowData.average === null ? "0%" : rowData.average + "%",
+                title: "Score", field: "score", render: rowData => Math.trunc((rowData.score / rowData.points) * 100) + "%",
                 customFilterAndSearch: (term, rowData) => parseInt(term) === 0 ? rowData.average === null : rowData.average === parseInt(term)
             },
             {
@@ -43,6 +44,7 @@ class UsersEvaluationsList extends Component {
             }
         ]
     }
+
     render() {
 
         const filterByDate = () => {
@@ -56,6 +58,22 @@ class UsersEvaluationsList extends Component {
             })
             return correctData;
         }
+
+        const getNewScore = (data) => {
+            console.log("labas");
+            let points = 0;
+            let score = 0;
+            data.forEach(item => {
+                score += item.score;
+                points += item.points;
+            })
+            let average = Math.trunc((score / points) * 100);
+            if (isNaN(average)) {
+                average = 0;
+            }
+            this.props.changeScore(average);
+        }
+
 
 
         const tableIcons = {
@@ -79,7 +97,6 @@ class UsersEvaluationsList extends Component {
         };
         return (
             <div>
-                {console.log(this.props)}
                 <MaterialTable
                     data={filterByDate()}
                     columns={this.state.columns}
@@ -90,6 +107,7 @@ class UsersEvaluationsList extends Component {
                         actionsColumnIndex: -1,
                         pageSize: 10
                     }}
+                    onOrderChange={() => getNewScore(filterByDate())}
                     components={{
                         Toolbar: props => (
                             <div>
@@ -104,7 +122,11 @@ class UsersEvaluationsList extends Component {
                                             label="Start date"
                                             value={this.state.minDate}
                                             maxDate={this.state.maxDate}
-                                            onChange={e => this.setState({ minDate: e })}
+                                            onChange={async e => {
+                                                await this.setState({ minDate: e });
+                                                getNewScore(filterByDate());
+
+                                            }}
                                             KeyboardButtonProps={{
                                                 'aria-label': 'change date',
                                             }}
@@ -119,7 +141,11 @@ class UsersEvaluationsList extends Component {
                                             value={this.state.maxDate}
                                             minDate={this.state.minDate}
                                             maxDate={new Date()}
-                                            onChange={e => this.setState({ maxDate: e })}
+                                            onChange={async e => {
+                                                await this.setState({ maxDate: e });
+                                                getNewScore(filterByDate());
+
+                                            }}
                                             KeyboardButtonProps={{
                                                 'aria-label': 'change date',
                                             }}
@@ -144,5 +170,6 @@ class UsersEvaluationsList extends Component {
         );
     }
 }
+
 
 export default UsersEvaluationsList;

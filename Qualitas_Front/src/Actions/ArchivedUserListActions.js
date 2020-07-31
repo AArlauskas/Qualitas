@@ -1,8 +1,8 @@
 import { ActionType } from "../Constants/ActionType";
-import { FetchUserList, UnarchiveUser, MarkUserDeleted } from "../API/API";
+import { UnarchiveUser, MarkUserDeleted, FetchArchivedUserList } from "../API/API";
 
 export const fetchArchivedUserData = () => async (dispatch) => {
-    let userList = await FetchUserList()
+    let userList = await FetchArchivedUserList()
     dispatch({
         type: ActionType.LOAD_ARCHIVED_USERS,
         payload: userList

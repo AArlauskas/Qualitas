@@ -4,10 +4,19 @@ import TeamListTable from "../../Components/TeamsListTable/TeamsListTable";
 import { fetchTeamsList, createTeam, updateTeam, deleteTeam } from '../../Actions/TeamsListActions';
 import LoadingScreen from '../../Components/LoadingScreen/LoadingScreen';
 
+let date = new Date();
 class TeamsDisplay extends Component {
-    state = {}
+    state = {
+        minDate: new Date(date.getFullYear(), date.getMonth(), 1),
+        maxDate: new Date(),
+    }
     componentDidMount() {
-        this.props.fetchTeamsList();
+        this.props.fetchTeamsList(this.state.minDate, this.state.maxDate);
+    }
+    componentDidUpdate(prevProps, prevState) {
+        if (prevState.minDate !== this.state.minDate || prevState.maxDate !== this.state.maxDate) {
+            this.props.fetchTeamsList(this.state.minDate, this.state.maxDate);
+        }
     }
     render() {
         return (
@@ -18,6 +27,10 @@ class TeamsDisplay extends Component {
                         createTeam={this.props.createTeam}
                         updateTeam={this.props.updateTeam}
                         deleteTeam={this.props.deleteTeam}
+                        minDate={this.state.minDate}
+                        maxDate={this.state.maxDate}
+                        setMinDate={(date) => this.setState({ minDate: date })}
+                        setMaxDate={(date) => this.setState({ maxDate: date })}
                     />}
             </div>
         );
@@ -29,7 +42,7 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-    fetchTeamsList: () => dispatch(fetchTeamsList()),
+    fetchTeamsList: (start, end) => dispatch(fetchTeamsList(start, end)),
     createTeam: (data) => dispatch(createTeam(data)),
     updateTeam: (data) => dispatch(updateTeam(data)),
     deleteTeam: (id) => dispatch(deleteTeam(id))

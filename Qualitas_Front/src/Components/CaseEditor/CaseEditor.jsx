@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { TextField, List, ListSubheader, ListItem, ListItemText, ListItemSecondaryAction, Checkbox, IconButton, Button } from '@material-ui/core';
+import { TextField, List, ListSubheader, ListItem, ListItemText, ListItemSecondaryAction, Checkbox, IconButton, Button, Tooltip, ListItemIcon } from '@material-ui/core';
 import AddCommentIcon from '@material-ui/icons/AddComment';
 import UnifiedModal from "../Core-Components/UnifiedModal";
 import DefaultTextArea from '../Core-Components/DefaultTextArea/DefaultTextArea';
@@ -7,6 +7,17 @@ import ButtonBlock from "../Core-Components/UnifiedModal/ButtonBlock/ButtonBlock
 import InsertEmoticonIcon from '@material-ui/icons/InsertEmoticon';
 import SentimentSatisfiedIcon from '@material-ui/icons/SentimentSatisfied';
 import SentimentVeryDissatisfiedIcon from '@material-ui/icons/SentimentVeryDissatisfied';
+import Fade from '@material-ui/core/Fade';
+import { withStyles } from "@material-ui/styles";
+import { DescriptionOutlined } from '@material-ui/icons';
+
+const CustomTooltip = withStyles({
+    tooltip: {
+        color: "black",
+        backgroundColor: "white",
+        fontSize: 15
+    }
+})(Tooltip);
 
 class CaseEditor extends Component {
     state = {
@@ -26,6 +37,7 @@ class CaseEditor extends Component {
                 id: topic.id,
                 name: topic.name,
                 isCritical: topic.isCritical,
+                description: topic.description,
                 failed: topic.failed,
                 criteria: []
             };
@@ -134,6 +146,12 @@ class CaseEditor extends Component {
                                     return (
                                         <div key={topic.id}>
                                             <ListItem button>
+                                                <ListItemIcon>
+                                                    {topic.description === "" || topic.description === null ? null :
+                                                        <CustomTooltip arrow TransitionComponent={Fade} title={topic.description} interactive>
+                                                            <DescriptionOutlined />
+                                                        </CustomTooltip>}
+                                                </ListItemIcon>
                                                 <ListItemText>{topic.name}</ListItemText>
                                                 <ListItemSecondaryAction>
                                                     <div style={{ overflow: "hidden" }}>

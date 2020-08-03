@@ -25,6 +25,7 @@ namespace Qualitas_Backend.Models
         public bool isCritical { get; set; }
         public int EvaluationId { get; set; }
         public bool failed { get; set; }
+        public string description { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Criterion> Criteria { get; set; }

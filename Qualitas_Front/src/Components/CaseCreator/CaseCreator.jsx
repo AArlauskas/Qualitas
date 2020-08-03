@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { TextField, List, ListSubheader, ListItem, ListItemText, ListItemSecondaryAction, Checkbox, IconButton, Button } from '@material-ui/core';
+import { TextField, List, ListSubheader, ListItem, ListItemText, ListItemSecondaryAction, Checkbox, IconButton, Button, Tooltip, ListItemIcon } from '@material-ui/core';
 import AddCommentIcon from '@material-ui/icons/AddComment';
 import UnifiedModal from "../../Components/Core-Components/UnifiedModal";
 import DefaultTextArea from '../Core-Components/DefaultTextArea/DefaultTextArea';
@@ -7,6 +7,17 @@ import ButtonBlock from "../Core-Components/UnifiedModal/ButtonBlock/ButtonBlock
 import InsertEmoticonIcon from '@material-ui/icons/InsertEmoticon';
 import SentimentSatisfiedIcon from '@material-ui/icons/SentimentSatisfied';
 import SentimentVeryDissatisfiedIcon from '@material-ui/icons/SentimentVeryDissatisfied';
+import Fade from '@material-ui/core/Fade';
+import { withStyles } from "@material-ui/styles";
+import { DescriptionOutlined } from '@material-ui/icons';
+
+const CustomTooltip = withStyles({
+    tooltip: {
+        color: "black",
+        backgroundColor: "white",
+        fontSize: 15
+    }
+})(Tooltip);
 
 class CaseCreator extends Component {
     state = {
@@ -35,6 +46,7 @@ class CaseCreator extends Component {
                 id: topic.id,
                 name: topic.name,
                 isCritical: topic.isCritical,
+                description: topic.description,
                 failed: false,
                 criteria: []
             };
@@ -78,7 +90,7 @@ class CaseCreator extends Component {
                         <TextField style={{ marginLeft: 20, width: 400 }} label="Case name" onChange={e => this.setState({ caseName: e.target.value })} />
                         <div>
                             <h3>Points: {TotalScore(this.state.topics)} / {TotalPoints(this.state.topics)}</h3>
-                            <h3>Percent: {Math.trunc(TotalScore(this.state.topics) / TotalPoints(this.state.topics) * 100)}%</h3>
+                            <h3>Percent: {isNaN(Math.trunc(TotalScore(this.state.topics) / TotalPoints(this.state.topics) * 100)) ? 0 : Math.trunc(TotalScore(this.state.topics) / TotalPoints(this.state.topics) * 100)}%</h3>
                         </div>
                         <div>
                             <div>
@@ -138,11 +150,19 @@ class CaseCreator extends Component {
                                     return (
                                         <div key={topic.id}>
                                             <ListItem button>
-                                                <ListItemText>{topic.name}</ListItemText>
+                                                <ListItemIcon>
+                                                    {topic.description === "" || topic.description === null ? null :
+                                                        <CustomTooltip arrow TransitionComponent={Fade} title={topic.description} interactive>
+                                                            <DescriptionOutlined />
+                                                        </CustomTooltip>}
+                                                </ListItemIcon>
+                                                <ListItemText>
+                                                    {topic.name}
+                                                </ListItemText>
                                                 <ListItemSecondaryAction>
                                                     <div style={{ overflow: "hidden" }}>
                                                         <p style={{ float: "left" }}>{TopicScore(topic)} / {TopicPoints(topic)}</p>
-                                                        <p style={{ float: "right", paddingLeft: 10 }}>{Math.trunc(TopicScore(topic) / TopicPoints(topic) * 100)}%</p>
+                                                        <p style={{ float: "right", paddingLeft: 10 }}>{isNaN(Math.trunc(TopicScore(topic) / TopicPoints(topic) * 100)) ? 0 : Math.trunc(TopicScore(topic) / TopicPoints(topic) * 100)}%</p>
                                                     </div>
                                                 </ListItemSecondaryAction>
                                             </ListItem>

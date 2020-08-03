@@ -103,6 +103,7 @@
           <Property Name="isCritical" Type="bit" Nullable="false" />
           <Property Name="EvaluationId" Type="int" Nullable="false" />
           <Property Name="failed" Type="bit" Nullable="false" />
+          <Property Name="description" Type="nvarchar(max)" />
         </EntityType>
         <EntityType Name="TopicTemplate">
           <Key>
@@ -112,6 +113,7 @@
           <Property Name="name" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="isCritical" Type="bit" Nullable="false" />
           <Property Name="TemplateId" Type="int" Nullable="false" />
+          <Property Name="description" Type="nvarchar(max)" />
         </EntityType>
         <EntityType Name="User">
           <Key>
@@ -491,6 +493,7 @@
           <Property Name="failed" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="Criteria" Relationship="Self.FK_Criteria_Topic" FromRole="Topic" ToRole="Criteria" />
           <NavigationProperty Name="Evaluation" Relationship="Self.FK_Topic_Evaluation" FromRole="Topic" ToRole="Evaluation" />
+          <Property Name="description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="TopicTemplate">
           <Key>
@@ -502,6 +505,7 @@
           <Property Name="TemplateId" Type="Int32" Nullable="false" />
           <NavigationProperty Name="CriteriaTemplates" Relationship="Self.FK_CriteriaTemplate_TopicTemplate" FromRole="TopicTemplate" ToRole="CriteriaTemplate" />
           <NavigationProperty Name="EvaluationTemplate" Relationship="Self.FK_TopicTemplate_EvaluationTemplate" FromRole="TopicTemplate" ToRole="EvaluationTemplate" />
+          <Property Name="description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="User">
           <Key>
@@ -807,6 +811,7 @@
           <EntitySetMapping Name="Topics">
             <EntityTypeMapping TypeName="DB_QualitasHostedModel.Topic">
               <MappingFragment StoreEntitySet="Topic">
+                <ScalarProperty Name="description" ColumnName="description" />
                 <ScalarProperty Name="id" ColumnName="id" />
                 <ScalarProperty Name="name" ColumnName="name" />
                 <ScalarProperty Name="isCritical" ColumnName="isCritical" />
@@ -818,6 +823,7 @@
           <EntitySetMapping Name="TopicTemplates">
             <EntityTypeMapping TypeName="DB_QualitasHostedModel.TopicTemplate">
               <MappingFragment StoreEntitySet="TopicTemplate">
+                <ScalarProperty Name="description" ColumnName="description" />
                 <ScalarProperty Name="id" ColumnName="id" />
                 <ScalarProperty Name="name" ColumnName="name" />
                 <ScalarProperty Name="isCritical" ColumnName="isCritical" />

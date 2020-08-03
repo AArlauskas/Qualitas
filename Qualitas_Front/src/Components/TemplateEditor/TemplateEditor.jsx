@@ -6,6 +6,10 @@ import DoneIcon from '@material-ui/icons/Done';
 import AddIcon from '@material-ui/icons/Add';
 import ExpandLess from "@material-ui/icons/ExpandLess";
 import ExpandMore from "@material-ui/icons/ExpandMore";
+import DescriptionIcon from '@material-ui/icons/Description';
+import UnifiedModal from '../Core-Components/UnifiedModal';
+import DefaultTextArea from '../Core-Components/DefaultTextArea/DefaultTextArea';
+import ButtonBlock from '../Core-Components/UnifiedModal/ButtonBlock/ButtonBlock';
 
 const calculateSum = (criteria) => {
     let sum = 0;
@@ -18,6 +22,8 @@ let index = 4;
 class TemplateCreator extends Component {
     UNSAFE_componentWillMount() {
         this.setState({
+            modalOpen: false,
+            commentTopicId: null,
             id: this.props.template.id,
             editing: false,
             templateName: this.props.template.TemplateName,
@@ -31,6 +37,7 @@ class TemplateCreator extends Component {
                 id: temp.id,
                 name: temp.name,
                 critical: temp.critical,
+                description: temp.description,
                 editing: false,
                 open: true
             });
@@ -54,6 +61,16 @@ class TemplateCreator extends Component {
     render() {
         return (
             <div>
+                <UnifiedModal open={this.state.modalOpen} title="Description">
+                    <DefaultTextArea defaultValue={this.state.modalOpen ? this.state.topics.find(topic => topic.id === this.state.commentTopicId).description : ""} label="Add description..." maxLength={600} onChange={e => {
+                        let TempTopics = [...this.state.topics];
+                        TempTopics.find(topic => topic.id === this.state.commentTopicId).description = e.target.value;
+                        this.setState({
+                            topics: [...TempTopics]
+                        })
+                    }} />
+                    <ButtonBlock onSave={() => this.setState({ modalOpen: false, commentTopicId: null })} />
+                </UnifiedModal>
                 <div style={{ marginLeft: "25%", marginRight: "25%", marginTop: 25, background: "rgba(200, 200, 200, 0.5)", textAlign: "center" }}>
                     <TextField focused={true} style={{ paddingBottom: 15, width: 250 }} defaultValue={this.state.templateName} label="Template name" onChange={e => this.setState({ templateName: e.target.value })} />
                     <div className="ButtonBlock" >
@@ -62,6 +79,7 @@ class TemplateCreator extends Component {
                             tempTopics.push({
                                 id: index,
                                 name: "Enter name",
+                                description: "",
                                 critical: true,
                                 editing: true,
                             });
@@ -75,6 +93,7 @@ class TemplateCreator extends Component {
                             tempTopics.push({
                                 id: index,
                                 name: "Enter name",
+                                description: "",
                                 critical: false,
                                 editing: true,
                                 open: true,
@@ -247,15 +266,12 @@ class TemplateCreator extends Component {
                                 return (
                                     <div key={entry.id}>
                                         <React.Fragment>
-                                            <ListItem button onClick={() => {
-                                                let id = entry.id;
-                                                let tempTopics = [...this.state.topics];
-                                                tempTopics.find(critical => critical.id === id).editing = true;
-                                                this.setState({
-                                                    editing: true,
-                                                    topics: tempTopics
-                                                })
-                                            }}>
+                                            <ListItem button>
+                                                <ListItemIcon>
+                                                    <IconButton onClick={() => this.setState({ modalOpen: true, commentTopicId: entry.id })}>
+                                                        <DescriptionIcon style={{ color: entry.description === "" ? null : "green" }} />
+                                                    </IconButton>
+                                                </ListItemIcon>
                                                 <ListItemIcon>
                                                     <IconButton onClick={() => {
                                                         let tempTopics = [...this.state.topics];
@@ -437,6 +453,7 @@ class TemplateCreator extends Component {
                         this.state.topics.forEach(topic => outputData.Topics.push({
                             id: topic.id,
                             name: topic.name,
+                            description: topic.description,
                             critical: topic.critical
                         }));
                         this.state.criteria.forEach(criteria => outputData.Criteria.push({

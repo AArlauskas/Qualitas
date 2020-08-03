@@ -6,6 +6,16 @@ import InsertEmoticonIcon from '@material-ui/icons/InsertEmoticon';
 import SentimentSatisfiedIcon from '@material-ui/icons/SentimentSatisfied';
 import SentimentVeryDissatisfiedIcon from '@material-ui/icons/SentimentVeryDissatisfied';
 import Fade from '@material-ui/core/Fade';
+import { withStyles } from "@material-ui/styles";
+import { DescriptionOutlined } from '@material-ui/icons';
+
+const CustomTooltip = withStyles({
+    tooltip: {
+        color: "black",
+        backgroundColor: "white",
+        fontSize: 15
+    }
+})(Tooltip);
 
 class CaseView extends Component {
     state = {
@@ -13,7 +23,6 @@ class CaseView extends Component {
         caseName: "",
         topics: [],
         breached: false,
-        anchorElement: null,
     }
 
     componentDidMount() {
@@ -22,6 +31,7 @@ class CaseView extends Component {
             let tempTopic = {
                 id: topic.id,
                 name: topic.name,
+                description: topic.description,
                 isCritical: topic.isCritical,
                 failed: topic.failed,
                 criteria: []
@@ -56,7 +66,7 @@ class CaseView extends Component {
                 {console.log(this.state)}
                 <div style={{ marginLeft: "25%", marginRight: "25%", background: "rgba(200, 200, 200, 0.5)" }}>
                     <UnifiedModal open={this.state.modalOpen} title="Comment">
-                        <p>this.state.modalOpen ? this.state.topics.find(topic => topic.id === this.state.commentTopicId)
+                        <p>{this.state.modalOpen ? this.state.topics.find(topic => topic.id === this.state.commentTopicId)
                             .criteria.find(criteria => criteria.id === this.state.commentCriteriaId).comment : ""}</p>
                     </UnifiedModal>
                     <div style={{ textAlign: "center" }}>
@@ -96,6 +106,10 @@ class CaseView extends Component {
                                     return (
                                         <div key={topic.id}>
                                             <ListItem >
+                                                {topic.description === "" || topic.description === null ? null :
+                                                    <CustomTooltip arrow TransitionComponent={Fade} title={topic.description} interactive>
+                                                        <DescriptionOutlined style={{ color: "green" }} />
+                                                    </CustomTooltip>}
                                                 <ListItemText>{topic.name}</ListItemText>
                                                 <ListItemSecondaryAction>
                                                     <div style={{ overflow: "hidden" }}>
@@ -121,11 +135,11 @@ class CaseView extends Component {
                                                                     <IconButton disabled={true} edge="end" aria-label="Failed" style={{ backgroundColor: crit.score === 0 ? "rgba(255,0,0, 0.2)" : null }}>
                                                                         <SentimentVeryDissatisfiedIcon />
                                                                     </IconButton>
-                                                                    <Tooltip arrow TransitionComponent={Fade} title={crit.comment} interactive>
+                                                                    <CustomTooltip arrow TransitionComponent={Fade} title={crit.comment} interactive>
                                                                         <IconButton aria-describedby={crit.id} edge="end" aria-label="Add comment" >
                                                                             <AddCommentIcon style={{ color: crit.comment === "" ? null : "green" }} />
                                                                         </IconButton>
-                                                                    </Tooltip>
+                                                                    </CustomTooltip>
                                                                 </ListItemSecondaryAction>
                                                             </ListItem>
                                                         </div>

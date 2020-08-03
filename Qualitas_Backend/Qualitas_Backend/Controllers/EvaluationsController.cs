@@ -43,6 +43,7 @@ namespace Qualitas_Backend.Controllers
                     topic.name,
                     topic.failed,
                     topic.isCritical,
+                    topic.description,
                     Criteria = topic.Criteria.Select(criteria => new
                     {
                         criteria.id,

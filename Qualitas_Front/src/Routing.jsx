@@ -26,6 +26,7 @@ import NavigationBreadcrumbsAdmin from './Components/NavigationBreadcrumbsAdmin/
 import CredentialsDisplay from './Containers/User/CredentialsDisplay/CredentialsDisplay';
 import NavigationBreadcrumbsUser from './Components/User/NavigationBreadcrumbsUser';
 import CaseViewDisplay from './Containers/User/CaseViewDisplay/CaseViewDisplay';
+import UserProjectsListDisplay from './Containers/User/UserProjectsListDisplay/UserProjectsListDisplay';
 
 class Routing extends Component {
     state = {}
@@ -118,6 +119,9 @@ class Routing extends Component {
                         </Route>
                         <Route exact path="/viewCase/:id">
                             <CaseViewDisplay />
+                        </Route>
+                        <Route path="/projects">
+                            <UserProjectsListDisplay />
                         </Route>
                         <Route>
                             <Redirect to="/evaluations" />

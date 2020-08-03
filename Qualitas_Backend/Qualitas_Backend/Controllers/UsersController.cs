@@ -274,6 +274,41 @@ namespace Qualitas_Backend.Controllers
             return Ok(entry);
         }
 
+        [HttpGet]
+        [Route("api/Users/Projects/review/{id}")]
+        public async Task<IHttpActionResult> GetUserProjectsReview (int id, DateTime start, DateTime end)
+        {
+            var entry = await db.Users.Where(user => !user.IsArchived && !user.IsDeleted).Select(user => new
+            {
+                user.id,
+                user.firstname,
+                user.lastname,
+                Projects = user.Projects.Where(project => !project.isDeleted).Select(project => new
+                {
+                    project.id,
+                    project.name,
+                    overallScore = project.Evaluations.Where(evaluation => !evaluation.isDeleted).Where(evaluation => evaluation.createdDate >= start && evaluation.createdDate <= end).Select(evaluation => evaluation.Topics.
+                    Select(topic => topic.Criteria.Select(criteria => (double?)criteria.score).ToList().Sum()).Sum()).Sum(),
+                    overallPoints = project.Evaluations.Where(evaluation => !evaluation.isDeleted).Where(evaluation => evaluation.createdDate >= start && evaluation.createdDate <= end).Select(evaluation => evaluation.Topics.
+                    Select(topic => topic.Criteria.Select(criteria => (int?)criteria.points).ToList().Sum()).Sum()).Sum(),
+
+                    score = user.Evaluations.Where(evaluation => evaluation.ProjectId == project.id).Where(evaluation => !evaluation.isDeleted).Where(evaluation => evaluation.createdDate >= start && evaluation.createdDate <= end).Select(evaluation => evaluation.Topics.
+                    Select(topic => topic.Criteria.Select(criteria => (double?)criteria.score).ToList().Sum()).Sum()).Sum(),
+                    points = user.Evaluations.Where(evaluation => evaluation.ProjectId == project.id).Where(evaluation => !evaluation.isDeleted).Where(evaluation => evaluation.createdDate >= start && evaluation.createdDate <= end).Select(evaluation => evaluation.Topics.
+                    Select(topic => topic.Criteria.Select(criteria => (int?)criteria.points).ToList().Sum()).Sum()).Sum()
+
+                })
+
+            }).FirstOrDefaultAsync(user => user.id == id);
+
+            if (entry == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(entry);
+        }
+
         [ResponseType(typeof(void))]
         [HttpPut]
         [Route("api/Users/credentials/{id}")]

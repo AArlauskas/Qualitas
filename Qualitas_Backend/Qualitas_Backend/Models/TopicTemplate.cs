@@ -24,6 +24,7 @@ namespace Qualitas_Backend.Models
         public string name { get; set; }
         public bool isCritical { get; set; }
         public int TemplateId { get; set; }
+        public string description { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<CriteriaTemplate> CriteriaTemplates { get; set; }

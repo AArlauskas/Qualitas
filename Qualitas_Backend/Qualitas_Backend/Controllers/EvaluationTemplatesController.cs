@@ -70,6 +70,7 @@ namespace Qualitas_Backend.Controllers
                     id = topic.id,
                     name = topic.name,
                     critical = topic.isCritical,
+                    description = topic.description,
                     parentId = topic.TemplateId
                 };
                 response.Topics.Add(tempTopic);
@@ -101,6 +102,7 @@ namespace Qualitas_Backend.Controllers
                 {
                     topic.id,
                     topic.name,
+                    topic.description,
                     topic.isCritical,
                     CriteriaTemplates = topic.CriteriaTemplates.Select(criteria => new
                     {
@@ -170,6 +172,7 @@ namespace Qualitas_Backend.Controllers
                 {
                     name = topic.name,
                     isCritical = topic.critical,
+                    description = topic.description,
                     TemplateId = template.id,
                 };
                 var listOfCriteria = new List<CriteriaTemplate>();
@@ -254,6 +257,7 @@ namespace Qualitas_Backend.Controllers
                 {
                     name = topic.name,
                     isCritical = topic.critical,
+                    description = topic.description,
                     TemplateId = template.id,
                 };
                 var listOfCriteria = new List<CriteriaTemplate>();

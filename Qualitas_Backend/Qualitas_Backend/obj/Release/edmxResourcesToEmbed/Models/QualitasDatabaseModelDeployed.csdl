@@ -90,6 +90,7 @@
     <Property Name="failed" Type="Boolean" Nullable="false" />
     <NavigationProperty Name="Criteria" Relationship="Self.FK_Criteria_Topic" FromRole="Topic" ToRole="Criteria" />
     <NavigationProperty Name="Evaluation" Relationship="Self.FK_Topic_Evaluation" FromRole="Topic" ToRole="Evaluation" />
+    <Property Name="description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
   </EntityType>
   <EntityType Name="TopicTemplate">
     <Key>
@@ -101,6 +102,7 @@
     <Property Name="TemplateId" Type="Int32" Nullable="false" />
     <NavigationProperty Name="CriteriaTemplates" Relationship="Self.FK_CriteriaTemplate_TopicTemplate" FromRole="TopicTemplate" ToRole="CriteriaTemplate" />
     <NavigationProperty Name="EvaluationTemplate" Relationship="Self.FK_TopicTemplate_EvaluationTemplate" FromRole="TopicTemplate" ToRole="EvaluationTemplate" />
+    <Property Name="description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
   </EntityType>
   <EntityType Name="User">
     <Key>

@@ -271,6 +271,21 @@ export const FetchTeamsList = async (start, end) => {
         });
 };
 
+export const FetchClientTeamsList = async (id, start, end) => {
+    return await Api.get("/Teams/Client/list/" + id, {
+        params: {
+            start: start,
+            end: end
+        }
+    })
+        .then((response) => {
+            return response.data;
+        })
+        .catch((error) => {
+            throw Error("An error has occurred calling the api: " + error);
+        });
+};
+
 export const FetchTeamsSimple = async () => {
     return await Api.get("/Teams/simple")
         .then((response) => {

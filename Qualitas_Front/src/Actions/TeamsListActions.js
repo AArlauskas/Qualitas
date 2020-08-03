@@ -1,5 +1,5 @@
 import { ActionType } from "../Constants/ActionType";
-import { FetchTeamsList, CreateTeam, UpdateTeam, DeleteTeam } from "../API/API";
+import { FetchTeamsList, CreateTeam, UpdateTeam, DeleteTeam, FetchClientTeamsList } from "../API/API";
 
 export const fetchTeamsList = (start, end) => async (dispatch) => {
     let teamList = await FetchTeamsList(start, end);
@@ -8,6 +8,15 @@ export const fetchTeamsList = (start, end) => async (dispatch) => {
         payload: teamList
     })
 };
+
+export const fetchClientTeamsList = (id, start, end) => async (dispatch) => {
+    let teamList = await FetchClientTeamsList(id, start, end);
+    dispatch({
+        type: ActionType.LOAD_TEAM_LIST,
+        payload: teamList
+    })
+};
+
 
 export const createTeam = (data) => async (dispatch) => {
     let id = await CreateTeam(data);

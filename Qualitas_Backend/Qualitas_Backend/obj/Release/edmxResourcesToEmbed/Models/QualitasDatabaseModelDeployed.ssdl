@@ -98,6 +98,7 @@
     <Property Name="isCritical" Type="bit" Nullable="false" />
     <Property Name="EvaluationId" Type="int" Nullable="false" />
     <Property Name="failed" Type="bit" Nullable="false" />
+    <Property Name="description" Type="nvarchar(max)" />
   </EntityType>
   <EntityType Name="TopicTemplate">
     <Key>
@@ -107,6 +108,7 @@
     <Property Name="name" Type="nvarchar" MaxLength="50" Nullable="false" />
     <Property Name="isCritical" Type="bit" Nullable="false" />
     <Property Name="TemplateId" Type="int" Nullable="false" />
+    <Property Name="description" Type="nvarchar(max)" />
   </EntityType>
   <EntityType Name="User">
     <Key>

@@ -76,6 +76,7 @@
     <EntitySetMapping Name="Topics">
       <EntityTypeMapping TypeName="DB_QualitasHostedModel.Topic">
         <MappingFragment StoreEntitySet="Topic">
+          <ScalarProperty Name="description" ColumnName="description" />
           <ScalarProperty Name="id" ColumnName="id" />
           <ScalarProperty Name="name" ColumnName="name" />
           <ScalarProperty Name="isCritical" ColumnName="isCritical" />
@@ -87,6 +88,7 @@
     <EntitySetMapping Name="TopicTemplates">
       <EntityTypeMapping TypeName="DB_QualitasHostedModel.TopicTemplate">
         <MappingFragment StoreEntitySet="TopicTemplate">
+          <ScalarProperty Name="description" ColumnName="description" />
           <ScalarProperty Name="id" ColumnName="id" />
           <ScalarProperty Name="name" ColumnName="name" />
           <ScalarProperty Name="isCritical" ColumnName="isCritical" />

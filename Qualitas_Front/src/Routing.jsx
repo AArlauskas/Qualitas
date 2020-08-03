@@ -27,6 +27,7 @@ import CredentialsDisplay from './Containers/User/CredentialsDisplay/Credentials
 import NavigationBreadcrumbsUser from './Components/User/NavigationBreadcrumbsUser';
 import CaseViewDisplay from './Containers/User/CaseViewDisplay/CaseViewDisplay';
 import UserProjectsListDisplay from './Containers/User/UserProjectsListDisplay/UserProjectsListDisplay';
+import NavigationBreadcrumbsClient from './Components/Client/NavigationBreadcrumbsClient';
 
 class Routing extends Component {
     state = {}
@@ -132,11 +133,14 @@ class Routing extends Component {
         }
         else if (role === "client") {
             return (
-                <Switch>
-                    <Route path="/client">
+                <div>
+                    <NavigationBreadcrumbsClient />
+                    <Switch>
+                        <Route path="/client">
 
-                    </Route>
-                </Switch>
+                        </Route>
+                    </Switch>
+                </div>
             );
         }
         else {

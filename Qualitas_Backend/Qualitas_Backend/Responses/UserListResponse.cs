@@ -20,5 +20,7 @@ namespace Qualitas_Backend.Responses
 
         public List<ProjectsListItem> projects { get; set; }
 
+        public ProjectsListItem clientProject { get; set; }
+
     }
 }

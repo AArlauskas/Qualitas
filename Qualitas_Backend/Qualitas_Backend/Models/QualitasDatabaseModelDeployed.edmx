@@ -5,6 +5,14 @@
     <!-- SSDL content -->
     <edmx:StorageModels>
     <Schema Namespace="DB_QualitasHostedModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Category">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="name" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="EvaluationTemplateId" Type="int" Nullable="false" />
+        </EntityType>
         <EntityType Name="Criteria">
           <Key>
             <PropertyRef Name="id" />
@@ -36,6 +44,10 @@
           <Property Name="UserId" Type="int" Nullable="false" />
           <Property Name="ProjectId" Type="int" Nullable="false" />
           <Property Name="EvaluatorId" Type="int" />
+          <Property Name="updatedDate" Type="date" />
+          <Property Name="comment" Type="nvarchar(max)" />
+          <Property Name="EvaluationTemplateName" Type="nvarchar" MaxLength="50" />
+          <Property Name="CategoryName" Type="nvarchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="EvaluationTemplate">
           <Key>
@@ -128,7 +140,20 @@
           <Property Name="IsArchived" Type="bit" Nullable="false" />
           <Property Name="IsDeleted" Type="bit" Nullable="false" />
           <Property Name="TeamId" Type="int" />
+          <Property Name="ClientProjectId" Type="int" />
         </EntityType>
+        <Association Name="FK_Category_EvaluationTemplate">
+          <End Role="EvaluationTemplate" Type="Self.EvaluationTemplate" Multiplicity="1" />
+          <End Role="Category" Type="Self.Category" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="EvaluationTemplate">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Category">
+              <PropertyRef Name="EvaluationTemplateId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_Criteria_Topic">
           <End Role="Topic" Type="Self.Topic" Multiplicity="1" />
           <End Role="Criteria" Type="Self.Criteria" Multiplicity="*" />
@@ -285,6 +310,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_User_Project">
+          <End Role="Project" Type="Self.Project" Multiplicity="0..1" />
+          <End Role="User" Type="Self.User" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Project">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="User">
+              <PropertyRef Name="ClientProjectId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_User_Team">
           <End Role="Team" Type="Self.Team" Multiplicity="0..1" />
           <End Role="User" Type="Self.User" Multiplicity="*" />
@@ -329,6 +366,7 @@
         </Function>
         <Function Name="sp_upgraddiagrams" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <EntityContainer Name="DB_QualitasHostedModelStoreContainer">
+          <EntitySet Name="Category" EntityType="Self.Category" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Criteria" EntityType="Self.Criteria" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CriteriaTemplate" EntityType="Self.CriteriaTemplate" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Evaluation" EntityType="Self.Evaluation" Schema="dbo" store:Type="Tables" />
@@ -342,6 +380,10 @@
           <EntitySet Name="Topic" EntityType="Self.Topic" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="TopicTemplate" EntityType="Self.TopicTemplate" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="User" EntityType="Self.User" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Category_EvaluationTemplate" Association="Self.FK_Category_EvaluationTemplate">
+            <End Role="EvaluationTemplate" EntitySet="EvaluationTemplate" />
+            <End Role="Category" EntitySet="Category" />
+          </AssociationSet>
           <AssociationSet Name="FK_Criteria_Topic" Association="Self.FK_Criteria_Topic">
             <End Role="Topic" EntitySet="Topic" />
             <End Role="Criteria" EntitySet="Criteria" />
@@ -394,6 +436,10 @@
             <End Role="EvaluationTemplate" EntitySet="EvaluationTemplate" />
             <End Role="TopicTemplate" EntitySet="TopicTemplate" />
           </AssociationSet>
+          <AssociationSet Name="FK_User_Project" Association="Self.FK_User_Project">
+            <End Role="Project" EntitySet="Project" />
+            <End Role="User" EntitySet="User" />
+          </AssociationSet>
           <AssociationSet Name="FK_User_Team" Association="Self.FK_User_Team">
             <End Role="Team" EntitySet="Team" />
             <End Role="User" EntitySet="User" />
@@ -440,6 +486,10 @@
           <NavigationProperty Name="Topics" Relationship="Self.FK_Topic_Evaluation" FromRole="Evaluation" ToRole="Topic" />
           <Property Name="EvaluatorId" Type="Int32" />
           <NavigationProperty Name="Evaluator" Relationship="DB_QualitasHostedModel.FK_Evaluation_Evaluators" FromRole="Evaluation" ToRole="User" />
+          <Property Name="updatedDate" Type="DateTime" Precision="0" />
+          <Property Name="comment" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="EvaluationTemplateName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CategoryName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="EvaluationTemplate">
           <Key>
@@ -450,6 +500,7 @@
           <Property Name="isDeleted" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="TopicTemplates" Relationship="Self.FK_TopicTemplate_EvaluationTemplate" FromRole="EvaluationTemplate" ToRole="TopicTemplate" />
           <NavigationProperty Name="Projects" Relationship="Self.TemplatesProjects" FromRole="EvaluationTemplate" ToRole="Project" />
+          <NavigationProperty Name="Categories" Relationship="DB_QualitasHostedModel.FK_Category_EvaluationTemplate" FromRole="EvaluationTemplate" ToRole="Category" />
         </EntityType>
         <EntityType Name="Project">
           <Key>
@@ -462,6 +513,7 @@
           <NavigationProperty Name="Teams" Relationship="Self.ProjectsTeams" FromRole="Project" ToRole="Team" />
           <NavigationProperty Name="Users" Relationship="Self.ProjectsUsers" FromRole="Project" ToRole="User" />
           <NavigationProperty Name="EvaluationTemplates" Relationship="Self.TemplatesProjects" FromRole="Project" ToRole="EvaluationTemplate" />
+          <NavigationProperty Name="Users1" Relationship="DB_QualitasHostedModel.FK_User_Project" FromRole="Project" ToRole="User" />
         </EntityType>
         <EntityType Name="sysdiagram">
           <Key>
@@ -524,6 +576,8 @@
           <NavigationProperty Name="Team" Relationship="Self.FK_User_Team" FromRole="User" ToRole="Team" />
           <NavigationProperty Name="Projects" Relationship="Self.ProjectsUsers" FromRole="User" ToRole="Project" />
           <NavigationProperty Name="Evaluated" Relationship="DB_QualitasHostedModel.FK_Evaluation_Evaluators" FromRole="User" ToRole="Evaluation" />
+          <Property Name="ClientProjectId" Type="Int32" />
+          <NavigationProperty Name="Project" Relationship="DB_QualitasHostedModel.FK_User_Project" FromRole="User" ToRole="Project" />
         </EntityType>
         <Association Name="FK_Criteria_Topic">
           <End Role="Topic" Type="Self.Topic" Multiplicity="1" />
@@ -706,6 +760,15 @@
             <End Role="User" EntitySet="Users" />
             <End Role="Evaluation" EntitySet="Evaluations" />
           </AssociationSet>
+          <AssociationSet Name="FK_User_Project" Association="DB_QualitasHostedModel.FK_User_Project">
+            <End Role="Project" EntitySet="Projects" />
+            <End Role="User" EntitySet="Users" />
+          </AssociationSet>
+          <EntitySet Name="Categories" EntityType="DB_QualitasHostedModel.Category" />
+          <AssociationSet Name="FK_Category_EvaluationTemplate" Association="DB_QualitasHostedModel.FK_Category_EvaluationTemplate">
+            <End Role="EvaluationTemplate" EntitySet="EvaluationTemplates" />
+            <End Role="Category" EntitySet="Categories" />
+          </AssociationSet>
         </EntityContainer>
         <ComplexType Name="sp_helpdiagramdefinition_Result">
           <Property Type="Int32" Name="version" Nullable="true" />
@@ -727,6 +790,39 @@
             </Principal>
             <Dependent Role="Evaluation">
               <PropertyRef Name="EvaluatorId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_User_Project">
+          <End Type="DB_QualitasHostedModel.Project" Role="Project" Multiplicity="0..1" />
+          <End Type="DB_QualitasHostedModel.User" Role="User" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Project">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="User">
+              <PropertyRef Name="ClientProjectId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="Category">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="EvaluationTemplateId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="EvaluationTemplate" Relationship="DB_QualitasHostedModel.FK_Category_EvaluationTemplate" FromRole="Category" ToRole="EvaluationTemplate" />
+        </EntityType>
+        <Association Name="FK_Category_EvaluationTemplate">
+          <End Type="DB_QualitasHostedModel.EvaluationTemplate" Role="EvaluationTemplate" Multiplicity="1" />
+          <End Type="DB_QualitasHostedModel.Category" Role="Category" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="EvaluationTemplate">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Category">
+              <PropertyRef Name="EvaluationTemplateId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -761,6 +857,10 @@
           <EntitySetMapping Name="Evaluations">
             <EntityTypeMapping TypeName="DB_QualitasHostedModel.Evaluation">
               <MappingFragment StoreEntitySet="Evaluation">
+                <ScalarProperty Name="CategoryName" ColumnName="CategoryName" />
+                <ScalarProperty Name="EvaluationTemplateName" ColumnName="EvaluationTemplateName" />
+                <ScalarProperty Name="comment" ColumnName="comment" />
+                <ScalarProperty Name="updatedDate" ColumnName="updatedDate" />
                 <ScalarProperty Name="EvaluatorId" ColumnName="EvaluatorId" />
                 <ScalarProperty Name="id" ColumnName="id" />
                 <ScalarProperty Name="name" ColumnName="name" />
@@ -834,6 +934,7 @@
           <EntitySetMapping Name="Users">
             <EntityTypeMapping TypeName="DB_QualitasHostedModel.User">
               <MappingFragment StoreEntitySet="User">
+                <ScalarProperty Name="ClientProjectId" ColumnName="ClientProjectId" />
                 <ScalarProperty Name="id" ColumnName="id" />
                 <ScalarProperty Name="username" ColumnName="username" />
                 <ScalarProperty Name="password" ColumnName="password" />
@@ -894,6 +995,15 @@
           </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="sp_renamediagram" FunctionName="DB_QualitasHostedModel.Store.sp_renamediagram" />
           <FunctionImportMapping FunctionImportName="sp_upgraddiagrams" FunctionName="DB_QualitasHostedModel.Store.sp_upgraddiagrams" />
+          <EntitySetMapping Name="Categories">
+            <EntityTypeMapping TypeName="DB_QualitasHostedModel.Category">
+              <MappingFragment StoreEntitySet="Category">
+                <ScalarProperty Name="EvaluationTemplateId" ColumnName="EvaluationTemplateId" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

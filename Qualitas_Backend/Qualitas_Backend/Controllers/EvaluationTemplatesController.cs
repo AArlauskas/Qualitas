@@ -61,7 +61,8 @@ namespace Qualitas_Backend.Controllers
                 id = evaluationTemplate.id,
                 TemplateName = evaluationTemplate.name,
                 Criteria = new List<CriteriaRequest>(),
-                Topics = new List<TopicRequest>()
+                Topics = new List<TopicRequest>(),
+                Categories = evaluationTemplate.Categories.Select(temp => temp.name).ToList()
             };
             foreach (var topic in evaluationTemplate.TopicTemplates)
             {
@@ -98,6 +99,7 @@ namespace Qualitas_Backend.Controllers
             {
                 template.id,
                 template.name,
+                categories = template.Categories.Select(temp => temp.name).ToList(),
                 TopicTemplates = template.TopicTemplates.Select(topic => new
                 {
                     topic.id,
@@ -164,6 +166,14 @@ namespace Qualitas_Backend.Controllers
             {
                 name = request.TemplateName,
             };
+
+            foreach (var category in request.Categories)
+            {
+                template.Categories.Add(new Category()
+                {
+                    name = category
+                });
+            }
 
             var listOfTopics = new List<TopicTemplate>();
             foreach (var topic in request.Topics)
@@ -249,6 +259,14 @@ namespace Qualitas_Backend.Controllers
             {
                 name = request.TemplateName,
             };
+
+            foreach(var category in request.Categories)
+            {
+                template.Categories.Add(new Category()
+                {
+                    name = category
+                });
+            }
 
             var listOfTopics = new List<TopicTemplate>();
             foreach(var topic in request.Topics)

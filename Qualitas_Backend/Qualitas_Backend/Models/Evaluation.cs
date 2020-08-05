@@ -27,6 +27,10 @@ namespace Qualitas_Backend.Models
         public int UserId { get; set; }
         public int ProjectId { get; set; }
         public Nullable<int> EvaluatorId { get; set; }
+        public Nullable<System.DateTime> updatedDate { get; set; }
+        public string comment { get; set; }
+        public string EvaluationTemplateName { get; set; }
+        public string CategoryName { get; set; }
     
         public virtual Project Project { get; set; }
         public virtual User User { get; set; }

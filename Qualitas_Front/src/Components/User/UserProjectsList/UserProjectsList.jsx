@@ -31,6 +31,9 @@ class UserProjectsList extends Component {
                 editable: "never", title: "Your score", field: "score", render: rowData => isNaN(Math.trunc((rowData.score / rowData.points) * 100)) ? "0%" : Math.trunc((rowData.score / rowData.points) * 100) + "%",
                 customFilterAndSearch: (term, rowData) => Math.trunc((rowData.score / rowData.points) * 100) === parseInt(term)
             },
+            {
+                editable: "never", title: "Rating", field: "rating", render: rowData => rowData.rating + " / " + rowData.userCount
+            }
 
         ];
         this.setState({ columns: columns, open: false })

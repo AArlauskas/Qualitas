@@ -1,5 +1,13 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Schema Namespace="DB_QualitasHostedModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="Category">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="name" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="EvaluationTemplateId" Type="int" Nullable="false" />
+  </EntityType>
   <EntityType Name="Criteria">
     <Key>
       <PropertyRef Name="id" />
@@ -31,6 +39,10 @@
     <Property Name="UserId" Type="int" Nullable="false" />
     <Property Name="ProjectId" Type="int" Nullable="false" />
     <Property Name="EvaluatorId" Type="int" />
+    <Property Name="updatedDate" Type="date" />
+    <Property Name="comment" Type="nvarchar(max)" />
+    <Property Name="EvaluationTemplateName" Type="nvarchar" MaxLength="50" />
+    <Property Name="CategoryName" Type="nvarchar" MaxLength="50" />
   </EntityType>
   <EntityType Name="EvaluationTemplate">
     <Key>
@@ -123,7 +135,20 @@
     <Property Name="IsArchived" Type="bit" Nullable="false" />
     <Property Name="IsDeleted" Type="bit" Nullable="false" />
     <Property Name="TeamId" Type="int" />
+    <Property Name="ClientProjectId" Type="int" />
   </EntityType>
+  <Association Name="FK_Category_EvaluationTemplate">
+    <End Role="EvaluationTemplate" Type="Self.EvaluationTemplate" Multiplicity="1" />
+    <End Role="Category" Type="Self.Category" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="EvaluationTemplate">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="Category">
+        <PropertyRef Name="EvaluationTemplateId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
   <Association Name="FK_Criteria_Topic">
     <End Role="Topic" Type="Self.Topic" Multiplicity="1" />
     <End Role="Criteria" Type="Self.Criteria" Multiplicity="*" />
@@ -280,6 +305,18 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
+  <Association Name="FK_User_Project">
+    <End Role="Project" Type="Self.Project" Multiplicity="0..1" />
+    <End Role="User" Type="Self.User" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Project">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="User">
+        <PropertyRef Name="ClientProjectId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
   <Association Name="FK_User_Team">
     <End Role="Team" Type="Self.Team" Multiplicity="0..1" />
     <End Role="User" Type="Self.User" Multiplicity="*" />
@@ -324,6 +361,7 @@
   </Function>
   <Function Name="sp_upgraddiagrams" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
   <EntityContainer Name="DB_QualitasHostedModelStoreContainer">
+    <EntitySet Name="Category" EntityType="Self.Category" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Criteria" EntityType="Self.Criteria" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="CriteriaTemplate" EntityType="Self.CriteriaTemplate" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Evaluation" EntityType="Self.Evaluation" Schema="dbo" store:Type="Tables" />
@@ -337,6 +375,10 @@
     <EntitySet Name="Topic" EntityType="Self.Topic" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="TopicTemplate" EntityType="Self.TopicTemplate" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="User" EntityType="Self.User" Schema="dbo" store:Type="Tables" />
+    <AssociationSet Name="FK_Category_EvaluationTemplate" Association="Self.FK_Category_EvaluationTemplate">
+      <End Role="EvaluationTemplate" EntitySet="EvaluationTemplate" />
+      <End Role="Category" EntitySet="Category" />
+    </AssociationSet>
     <AssociationSet Name="FK_Criteria_Topic" Association="Self.FK_Criteria_Topic">
       <End Role="Topic" EntitySet="Topic" />
       <End Role="Criteria" EntitySet="Criteria" />
@@ -388,6 +430,10 @@
     <AssociationSet Name="FK_TopicTemplate_EvaluationTemplate" Association="Self.FK_TopicTemplate_EvaluationTemplate">
       <End Role="EvaluationTemplate" EntitySet="EvaluationTemplate" />
       <End Role="TopicTemplate" EntitySet="TopicTemplate" />
+    </AssociationSet>
+    <AssociationSet Name="FK_User_Project" Association="Self.FK_User_Project">
+      <End Role="Project" EntitySet="Project" />
+      <End Role="User" EntitySet="User" />
     </AssociationSet>
     <AssociationSet Name="FK_User_Team" Association="Self.FK_User_Team">
       <End Role="Team" EntitySet="Team" />

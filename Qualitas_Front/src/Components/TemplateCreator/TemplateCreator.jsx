@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Button, List, ListItem, ListItemText, TextField, ListItemSecondaryAction, IconButton, ListSubheader, ListItemIcon, Collapse } from '@material-ui/core';
+import { Button, List, ListItem, ListItemText, TextField, ListItemSecondaryAction, IconButton, ListSubheader, ListItemIcon, Collapse, Chip } from '@material-ui/core';
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
 import DoneIcon from '@material-ui/icons/Done';
@@ -59,7 +59,9 @@ class TemplateCreator extends Component {
                 open: true,
             }
         ],
-        criteria: []
+        criteria: [],
+        categories: ["inbound", "outbound"],
+        currentCategory: ""
     }
 
     render() {
@@ -107,6 +109,33 @@ class TemplateCreator extends Component {
                         }}>
                             Add topic
                     </Button>
+                        <div style={{ marginLeft: "25%", marginRight: "25%", marginTop: 15, marginBottom: 15 }}>
+                            <TextField value={this.state.currentCategory} label="Add category" onChange={e => this.setState({ currentCategory: e.target.value })} />
+                            <IconButton style={{ marginTop: 5 }} onClick={() => {
+                                if (this.state.currentCategory !== "") {
+                                    let tempCategories = [...this.state.categories];
+                                    tempCategories.push(this.state.currentCategory);
+                                    this.setState({
+                                        currentCategory: "",
+                                        categories: tempCategories
+                                    })
+                                }
+                            }}>
+                                <AddIcon />
+                            </IconButton>
+                            <div>
+                                {this.state.categories.map(category => {
+                                    return (
+                                        <Chip label={category} onDelete={() => {
+                                            let tempCategories = [...this.state.categories];
+                                            this.setState({
+                                                categories: tempCategories.filter(temp => temp !== category)
+                                            })
+                                        }} />
+                                    );
+                                })}
+                            </div>
+                        </div>
                     </div>
                     <p style={{ marginTop: 10 }}><b>Overall Points: {calculateSum(this.state.criteria)}</b></p>
                     <List style={{ color: "red" }}>
@@ -450,7 +479,8 @@ class TemplateCreator extends Component {
                         let outputData = {
                             TemplateName: this.state.templateName,
                             Topics: [],
-                            Criteria: []
+                            Criteria: [],
+                            Categories: this.state.categories
                         };
                         this.state.topics.forEach(topic => outputData.Topics.push({
                             id: topic.id,

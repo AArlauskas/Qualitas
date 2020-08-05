@@ -14,5 +14,7 @@ namespace Qualitas_Backend.Responses
         public List<CriteriaRequest> Criteria { get; set; }
 
         public List<TopicRequest> Topics { get; set; }
+
+        public List<string> Categories { get; set; }
     }
 }

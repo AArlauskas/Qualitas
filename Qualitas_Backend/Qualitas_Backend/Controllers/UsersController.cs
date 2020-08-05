@@ -141,32 +141,54 @@ namespace Qualitas_Backend.Controllers
 
         [HttpGet]
         [Route("api/Users/review/{id}")]
-        public async Task<IHttpActionResult> GetUserReview(int id)
+        public async Task<IHttpActionResult> GetUserReview(int id, DateTime start, DateTime end)
         {
             var users = await db.Users
-                .Select(user => new {
+                .Select(user => new UserReviewResponse(){
                     id = user.id,
                     firstname = user.firstname,
                     lastname = user.lastname,
+                    teamId = user.TeamId,
                     teamName = user.Team.name,
+                    rating = 0,
+                    teamUsersCount = user.Team.Users.Count(),
                     valid = user.Projects.Any(project => project.Evaluations.Count() > 0),
                     projectCount = user.Projects.Where(project => !project.isDeleted).Count(),
-                    Evaluations = user.Evaluations.Where(evaluation => !evaluation.isDeleted).Select(evaluation => new
+                    Evaluations = user.Evaluations.Where(evaluation => !evaluation.isDeleted).Where(evaluation => evaluation.createdDate >= start && evaluation.createdDate <= end).Select(evaluation => new EvaluationResponse()
                     {
-                        evaluation.id,
-                        evaluation.name,
+                        id = evaluation.id,
+                        name = evaluation.name,
+                        EvaluationTemplateName = evaluation.EvaluationTemplateName,
                         projectName = evaluation.Project.name,
                         projectId = evaluation.Project.id,
-                        evaluation.createdDate,
+                        createdDate = evaluation.createdDate,
+                        updatedDate = evaluation.updatedDate,
                         evaluator = evaluation.Evaluator.firstname + " " + evaluation.Evaluator.lastname,
                         score = evaluation.Topics.Select(topic => topic.Criteria.Select(criteria => (double?)criteria.score).ToList().Sum()).Sum(),
                         points = evaluation.Topics.Select(topic => topic.Criteria.Select(criteria => (int?)criteria.points).ToList().Sum()).Sum(),
-                    })
+
+                    }).ToList()
                 }).FirstOrDefaultAsync(temp => temp.id == id);
+
             if (users == null)
             {
                 return NotFound();
             }
+
+            var teams = await db.Teams
+            .Select(team => new {
+                id = team.id,
+                Users = team.Users.Where(user => !user.IsArchived || !user.IsDeleted).Select(user => new
+                {
+                    user.id,
+                    average = (int?)(user.Evaluations.Where(evaluation => !evaluation.isDeleted).Where(evaluation => evaluation.createdDate >= start && evaluation.createdDate <= end).Select(evaluation => evaluation.Topics.
+                    Select(topic => topic.Criteria.Select(criteria => (double?)criteria.score).ToList().Sum()).Sum()).Sum() / user.Evaluations.Where(evaluation => !evaluation.isDeleted).Where(evaluation => evaluation.createdDate >= start && evaluation.createdDate <= end).Select(evaluation => evaluation.Topics.
+                    Select(topic => topic.Criteria.Select(criteria => (int?)criteria.points).ToList().Sum()).Sum()).Sum() * 100)
+                }).OrderByDescending(temp => temp.average).ToList()
+            }).FirstOrDefaultAsync(temp => temp.id == users.teamId);
+
+
+            users.rating = teams.Users.FindIndex(temp => temp.id == users.id) + 1;
 
             return Ok(users);
         }
@@ -178,14 +200,15 @@ namespace Qualitas_Backend.Controllers
         {
             try
             {
-                var user = await db.Users.FirstAsync(temp => temp.username == request.username && temp.password == request.password);
+                var user = await db.Users.Where(temp => !temp.IsArchived && !temp.IsDeleted).FirstAsync(temp => temp.username == request.username && temp.password == request.password);
                 var response = new LoginResponse
                 {
                     Id = user.id,
                     firstname = user.firstname,
                     lastname = user.lastname,
                     role = user.RoleType,
-                    username = user.username
+                    username = user.username,
+                    clientProjectId = user.ClientProjectId
                 };
                 return Ok(response);
             }
@@ -258,6 +281,17 @@ namespace Qualitas_Backend.Controllers
                 projects.Add(item);
             }
 
+            ProjectsListItem clientProject = null;
+
+            if(user.ClientProjectId != null)
+            {
+                clientProject = new ProjectsListItem()
+                {
+                    id = user.Project.id,
+                    name = user.Project.name
+                };
+            }
+
             var entry = new UserListResponse
             {
                 id = user.id,
@@ -268,7 +302,9 @@ namespace Qualitas_Backend.Controllers
                 isArchived = user.IsArchived,
                 role = user.RoleType,
                 teamId = user.TeamId,
-                projects = projects
+                projects = projects,
+                clientProject = clientProject
+                
             };
 
             return Ok(entry);
@@ -278,15 +314,28 @@ namespace Qualitas_Backend.Controllers
         [Route("api/Users/Projects/review/{id}")]
         public async Task<IHttpActionResult> GetUserProjectsReview (int id, DateTime start, DateTime end)
         {
-            var entry = await db.Users.Where(user => !user.IsArchived && !user.IsDeleted).Select(user => new
-            {
-                user.id,
-                user.firstname,
-                user.lastname,
-                Projects = user.Projects.Where(project => !project.isDeleted).Select(project => new
+            var projects = await db.Projects.Where(project => project.Users.FirstOrDefault(user => user.id == id) != null)
+                .Select(project => new
                 {
-                    project.id,
-                    project.name,
+                    id = project.id,
+                    Users = project.Users.Where(user => !user.IsArchived && !user.IsDeleted).Select(user => new
+                    {
+                        user.id,
+                        average = (int?)(user.Evaluations.Where(evaluation => !evaluation.isDeleted).Where(evaluation => evaluation.createdDate >= start && evaluation.createdDate <= end).Select(evaluation => evaluation.Topics.
+                        Select(topic => topic.Criteria.Select(criteria => (double?)criteria.score).ToList().Sum()).Sum()).Sum() / user.Evaluations.Where(evaluation => !evaluation.isDeleted).Where(evaluation => evaluation.createdDate >= start && evaluation.createdDate <= end).Select(evaluation => evaluation.Topics.
+                        Select(topic => topic.Criteria.Select(criteria => (int?)criteria.points).ToList().Sum()).Sum()).Sum() * 100)
+                    }).OrderByDescending(temp => temp.average).ToList()
+                }).ToListAsync();
+
+            var entries = await db.Users.Where(user => !user.IsArchived && !user.IsDeleted).Select(user => new UserProjectsResponse()
+            {
+                id = user.id,
+                firstname = user.firstname,
+                lastname = user.lastname,
+                Projects = user.Projects.Where(project => !project.isDeleted).Select(project => new ProjectScoreResponse()
+                {
+                    id = project.id,
+                    name = project.name,
                     overallScore = project.Evaluations.Where(evaluation => !evaluation.isDeleted).Where(evaluation => evaluation.createdDate >= start && evaluation.createdDate <= end).Select(evaluation => evaluation.Topics.
                     Select(topic => topic.Criteria.Select(criteria => (double?)criteria.score).ToList().Sum()).Sum()).Sum(),
                     overallPoints = project.Evaluations.Where(evaluation => !evaluation.isDeleted).Where(evaluation => evaluation.createdDate >= start && evaluation.createdDate <= end).Select(evaluation => evaluation.Topics.
@@ -295,18 +344,22 @@ namespace Qualitas_Backend.Controllers
                     score = user.Evaluations.Where(evaluation => evaluation.ProjectId == project.id).Where(evaluation => !evaluation.isDeleted).Where(evaluation => evaluation.createdDate >= start && evaluation.createdDate <= end).Select(evaluation => evaluation.Topics.
                     Select(topic => topic.Criteria.Select(criteria => (double?)criteria.score).ToList().Sum()).Sum()).Sum(),
                     points = user.Evaluations.Where(evaluation => evaluation.ProjectId == project.id).Where(evaluation => !evaluation.isDeleted).Where(evaluation => evaluation.createdDate >= start && evaluation.createdDate <= end).Select(evaluation => evaluation.Topics.
-                    Select(topic => topic.Criteria.Select(criteria => (int?)criteria.points).ToList().Sum()).Sum()).Sum()
+                    Select(topic => topic.Criteria.Select(criteria => (int?)criteria.points).ToList().Sum()).Sum()).Sum(),
 
-                })
+                    userCount = project.Users.Where(temp => !temp.IsArchived && !temp.IsDeleted).Count(),
+                    rating = 0
+
+                }).ToList()
 
             }).FirstOrDefaultAsync(user => user.id == id);
 
-            if (entry == null)
+            foreach(var project in entries.Projects)
             {
-                return NotFound();
+                project.rating = projects.FirstOrDefault(temp => temp.id == project.id).Users.FindIndex(temp => temp.id == entries.id) + 1;
             }
 
-            return Ok(entry);
+
+            return Ok(entries);
         }
 
         [ResponseType(typeof(void))]
@@ -403,6 +456,40 @@ namespace Qualitas_Backend.Controllers
                 var temp = db.Projects.Find(value);
                 user.Projects.Remove(temp);
             }
+
+            await db.SaveChangesAsync();
+
+            return Ok();
+        }
+
+        [HttpPut]
+        [Route("api/Users/addClientProject/{id}")]
+        public async Task<IHttpActionResult> AddClientProject(int id, [FromBody]int add)
+        {
+            User user = await db.Users.FindAsync(id);
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            user.ClientProjectId = add;
+
+            await db.SaveChangesAsync();
+
+            return Ok();
+        }
+
+        [HttpPut]
+        [Route("api/Users/removeClientProject/{id}")]
+        public async Task<IHttpActionResult> RemoveClientProject(int id, [FromBody]int remove)
+        {
+            User user = await db.Users.FindAsync(id);
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            user.ClientProjectId = null;
 
             await db.SaveChangesAsync();
 

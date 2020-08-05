@@ -131,6 +131,9 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\Category.cs">
+      <DependentUpon>QualitasDatabaseModelDeployed.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\CriteriaTemplate.cs">
       <DependentUpon>QualitasDatabaseModelDeployed.tt</DependentUpon>
     </Compile>
@@ -205,14 +208,19 @@
     <Compile Include="Requests\LoginRequest.cs" />
     <Compile Include="Requests\SubClassesForRequests\CriteriaRequest.cs" />
     <Compile Include="Requests\SubClassesForRequests\TopicRequest.cs" />
+    <Compile Include="Responses\EvaluationResponse.cs" />
     <Compile Include="Responses\EvaluationTemplateListItem.cs" />
     <Compile Include="Responses\GetFullEvaluationTemplateResponse.cs" />
     <Compile Include="Responses\LoginResponse.cs" />
+    <Compile Include="Responses\ProjectAverageResult.cs" />
+    <Compile Include="Responses\ProjectScoreResponse.cs" />
     <Compile Include="Responses\ProjectsListItem.cs" />
     <Compile Include="Responses\TeamListResponse.cs" />
     <Compile Include="Responses\TemplateListResponse.cs" />
     <Compile Include="Responses\TemplateProjectsResponse.cs" />
     <Compile Include="Responses\UserListResponse.cs" />
+    <Compile Include="Responses\UserProjectsResponse.cs" />
+    <Compile Include="Responses\UserReviewResponse.cs" />
   </ItemGroup>
   <ItemGroup>
     <EntityDeploy Include="Models\Qualitas_Database_Model.edmx">

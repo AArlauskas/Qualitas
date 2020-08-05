@@ -37,6 +37,7 @@ namespace Qualitas_Backend.Models
         public virtual DbSet<Topic> Topics { get; set; }
         public virtual DbSet<TopicTemplate> TopicTemplates { get; set; }
         public virtual DbSet<User> Users { get; set; }
+        public virtual DbSet<Category> Categories { get; set; }
     
         public virtual int sp_alterdiagram(string diagramname, Nullable<int> owner_id, Nullable<int> version, byte[] definition)
         {

@@ -13,5 +13,7 @@ namespace Qualitas_Backend.Requests
         public CriteriaRequest[] Criteria { get; set; }
 
         public TopicRequest[] Topics { get; set; }
+
+        public List<string> Categories { get; set; }
     }
 }

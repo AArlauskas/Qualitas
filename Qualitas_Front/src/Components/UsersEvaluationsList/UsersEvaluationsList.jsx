@@ -19,11 +19,8 @@ import { KeyboardDatePicker, MuiPickersUtilsProvider } from '@material-ui/picker
 import DateFnsUtils from '@date-io/date-fns';
 import { Chip } from '@material-ui/core';
 
-const date = new Date();
 class UsersEvaluationsList extends Component {
     state = {
-        minDate: new Date(date.getFullYear(), date.getMonth(), 1),
-        maxDate: new Date(),
         columns: [
             {
                 title: "Name", field: "name"
@@ -32,12 +29,18 @@ class UsersEvaluationsList extends Component {
                 title: "Date", field: "createdDate", filtering: false, render: rowData => rowData.createdDate.split("T")[0]
             },
             {
+                title: "Last update", field: "updatedDate", filtering: false, render: rowData => rowData.updatedDate === null ? "" : rowData.updatedDate.split("T")[0]
+            },
+            {
                 title: "Project", field: "project", render: rowData => <Chip label={rowData.projectName} onClick={() => window.location.href = "/ProjectReview/" + rowData.projectId} />,
                 customFilterAndSearch: (term, rowData) => rowData.Projects.some(project => project.name.toLowerCase().startsWith(term.toLowerCase()))
             },
             {
-                title: "Score", field: "score", render: rowData => Math.trunc((rowData.score / rowData.points) * 100) + "%",
-                customFilterAndSearch: (term, rowData) => parseInt(term) === 0 ? rowData.average === null : rowData.average === parseInt(term)
+                title: "Template", field: "EvaluationTemplateName"
+            },
+            {
+                title: "Score", field: "score", render: rowData => isNaN(Math.trunc((rowData.score / rowData.points) * 100)) ? "0%" : Math.trunc((rowData.score / rowData.points) * 100) + "%",
+                customFilterAndSearch: (term, rowData) => isNaN(Math.trunc((rowData.score / rowData.points) * 100)) ? parseInt(term) === 0 : Math.trunc((rowData.score / rowData.points) * 100) === parseInt(term)
             },
             {
                 title: "Evaluator", field: "evaluator"
@@ -45,37 +48,13 @@ class UsersEvaluationsList extends Component {
         ]
     }
 
+    componentDidUpdate(prevProps) {
+        if (prevProps.minDate !== this.props.minDate || prevProps.maxDate !== this.props.maxDate) {
+            this.forceUpdate();
+        }
+    }
+
     render() {
-
-        const filterByDate = () => {
-            let data = this.props.evaluations.Evaluations;
-            let correctData = [];
-            data.forEach(evalutation => {
-                let createdDate = new Date(evalutation.createdDate);
-                if (createdDate >= this.state.minDate && createdDate <= this.state.maxDate) {
-                    correctData.push(evalutation);
-                }
-            })
-            return correctData;
-        }
-
-        const getNewScore = (data) => {
-            console.log("labas");
-            let points = 0;
-            let score = 0;
-            data.forEach(item => {
-                score += item.score;
-                points += item.points;
-            })
-            let average = Math.trunc((score / points) * 100);
-            if (isNaN(average)) {
-                average = 0;
-            }
-            this.props.changeScore(average);
-        }
-
-
-
         const tableIcons = {
             Add: forwardRef((props, ref) => <AddBox {...props} ref={ref} />),
             Check: forwardRef((props, ref) => <Check {...props} ref={ref} />),
@@ -97,8 +76,9 @@ class UsersEvaluationsList extends Component {
         };
         return (
             <div>
+                {console.log(this.props.evaluations)}
                 <MaterialTable
-                    data={filterByDate()}
+                    data={this.props.evaluations}
                     columns={this.state.columns}
                     title="Evaluations"
                     icons={tableIcons}
@@ -107,7 +87,6 @@ class UsersEvaluationsList extends Component {
                         actionsColumnIndex: -1,
                         pageSize: 10
                     }}
-                    onOrderChange={() => getNewScore(filterByDate())}
                     components={{
                         Toolbar: props => (
                             <div>
@@ -120,13 +99,9 @@ class UsersEvaluationsList extends Component {
                                             format="yyyy-MM-dd"
                                             margin="normal"
                                             label="Start date"
-                                            value={this.state.minDate}
                                             maxDate={this.state.maxDate}
-                                            onChange={async e => {
-                                                await this.setState({ minDate: e });
-                                                getNewScore(filterByDate());
-
-                                            }}
+                                            value={this.props.minDate}
+                                            onChange={e => this.props.setMinDate(e)}
                                             KeyboardButtonProps={{
                                                 'aria-label': 'change date',
                                             }}
@@ -138,14 +113,10 @@ class UsersEvaluationsList extends Component {
                                             format="yyyy-MM-dd"
                                             margin="normal"
                                             label="End date"
-                                            value={this.state.maxDate}
+                                            value={this.props.maxDate}
                                             minDate={this.state.minDate}
                                             maxDate={new Date()}
-                                            onChange={async e => {
-                                                await this.setState({ maxDate: e });
-                                                getNewScore(filterByDate());
-
-                                            }}
+                                            onChange={e => this.props.setMaxDate(e)}
                                             KeyboardButtonProps={{
                                                 'aria-label': 'change date',
                                             }}

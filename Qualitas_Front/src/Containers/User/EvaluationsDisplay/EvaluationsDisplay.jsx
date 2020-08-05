@@ -1,38 +1,66 @@
 import React, { Component } from 'react';
-import { connect } from "react-redux";
-import { fetchUsersEvaluations, deleteEvaluation } from '../../../Actions/UserEvaluationListActions';
 import LoadingScreen from '../../../Components/LoadingScreen/LoadingScreen';
 import UserEvaluationsList from '../../../Components/User/UserEvaluationsList/UserEvaluationsList';
+import { FetchUserToReview } from '../../../API/API';
 
+let date = new Date();
 class EvaluationsDisplay extends Component {
     state = {
         User: [],
-        overallScore: null
+        minDate: new Date(date.getFullYear(), date.getMonth(), 1),
+        maxDate: new Date(),
     }
     componentDidMount() {
         let id = window.localStorage.getItem("id");
-        this.props.fetchUsersEvaluations(id);
+        FetchUserToReview(id, this.state.minDate, this.state.maxDate).then(response => this.setState({ User: response }));
     }
 
-    changeOverallScore = (score) => {
-        this.setState({ overallScore: score });
-        console.log("got here");
+    componentDidUpdate(prevProps, prevState) {
+        if (prevState.minDate !== this.state.minDate || prevState.maxDate !== this.state.maxDate) {
+            let id = window.localStorage.getItem("id");
+            FetchUserToReview(id, this.state.minDate, this.state.maxDate).then(response => this.setState({ User: response }));
+        }
+    }
+
+    calculateOverallScore = () => {
+        let score = 0;
+        let points = 0;
+        this.state.User.Evaluations.forEach(evaluation => {
+            score += evaluation.score;
+            points += evaluation.points;
+        });
+
+        let average = Math.trunc((score / points) * 100);
+        if (isNaN(average)) {
+            average = 0;
+        }
+        return average;
     }
 
     render() {
         return (
             <div>
-
-                {this.props.evaluations.length === 0 ? <LoadingScreen /> :
-                    <div style={{ textAlign: "center" }}>
-                        <h3>User: {this.props.evaluations.firstname + " " + this.props.evaluations.lastname}</h3>
-                        <h3>Assigned projects: {this.props.evaluations.projectCount}</h3>
-                        {this.state.overallScore === null ? null : <h3>Overall score: {this.state.overallScore}%</h3>}
-                        {this.props.evaluations.teamName === null ? null : <h3>Team: {this.props.evaluations.teamName}</h3>}
+                {console.log(this.state.User)}
+                {this.state.User.length === 0 ? <LoadingScreen /> :
+                    <div>
+                        <div style={{ textAlign: "center" }}>
+                            <h3>User: {this.state.User.firstname + " " + this.state.User.lastname}</h3>
+                            <h3>Assigned projects: {this.state.User.projectCount}</h3>
+                            <h3>Overall score: {this.calculateOverallScore()}%</h3>
+                            {this.state.User.teamName === null ? null :
+                                <div style={{ display: "inline" }}>
+                                    <h3 style={{ display: "inline", marginRight: 10 }}>Team: {this.state.User.teamName}</h3>
+                                    <h3 style={{ display: "inline", marginRight: 10 }}>Members: {this.state.User.teamUsersCount}</h3>
+                                    <h3 style={{ display: "inline", marginRight: 10 }}>Rating: {this.state.User.rating + " / " + this.state.User.teamUsersCount}</h3>
+                                </div>}
+                        </div>
                         <div>
                             <UserEvaluationsList
-                                evaluations={this.props.evaluations}
-                                changeScore={(score) => this.changeOverallScore(score)} />
+                                evaluations={this.state.User.Evaluations}
+                                minDate={this.state.minDate}
+                                maxDate={this.state.maxDate}
+                                setMinDate={(date) => this.setState({ minDate: date })}
+                                setMaxDate={(date) => this.setState({ maxDate: date })} />
                         </div>
                     </div>}
 
@@ -41,13 +69,4 @@ class EvaluationsDisplay extends Component {
     }
 }
 
-const mapStateToProps = (state) => ({
-    evaluations: state.Evaluations
-});
-
-const mapDispatchToProps = (dispatch) => ({
-    fetchUsersEvaluations: (id) => dispatch(fetchUsersEvaluations(id)),
-    deleteEvaluation: (id) => dispatch(deleteEvaluation(id))
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(EvaluationsDisplay);
+export default EvaluationsDisplay;

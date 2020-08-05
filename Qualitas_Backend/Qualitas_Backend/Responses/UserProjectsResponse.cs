@@ -5,14 +5,11 @@ using System.Web;
 
 namespace Qualitas_Backend.Responses
 {
-    public class LoginResponse
+    public class UserProjectsResponse
     {
-        public int Id { get; set; }
+        public int id { get; set; }
         public string firstname { get; set; }
         public string lastname { get; set; }
-        public string role { get; set; }
-
-        public int? clientProjectId { get; set; }
-        public string username { get; set; }
+        public List<ProjectScoreResponse> Projects { get; set; }
     }
 }

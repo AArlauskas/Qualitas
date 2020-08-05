@@ -24,6 +24,8 @@ class CaseEditor extends Component {
         id: null,
         caseName: "",
         topics: [],
+        overallComment: "",
+        CategoryName: "",
         breached: false,
         modalOpen: false,
         commentTopicId: null,
@@ -59,7 +61,9 @@ class CaseEditor extends Component {
             topics.push(tempTopic);
         });
         this.setState({
+            CategoryName: this.props.case.CategoryName,
             caseName: this.props.case.name,
+            overallComment: this.props.case.comment,
             id: this.props.case.id,
             topics: topics
         });
@@ -84,6 +88,7 @@ class CaseEditor extends Component {
                     </UnifiedModal>
                     <div style={{ textAlign: "center" }}>
                         <TextField style={{ marginLeft: 20, width: 400 }} value={this.state.caseName} label="Case name" onChange={e => this.setState({ caseName: e.target.value })} />
+                        {this.state.CategoryName === "" ? null : <h3>Category: {this.state.CategoryName}</h3>}
                         <div>
                             <h3>Points: {TotalScore(this.state.topics)} / {TotalPoints(this.state.topics)}</h3>
                             <h3>Percent: {Math.trunc(TotalScore(this.state.topics) / TotalPoints(this.state.topics) * 100)}%</h3>
@@ -232,6 +237,16 @@ class CaseEditor extends Component {
                     </div>
 
                 </div >
+                <div style={{ textAlign: "center", marginTop: 10, marginLeft: "25%", marginRight: "25%" }}>
+                    <TextField
+                        rows={6}
+                        fullWidth
+                        variant="outlined"
+                        multiline
+                        value={this.state.overallComment}
+                        onChange={e => this.setState({ overallComment: e.target.value })}
+                        label="Comment..." />
+                </div>
                 <div style={{ textAlign: "center", marginTop: 50, marginBottom: 50 }}>
                     <Button disabled={this.state.caseName.length === 0} style={{ width: "20%", color: "white", backgroundColor: "#2fed95" }}
                         onClick={() => {
@@ -239,6 +254,7 @@ class CaseEditor extends Component {
                                 id: this.state.id,
                                 name: this.state.caseName,
                                 createdDate: this.props.case.createdDate,
+                                comment: this.state.overallComment,
                                 UserId: this.props.case.userId,
                                 ProjectId: this.props.case.projectId,
                                 Topics: this.state.topics

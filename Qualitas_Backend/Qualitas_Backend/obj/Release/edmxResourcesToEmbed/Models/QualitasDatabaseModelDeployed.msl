@@ -26,6 +26,10 @@
     <EntitySetMapping Name="Evaluations">
       <EntityTypeMapping TypeName="DB_QualitasHostedModel.Evaluation">
         <MappingFragment StoreEntitySet="Evaluation">
+          <ScalarProperty Name="CategoryName" ColumnName="CategoryName" />
+          <ScalarProperty Name="EvaluationTemplateName" ColumnName="EvaluationTemplateName" />
+          <ScalarProperty Name="comment" ColumnName="comment" />
+          <ScalarProperty Name="updatedDate" ColumnName="updatedDate" />
           <ScalarProperty Name="EvaluatorId" ColumnName="EvaluatorId" />
           <ScalarProperty Name="id" ColumnName="id" />
           <ScalarProperty Name="name" ColumnName="name" />
@@ -99,6 +103,7 @@
     <EntitySetMapping Name="Users">
       <EntityTypeMapping TypeName="DB_QualitasHostedModel.User">
         <MappingFragment StoreEntitySet="User">
+          <ScalarProperty Name="ClientProjectId" ColumnName="ClientProjectId" />
           <ScalarProperty Name="id" ColumnName="id" />
           <ScalarProperty Name="username" ColumnName="username" />
           <ScalarProperty Name="password" ColumnName="password" />
@@ -159,5 +164,14 @@
     </FunctionImportMapping>
     <FunctionImportMapping FunctionImportName="sp_renamediagram" FunctionName="DB_QualitasHostedModel.Store.sp_renamediagram" />
     <FunctionImportMapping FunctionImportName="sp_upgraddiagrams" FunctionName="DB_QualitasHostedModel.Store.sp_upgraddiagrams" />
+    <EntitySetMapping Name="Categories">
+      <EntityTypeMapping TypeName="DB_QualitasHostedModel.Category">
+        <MappingFragment StoreEntitySet="Category">
+          <ScalarProperty Name="EvaluationTemplateId" ColumnName="EvaluationTemplateId" />
+          <ScalarProperty Name="name" ColumnName="name" />
+          <ScalarProperty Name="id" ColumnName="id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
   </EntityContainerMapping>
 </Mapping>

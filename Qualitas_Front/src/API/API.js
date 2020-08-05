@@ -1,6 +1,6 @@
 import axios from "axios";
 
-let baseUri = "https:localhost:44326/api"
+let baseUri = "http://infomedia-001-site1.ftempurl.com/api"
 let Api = axios.create({
     baseURL: baseUri,
     headers: {
@@ -105,8 +105,13 @@ export const UpdateUserCredentials = async (id, data) => {
         });
 };
 
-export const FetchUserToReview = async (id) => {
-    return await Api.get("/Users/review/" + id)
+export const FetchUserToReview = async (id, start, end) => {
+    return await Api.get("/Users/review/" + id, {
+        params: {
+            start: start,
+            end: end
+        }
+    })
         .then((response) => {
             return response.data;
         })
@@ -128,6 +133,27 @@ export const AddToProjectUser = async (id, data) => {
 
 export const RemoveFromProjectUser = async (id, data) => {
     return await Api.put("/Projects/removeuser/" + id, data)
+        .then((response) => {
+            return response.data;
+        })
+        .catch((error) => {
+            throw Error("An error has occurred calling the api: " + error);
+        });
+}
+
+export const AddToProjectClient = async (id, data) => {
+    console.log(data);
+    return await Api.put("/Users/addClientProject/" + id, data)
+        .then((response) => {
+            return response.data;
+        })
+        .catch((error) => {
+            throw Error("An error has occurred calling the api: " + error);
+        });
+}
+
+export const RemoveFromProjectClient = async (id, data) => {
+    return await Api.put("/Users/removeClientProject/" + id, data)
         .then((response) => {
             return response.data;
         })

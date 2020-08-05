@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { List, ListSubheader, ListItem, ListItemText, ListItemSecondaryAction, Checkbox, IconButton, Tooltip } from '@material-ui/core';
+import { List, ListSubheader, ListItem, ListItemText, ListItemSecondaryAction, Checkbox, IconButton, Tooltip, TextField } from '@material-ui/core';
 import AddCommentIcon from '@material-ui/icons/AddComment';
 import UnifiedModal from "../../Core-Components/UnifiedModal";
 import InsertEmoticonIcon from '@material-ui/icons/InsertEmoticon';
@@ -21,7 +21,9 @@ class CaseView extends Component {
     state = {
         id: null,
         caseName: "",
+        CategoryName: "",
         topics: [],
+        overallComment: "",
         breached: false,
     }
 
@@ -54,8 +56,10 @@ class CaseView extends Component {
             topics.push(tempTopic);
         });
         this.setState({
+            CategoryName: this.props.case.CategoryName,
             caseName: this.props.case.name,
             id: this.props.case.id,
+            overallComment: this.props.case.comment,
             topics: topics
         });
     }
@@ -71,9 +75,10 @@ class CaseView extends Component {
                     </UnifiedModal>
                     <div style={{ textAlign: "center" }}>
                         <h2>Case name: {this.state.caseName}</h2>
+                        {this.state.CategoryName === "" ? null : <h2>Category: {this.state.CategoryName}</h2>}
                         <div>
                             <h3>Points: {TotalScore(this.state.topics)} / {TotalPoints(this.state.topics)}</h3>
-                            <h3>Percent: {Math.trunc(TotalScore(this.state.topics) / TotalPoints(this.state.topics) * 100)}%</h3>
+                            <h3>Percent: {isNaN(Math.trunc(TotalScore(this.state.topics) / TotalPoints(this.state.topics) * 100)) ? "0" : Math.trunc(TotalScore(this.state.topics) / TotalPoints(this.state.topics) * 100)}%</h3>
                         </div>
                         <div>
                             <div>
@@ -154,6 +159,17 @@ class CaseView extends Component {
                     </div>
 
                 </div >
+                {this.state.overallComment === null ? null :
+                    <div style={{ textAlign: "center", marginTop: 10, marginLeft: "25%", marginRight: "25%" }}>
+                        <TextField
+                            disabled={true}
+                            rows={6}
+                            fullWidth
+                            variant="outlined"
+                            multiline
+                            value={this.state.overallComment}
+                            label="Comment..." />
+                    </div>}
             </div>
         );
     }

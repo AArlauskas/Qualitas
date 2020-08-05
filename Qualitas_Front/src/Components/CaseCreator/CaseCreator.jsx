@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { TextField, List, ListSubheader, ListItem, ListItemText, ListItemSecondaryAction, Checkbox, IconButton, Button, Tooltip, ListItemIcon } from '@material-ui/core';
+import { TextField, List, ListSubheader, ListItem, ListItemText, ListItemSecondaryAction, Checkbox, IconButton, Button, Tooltip, ListItemIcon, Select, MenuItem } from '@material-ui/core';
 import AddCommentIcon from '@material-ui/icons/AddComment';
 import UnifiedModal from "../../Components/Core-Components/UnifiedModal";
 import DefaultTextArea from '../Core-Components/DefaultTextArea/DefaultTextArea';
@@ -22,6 +22,9 @@ const CustomTooltip = withStyles({
 class CaseCreator extends Component {
     state = {
         caseName: "",
+        templateName: this.props.template.name,
+        CategoryName: "",
+        overallComment: "",
         topics: [],
         breached: false,
         modalOpen: false,
@@ -88,6 +91,9 @@ class CaseCreator extends Component {
                     </UnifiedModal>
                     <div style={{ textAlign: "center" }}>
                         <TextField style={{ marginLeft: 20, width: 400 }} label="Case name" onChange={e => this.setState({ caseName: e.target.value })} />
+                        {this.props.template.categories.length === 0 ? null : <Select style={{ marginTop: 18, marginLeft: 15, width: 300 }} value={this.state.CategoryName} onChange={e => this.setState({ CategoryName: e.target.value })}>
+                            {this.props.template.categories.map(category => <MenuItem value={category}>{category}</MenuItem>)}
+                        </Select>}
                         <div>
                             <h3>Points: {TotalScore(this.state.topics)} / {TotalPoints(this.state.topics)}</h3>
                             <h3>Percent: {isNaN(Math.trunc(TotalScore(this.state.topics) / TotalPoints(this.state.topics) * 100)) ? 0 : Math.trunc(TotalScore(this.state.topics) / TotalPoints(this.state.topics) * 100)}%</h3>
@@ -238,11 +244,24 @@ class CaseCreator extends Component {
                     </div>
 
                 </div >
+                <div style={{ textAlign: "center", marginTop: 10, marginLeft: "25%", marginRight: "25%" }}>
+                    <TextField
+                        rows={6}
+                        fullWidth
+                        variant="outlined"
+                        multiline
+                        value={this.state.overallComment}
+                        onChange={e => this.setState({ overallComment: e.target.value })}
+                        label="Comment..." />
+                </div>
                 <div style={{ textAlign: "center", marginTop: 50, marginBottom: 50 }}>
                     <Button disabled={this.state.caseName.length === 0} style={{ width: "20%", color: "white", backgroundColor: "#2fed95" }}
                         onClick={() => {
                             let data = {
                                 name: this.state.caseName,
+                                comment: this.state.overallComment,
+                                CategoryName: this.state.CategoryName,
+                                EvaluationTemplateName: this.state.templateName,
                                 UserId: this.props.userId,
                                 ProjectId: this.props.projectId,
                                 EvaluatorId: window.localStorage.getItem("id"),

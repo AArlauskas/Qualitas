@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import UsersProjects from '../../Components/UsersProjects/UsersProjects';
-import { FetchUserForProjects, AddProjectToUser, RemoveProjectFromUser, FetchProjectsSimple } from '../../API/API';
+import { FetchUserForProjects, AddProjectToUser, RemoveProjectFromUser, FetchProjectsSimple, AddToProjectClient, RemoveFromProjectClient } from '../../API/API';
 import LoadingScreen from '../../Components/LoadingScreen/LoadingScreen';
 
 class UsersProjectsDisplay extends Component {
@@ -18,6 +18,7 @@ class UsersProjectsDisplay extends Component {
             <div>
                 {this.state.user.length === 0 || this.state.projects.length === 0 ? <LoadingScreen /> :
                     <UsersProjects
+                        isClient={this.state.user.role === "client"}
                         projects={this.state.projects}
                         user={this.state.user}
                         addProjectToUser={addProjectToUser}
@@ -27,12 +28,24 @@ class UsersProjectsDisplay extends Component {
     }
 }
 
-const addProjectToUser = async (id, data) => {
-    await AddProjectToUser(id, data);
+const addProjectToUser = async (id, data, isClient) => {
+    if (isClient) {
+        await AddToProjectClient(id, data);
+    }
+    else {
+        await AddProjectToUser(id, data);
+    }
+
 }
 
-const removeProjectFromUser = async (id, data) => {
-    await RemoveProjectFromUser(id, data);
+const removeProjectFromUser = async (id, data, isClient) => {
+    if (isClient) {
+        await RemoveFromProjectClient(id, data);
+    }
+    else {
+        await RemoveProjectFromUser(id, data);
+    }
+
 }
 
 export default UsersProjectsDisplay;

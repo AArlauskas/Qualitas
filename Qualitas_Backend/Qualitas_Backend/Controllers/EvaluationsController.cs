@@ -33,7 +33,10 @@ namespace Qualitas_Backend.Controllers
             {
                 evaluation.id,
                 evaluation.name,
+                evaluation.comment,
                 evaluation.createdDate,
+                evaluation.updatedDate,
+                evaluation.CategoryName,
                 userId = evaluation.User.id,
                 projectId = evaluation.Project.id,
                 evaluator = evaluation.Evaluator.firstname + " " + evaluation.Evaluator.lastname,
@@ -78,6 +81,8 @@ namespace Qualitas_Backend.Controllers
             }
 
             db.Evaluations.Find(id).name = evaluation.name;
+            db.Evaluations.Find(id).updatedDate = DateTime.Now;
+            db.Evaluations.Find(id).comment = evaluation.comment;
             foreach(var topic in evaluation.Topics)
             {
                 db.Topics.Find(topic.id).failed = topic.failed;

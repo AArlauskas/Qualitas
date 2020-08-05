@@ -28,6 +28,8 @@ import NavigationBreadcrumbsUser from './Components/User/NavigationBreadcrumbsUs
 import CaseViewDisplay from './Containers/User/CaseViewDisplay/CaseViewDisplay';
 import UserProjectsListDisplay from './Containers/User/UserProjectsListDisplay/UserProjectsListDisplay';
 import NavigationBreadcrumbsClient from './Components/Client/NavigationBreadcrumbsClient';
+import ClientUsersDisplay from './Containers/Client/ClientUsersDisplay/ClientUsersDisplay';
+import ClientUsersDetailsDisplay from './Containers/Client/ClientUsersDetailsDisplay/ClientUsersDetailsDisplay';
 
 class Routing extends Component {
     state = {}
@@ -136,8 +138,11 @@ class Routing extends Component {
                 <div>
                     <NavigationBreadcrumbsClient />
                     <Switch>
-                        <Route path="/client">
-
+                        <Route path="/Users">
+                            <ClientUsersDisplay />
+                        </Route>
+                        <Route exact path="/UserDetails/:id">
+                            <ClientUsersDetailsDisplay />
                         </Route>
                     </Switch>
                 </div>

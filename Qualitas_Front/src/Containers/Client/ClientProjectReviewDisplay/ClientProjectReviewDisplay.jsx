@@ -1,26 +1,27 @@
 import React, { Component } from 'react';
-import ClientUsersList from '../../../Components/Client/ClientUsersList/ClientUsersList';
-import LoadingScreen from '../../../Components/LoadingScreen/LoadingScreen';
+import ClientProjectReview from '../../../Components/Client/ClientProjectReview/ClientProjectReview';
 import { FetchProjectToReview } from '../../../API/API';
+import LoadingScreen from '../../../Components/LoadingScreen/LoadingScreen';
 
 let date = new Date();
-class ClientUsersDisplay extends Component {
+class ClientProjectReviewDisplay extends Component {
     state = {
         Project: [],
         minDate: new Date(date.getFullYear(), date.getMonth(), 1),
         maxDate: new Date(),
     }
     componentDidMount() {
-        let id = window.localStorage.getItem("projectId");
+        let id = this.props.match.params.id
         FetchProjectToReview(id, this.state.minDate, this.state.maxDate).then(response => this.setState({ Project: response }))
     }
 
     componentDidUpdate(prevProps, prevState) {
         if (prevState.minDate !== this.state.minDate || prevState.maxDate !== this.state.maxDate) {
-            let id = window.localStorage.getItem("projectId");
+            let id = this.props.match.params.id
             FetchProjectToReview(id, this.state.minDate, this.state.maxDate).then(response => this.setState({ Project: response }))
         }
     }
+
     calculateOverallScore = () => {
         let score = 0;
         let points = 0;
@@ -35,16 +36,19 @@ class ClientUsersDisplay extends Component {
         }
         return average;
     }
+
     render() {
         return (
             <div>
+                {console.log(this.props)}
                 {this.state.Project.length === 0 ? <LoadingScreen /> : <div>
                     <div style={{ textAlign: "center" }}>
                         <h2>Project's name: {this.state.Project.name}</h2>
                         <h2>Overall score: {this.calculateOverallScore()}%</h2>
                     </div>
                     <div>
-                        <ClientUsersList
+                        <ClientProjectReview
+                            projectId={this.state.Project.id}
                             users={this.state.Project.Users}
                             minDate={this.state.minDate}
                             maxDate={this.state.maxDate}
@@ -57,4 +61,4 @@ class ClientUsersDisplay extends Component {
     }
 }
 
-export default ClientUsersDisplay;
+export default ClientProjectReviewDisplay;

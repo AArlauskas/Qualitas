@@ -46,6 +46,44 @@ namespace Qualitas_Backend.Controllers
             return Ok(templates);
         }
 
+        [HttpGet]
+        [Route("api/EvaluationTemplates/Client/list/{id}")]
+        public async Task<IHttpActionResult> GetClientEvaluationList(int id)
+        {
+            var ClientProjects = db.Users.Where(user => !user.IsArchived && !user.IsDeleted).FirstOrDefault(user => user.id == id).Projects.Select(project => new
+            {
+                project.id
+            }).ToList();
+            var templates = await db.EvaluationTemplates.Where(template => !template.isDeleted).Select(template => new
+            {
+                template.id,
+                template.name,
+                Projects = template.Projects.Where(project => !project.isDeleted).Select(project => new
+                {
+                    project.id,
+                    project.name
+                })
+            }).ToListAsync();
+            List<EvaluationTemplateListItem> list = new List<EvaluationTemplateListItem>();
+            foreach(var entry in templates)
+            {
+                var projects = entry.Projects.Select(project => new
+                {
+                    project.id
+                });
+                if(projects.Intersect(ClientProjects).Any())
+                {
+                    list.Add(new EvaluationTemplateListItem()
+                    {
+                        id = entry.id,
+                        name = entry.name,
+                    });
+                }
+            }
+            
+            return Ok(list);
+        }
+
         // GET: api/EvaluationTemplates/5
         [ResponseType(typeof(GetFullEvaluationTemplateResponse))]
         public async Task<IHttpActionResult> GetEvaluationTemplate(int id)

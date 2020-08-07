@@ -1,6 +1,6 @@
 import React from "react";
 import { Breadcrumbs, Link } from "@material-ui/core";
-import { PeopleRounded, DashboardRounded, AssignmentTurnedInOutlined, GroupWorkOutlined } from "@material-ui/icons";
+import { DashboardRounded, AssignmentTurnedInOutlined, WorkRounded } from "@material-ui/icons";
 import QLogo from "../../../Images/QLogo.png";
 import "./NavigationBreadcrumbs.scss";
 
@@ -13,12 +13,13 @@ const NavigationBreadcrumbsClient = () => {
             </div>
             <Breadcrumbs separator={<div className={"Separator"}>||</div>} className="Breadcrumbs">
                 <Link
-                    href="/teams"
-                    className={currentPage === "/teams" ? "LinkBold" : "Link"}
+                    href="/projects"
+                    className={currentPage === "/projects" ? "LinkBold" : "Link"}
                 >
-                    <GroupWorkOutlined className="Icon" fontSize="small" />
-                    Teams
+                    <WorkRounded className="Icon" fontSize="small" />
+                    Projects
                 </Link>
+
                 <Link
                     href="/templates"
                     className={currentPage === "/templates" ? "LinkBold" : "Link"}
@@ -32,13 +33,6 @@ const NavigationBreadcrumbsClient = () => {
                 >
                     <AssignmentTurnedInOutlined className="Icon" fontSize="small" />
                     Reports
-                </Link>
-                <Link
-                    href="/users"
-                    className={currentPage === "/users" ? "LinkBold" : "Link"}
-                >
-                    <PeopleRounded className="Icon" fontSize="small" />
-                    Users
                 </Link>
             </Breadcrumbs>
             <div style={{ marginTop: 5, marginRight: 5 }}>

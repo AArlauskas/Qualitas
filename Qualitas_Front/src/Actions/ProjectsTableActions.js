@@ -1,12 +1,19 @@
 import { ActionType } from "../Constants/ActionType";
 import templates from "../Constants/Templates";
-import { FetchProjectsList, CreateProject, DeleteProject, UpadateProjectName, FetchProjectsListForReview } from "../API/API";
+import { FetchProjectsList, CreateProject, DeleteProject, UpadateProjectName, FetchProjectsListForReview, FetchClientProjectsList } from "../API/API";
 require('react-virtualized-transfer/lib/css')
 
 export const fetchProjects = (start, end) => async (dispatch) => {
     dispatch({
         type: ActionType.LOAD_PROJECTS,
         payload: await FetchProjectsList(start, end)
+    });
+};
+
+export const fetchClientProjects = (id, start, end) => async (dispatch) => {
+    dispatch({
+        type: ActionType.LOAD_PROJECTS,
+        payload: await FetchClientProjectsList(id, start, end)
     });
 };
 

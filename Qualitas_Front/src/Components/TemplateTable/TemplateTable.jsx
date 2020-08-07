@@ -101,6 +101,7 @@ class TemplateTable extends Component {
                                 }, 600);
                             })
                     }}
+
                 />
             </div>
         );

@@ -15,22 +15,12 @@ import Remove from '@material-ui/icons/Remove';
 import SaveAlt from '@material-ui/icons/SaveAlt';
 import Search from '@material-ui/icons/Search';
 import ViewColumn from '@material-ui/icons/ViewColumn';
-import UnarchiveIcon from '@material-ui/icons/Unarchive';
 
-class ArchivedUserListTable extends Component {
+
+class ClientTemplatesList extends Component {
     state = {
         columns: [
-            {
-                title: "Role", field: "role", lookup: {
-                    "admin": "Admin",
-                    "user": "User",
-                    "client": "Client"
-                }
-            },
-            { title: 'Name', field: 'firstname' },
-            {
-                title: 'Surname', field: 'lastname',
-            },
+            { title: 'Template name', field: 'name', customFilterAndSearch: (term, rowData) => rowData.name.toLowerCase().startsWith(term.toLowerCase()) },
         ]
     }
     render() {
@@ -55,46 +45,22 @@ class ArchivedUserListTable extends Component {
         };
         return (
             <div>
-                <div style={{ marginTop: 10, paddingLeft: 10, paddingRight: 10 }}>
-                    <MaterialTable
-                        options={{
-                            filtering: true,
-                            actionsColumnIndex: -1,
-                            pageSize: 10
-                        }}
-                        icons={tableIcons}
-                        title="Archived Accounts"
-                        columns={this.state.columns}
-                        data={this.props.archivedUserData.filter(user => user.isArchived === true)}
-                        actions={[{
-                            icon: () => <UnarchiveIcon />,
-                            tooltip: "Unarchive",
-                            onClick: (event, rowData) => {
-                                new Promise((resolve) => {
-                                    setTimeout(() => {
-                                        resolve();
-                                        this.props.unarchiveUser(rowData);
-                                    }, 600);
-                                })
-                            }
-                        }]}
-                        editable={{
-                            onRowDelete: (oldData) =>
-                                new Promise((resolve) => {
-                                    setTimeout(() => {
-                                        resolve();
-                                        this.setState((prevState) => {
-                                            this.props.deleteUser(oldData);
-                                        });
-                                    }, 600);
-                                })
-                        }}
-                        onRowClick={(event, rowData, togglePanel) => rowData.role === "user" ? window.location.href = "/ArchivedUser/" + rowData.id : null}
-                    />
-                </div>
+                {console.log(this.props.templates)}
+                <MaterialTable
+                    title="Templates"
+                    icons={tableIcons}
+                    data={this.props.templates}
+                    columns={this.state.columns}
+                    options={{
+                        actionsColumnIndex: -1,
+                        pageSize: 10,
+                        filtering: true
+                    }}
+                    onRowClick={(event, rowData, togglePanel) => window.location.href = "/viewTemplate/" + rowData.id}
+                />
             </div>
         );
     }
 }
 
-export default ArchivedUserListTable;
+export default ClientTemplatesList;

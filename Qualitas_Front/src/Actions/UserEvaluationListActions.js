@@ -1,8 +1,16 @@
 import { ActionType } from "../Constants/ActionType";
-import { MarkEvaluationDeleted, FetchUserToReview } from "../API/API";
+import { MarkEvaluationDeleted, FetchUserToReview, FetchProjectUserToReview } from "../API/API";
 
 export const fetchUsersEvaluations = (id, min, max) => async (dispatch) => {
     let response = await FetchUserToReview(id, min, max);
+    dispatch({
+        type: ActionType.LOAD_USERS_EVALUATIONS,
+        payload: response
+    })
+}
+
+export const fetchProjectUsersEvaluations = (userId, projectId, min, max) => async (dispatch) => {
+    let response = await FetchProjectUserToReview(userId, projectId, min, max);
     dispatch({
         type: ActionType.LOAD_USERS_EVALUATIONS,
         payload: response

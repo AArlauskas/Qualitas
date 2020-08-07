@@ -1,14 +1,14 @@
 import React, { Component } from 'react';
 
-class ClientTeamsList extends Component {
+class ClientReportsDisplay extends Component {
     state = {}
     render() {
         return (
             <div>
-                Client team's list
+                Client reports
             </div>
         );
     }
 }
 
-export default ClientTeamsList;
+export default ClientReportsDisplay;

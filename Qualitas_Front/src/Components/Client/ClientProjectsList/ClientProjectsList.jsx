@@ -15,37 +15,44 @@ import Remove from '@material-ui/icons/Remove';
 import SaveAlt from '@material-ui/icons/SaveAlt';
 import Search from '@material-ui/icons/Search';
 import ViewColumn from '@material-ui/icons/ViewColumn';
+import { Chip } from '@material-ui/core';
 import { KeyboardDatePicker, MuiPickersUtilsProvider } from '@material-ui/pickers';
 import DateFnsUtils from '@date-io/date-fns';
-import { Chip } from '@material-ui/core';
 
-class UserEvaluationsList extends Component {
-    state = {
-        columns: [
+class ClientProjectsList extends Component {
+    state = {}
+    componentDidMount() {
+        let columns = [
+            { title: "Project name", field: "name", customFilterAndSearch: (term, rowData) => rowData.name.toLowerCase().startsWith(term.toLowerCase()) },
             {
-                title: "Name", field: "name"
+                editable: "never",
+                title: "Templates",
+                field: "templates",
+                render: rowData => <div>{rowData.templates.map(template => <Chip style={{ marginRight: 2, marginTop: 2 }} key={template.id}
+                    label={template.name}
+                    onClick={() => window.location.href = "/viewTemplate/" + template.id} />)}</div>,
+                customFilterAndSearch: (term, rowData) => rowData.templates.some(template => template.name.toLowerCase().startsWith(term.toLowerCase()))
             },
             {
-                title: "Date", field: "createdDate", filtering: false, render: rowData => rowData.createdDate.split("T")[0]
-            },
-            {
-                title: "Project", field: "project", render: rowData => <Chip label={rowData.projectName} />,
-                customFilterAndSearch: (term, rowData) => rowData.projectName.toLowerCase().startsWith(term.toLowerCase())
-            },
-            {
-                title: "Score", field: "score", render: rowData => isNaN(Math.trunc((rowData.score / rowData.points) * 100)) ? "0%" : Math.trunc((rowData.score / rowData.points) * 100) + "%",
+                editable: "never", title: "Score", field: "score", render: rowData => isNaN(Math.trunc((rowData.score / rowData.points) * 100)) ? "0%" : Math.trunc((rowData.score / rowData.points) * 100) + "%",
                 customFilterAndSearch: (term, rowData) => Math.trunc((rowData.score / rowData.points) * 100) === parseInt(term)
             },
             {
-                title: "Evaluator", field: "evaluator"
+                title: "Number of users", field: "userCount", customFilterAndSearch: (term, rowData) => rowData.userCount === parseInt(term), editable: "never"
+            },
+            {
+                title: "Evaluated cases", field: "caseCount", customFilterAndSearch: (term, rowData) => rowData.caseCount === parseInt(term), editable: "never"
             }
-        ]
+        ];
+        this.setState({ columns: columns, open: false })
     }
+
     componentDidUpdate(prevProps) {
         if (prevProps.minDate !== this.props.minDate || prevProps.maxDate !== this.props.maxDate) {
             this.forceUpdate();
         }
     }
+
     render() {
 
         const tableIcons = {
@@ -69,17 +76,17 @@ class UserEvaluationsList extends Component {
         };
 
         return (
-            <div>
+            <div style={{ marginTop: 10, paddingLeft: 10, paddingRight: 10 }}>
                 <MaterialTable
-                    data={this.props.evaluations}
-                    columns={this.state.columns}
-                    title="Evaluations"
-                    icons={tableIcons}
                     options={{
                         filtering: true,
                         actionsColumnIndex: -1,
                         pageSize: 10
                     }}
+                    icons={tableIcons}
+                    title="Projects"
+                    columns={this.state.columns}
+                    data={this.props.projects}
                     components={{
                         Toolbar: props => (
                             <div>
@@ -92,8 +99,8 @@ class UserEvaluationsList extends Component {
                                             format="yyyy-MM-dd"
                                             margin="normal"
                                             label="Start date"
-                                            maxDate={this.props.maxDate}
                                             value={this.props.minDate}
+                                            maxDate={this.state.maxDate}
                                             onChange={e => this.props.setMinDate(e)}
                                             KeyboardButtonProps={{
                                                 'aria-label': 'change date',
@@ -107,7 +114,7 @@ class UserEvaluationsList extends Component {
                                             margin="normal"
                                             label="End date"
                                             value={this.props.maxDate}
-                                            minDate={this.state.minDate}
+                                            minDate={this.props.minDate}
                                             maxDate={new Date()}
                                             onChange={e => this.props.setMaxDate(e)}
                                             KeyboardButtonProps={{
@@ -120,11 +127,11 @@ class UserEvaluationsList extends Component {
 
                         ),
                     }}
-                    onRowClick={(event, rowData, togglePanel) => event.target.tagName === "SPAN" ? null : window.location.href = "/viewCase/" + rowData.id}
+                    onRowClick={(event, rowData, togglePanel) => event.target.tagName === "SPAN" ? null : window.location.href = "/projectReview/" + rowData.id}
                 />
             </div>
         );
     }
 }
 
-export default UserEvaluationsList;
+export default ClientProjectsList;

@@ -118,7 +118,9 @@ class UserListTable extends Component {
                                 new Promise((resolve) => {
                                     setTimeout(() => {
                                         resolve();
-                                        window.location.href = "/UsersProjects/" + rowData.id
+                                        if (rowData.role !== "admin") {
+                                            window.location.href = "/UsersProjects/" + rowData.id
+                                        }
                                     }, 600);
                                 })
                             },

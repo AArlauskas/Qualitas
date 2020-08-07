@@ -79,19 +79,19 @@ namespace Qualitas_Backend.Controllers
                 .Select(project => new {
                     id = project.id,
                     name = project.name,
-                    Users = project.Users.Where(user => !user.IsArchived || !user.IsDeleted).Select(user => new
+                    Users = project.Users.Where(user => !user.IsArchived || !user.IsDeleted).Where(user => user.RoleType == "user").Select(user => new
                     {
                         user.id,
                         user.firstname,
                         user.lastname,
                         teamName = user.Team.name,
                         teamId = (int?)user.Team.id,
-                        caseCount = user.Evaluations.Where(evaluation => evaluation.createdDate >= start && evaluation.createdDate <= end).Count(),
+                        caseCount = user.Evaluations.Where(temp => temp.ProjectId == id).Where(evaluation => !evaluation.isDeleted).Where(evaluation => evaluation.createdDate >= start && evaluation.createdDate <= end).Count(),
 
-                        score = user.Evaluations.Where(evaluation => !evaluation.isDeleted).Where(evaluation => evaluation.createdDate >= start && evaluation.createdDate <= end).Select(evaluation => evaluation.Topics.
+                        score = user.Evaluations.Where(temp => temp.ProjectId == id).Where(evaluation => !evaluation.isDeleted).Where(evaluation => evaluation.createdDate >= start && evaluation.createdDate <= end).Select(evaluation => evaluation.Topics.
                         Select(topic => topic.Criteria.Select(criteria => (double?)criteria.score).ToList().Sum()).Sum()).Sum(),
 
-                        points = user.Evaluations.Where(evaluation => !evaluation.isDeleted).Where(evaluation => evaluation.createdDate >= start && evaluation.createdDate <= end).Select(evaluation => evaluation.Topics.
+                        points = user.Evaluations.Where(temp => temp.ProjectId == id).Where(evaluation => !evaluation.isDeleted).Where(evaluation => evaluation.createdDate >= start && evaluation.createdDate <= end).Select(evaluation => evaluation.Topics.
                         Select(topic => topic.Criteria.Select(criteria => (int?)criteria.points).ToList().Sum()).Sum()).Sum()
                     })
                 }).FirstOrDefaultAsync(temp => temp.id == id);

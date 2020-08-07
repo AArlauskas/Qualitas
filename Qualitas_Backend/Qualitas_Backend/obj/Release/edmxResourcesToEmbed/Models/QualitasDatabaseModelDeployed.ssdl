@@ -135,7 +135,6 @@
     <Property Name="IsArchived" Type="bit" Nullable="false" />
     <Property Name="IsDeleted" Type="bit" Nullable="false" />
     <Property Name="TeamId" Type="int" />
-    <Property Name="ClientProjectId" Type="int" />
   </EntityType>
   <Association Name="FK_Category_EvaluationTemplate">
     <End Role="EvaluationTemplate" Type="Self.EvaluationTemplate" Multiplicity="1" />
@@ -305,18 +304,6 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="FK_User_Project">
-    <End Role="Project" Type="Self.Project" Multiplicity="0..1" />
-    <End Role="User" Type="Self.User" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="Project">
-        <PropertyRef Name="id" />
-      </Principal>
-      <Dependent Role="User">
-        <PropertyRef Name="ClientProjectId" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
   <Association Name="FK_User_Team">
     <End Role="Team" Type="Self.Team" Multiplicity="0..1" />
     <End Role="User" Type="Self.User" Multiplicity="*" />
@@ -430,10 +417,6 @@
     <AssociationSet Name="FK_TopicTemplate_EvaluationTemplate" Association="Self.FK_TopicTemplate_EvaluationTemplate">
       <End Role="EvaluationTemplate" EntitySet="EvaluationTemplate" />
       <End Role="TopicTemplate" EntitySet="TopicTemplate" />
-    </AssociationSet>
-    <AssociationSet Name="FK_User_Project" Association="Self.FK_User_Project">
-      <End Role="Project" EntitySet="Project" />
-      <End Role="User" EntitySet="User" />
     </AssociationSet>
     <AssociationSet Name="FK_User_Team" Association="Self.FK_User_Team">
       <End Role="Team" EntitySet="Team" />

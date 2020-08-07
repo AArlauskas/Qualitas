@@ -13,10 +13,11 @@ class TemplatesDisplay extends Component {
     render() {
         return (
             <div>
-                {this.props.templates.length === 0 ? <LoadingScreen /> : <div><Button color="primary" variant="outlined" href="/newTemplate" style={{ marginBottom: 10 }}>Create new template</Button>
-                    <TemplateTable
-                        templates={this.props.templates}
-                        deleteTemplate={this.props.deleteTemplate} /></div>}
+                {this.props.templates.length === 0 ? <LoadingScreen /> :
+                    <div><Button color="primary" variant="outlined" href="/newTemplate" style={{ marginBottom: 10 }}>Create new template</Button>
+                        <TemplateTable
+                            templates={this.props.templates}
+                            deleteTemplate={this.props.deleteTemplate} /></div>}
             </div>
         );
     }

@@ -17,9 +17,8 @@ import Search from '@material-ui/icons/Search';
 import ViewColumn from '@material-ui/icons/ViewColumn';
 import { KeyboardDatePicker, MuiPickersUtilsProvider } from '@material-ui/pickers';
 import DateFnsUtils from '@date-io/date-fns';
-import { Chip } from '@material-ui/core';
 
-class UserEvaluationsList extends Component {
+class ClientUserReview extends Component {
     state = {
         columns: [
             {
@@ -29,12 +28,14 @@ class UserEvaluationsList extends Component {
                 title: "Date", field: "createdDate", filtering: false, render: rowData => rowData.createdDate.split("T")[0]
             },
             {
-                title: "Project", field: "project", render: rowData => <Chip label={rowData.projectName} />,
-                customFilterAndSearch: (term, rowData) => rowData.projectName.toLowerCase().startsWith(term.toLowerCase())
+                title: "Last update", field: "updatedDate", filtering: false, render: rowData => rowData.updatedDate === null ? "" : rowData.updatedDate.split("T")[0]
+            },
+            {
+                title: "Template", field: "EvaluationTemplateName"
             },
             {
                 title: "Score", field: "score", render: rowData => isNaN(Math.trunc((rowData.score / rowData.points) * 100)) ? "0%" : Math.trunc((rowData.score / rowData.points) * 100) + "%",
-                customFilterAndSearch: (term, rowData) => Math.trunc((rowData.score / rowData.points) * 100) === parseInt(term)
+                customFilterAndSearch: (term, rowData) => isNaN(Math.trunc((rowData.score / rowData.points) * 100)) ? parseInt(term) === 0 : Math.trunc((rowData.score / rowData.points) * 100) === parseInt(term)
             },
             {
                 title: "Evaluator", field: "evaluator"
@@ -46,8 +47,8 @@ class UserEvaluationsList extends Component {
             this.forceUpdate();
         }
     }
-    render() {
 
+    render() {
         const tableIcons = {
             Add: forwardRef((props, ref) => <AddBox {...props} ref={ref} />),
             Check: forwardRef((props, ref) => <Check {...props} ref={ref} />),
@@ -67,9 +68,9 @@ class UserEvaluationsList extends Component {
             ThirdStateCheck: forwardRef((props, ref) => <Remove {...props} ref={ref} />),
             ViewColumn: forwardRef((props, ref) => <ViewColumn {...props} ref={ref} />)
         };
-
         return (
             <div>
+                {console.log(this.props.evaluations)}
                 <MaterialTable
                     data={this.props.evaluations}
                     columns={this.state.columns}
@@ -92,7 +93,7 @@ class UserEvaluationsList extends Component {
                                             format="yyyy-MM-dd"
                                             margin="normal"
                                             label="Start date"
-                                            maxDate={this.props.maxDate}
+                                            maxDate={this.state.maxDate}
                                             value={this.props.minDate}
                                             onChange={e => this.props.setMinDate(e)}
                                             KeyboardButtonProps={{
@@ -120,11 +121,10 @@ class UserEvaluationsList extends Component {
 
                         ),
                     }}
-                    onRowClick={(event, rowData, togglePanel) => event.target.tagName === "SPAN" ? null : window.location.href = "/viewCase/" + rowData.id}
-                />
+                    onRowClick={(event, rowData, togglePanel) => event.target.tagName === "SPAN" ? null : window.location.href = "/viewCase/" + rowData.id} />
             </div>
         );
     }
 }
 
-export default UserEvaluationsList;
+export default ClientUserReview;

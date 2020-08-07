@@ -103,7 +103,6 @@
     <EntitySetMapping Name="Users">
       <EntityTypeMapping TypeName="DB_QualitasHostedModel.User">
         <MappingFragment StoreEntitySet="User">
-          <ScalarProperty Name="ClientProjectId" ColumnName="ClientProjectId" />
           <ScalarProperty Name="id" ColumnName="id" />
           <ScalarProperty Name="username" ColumnName="username" />
           <ScalarProperty Name="password" ColumnName="password" />

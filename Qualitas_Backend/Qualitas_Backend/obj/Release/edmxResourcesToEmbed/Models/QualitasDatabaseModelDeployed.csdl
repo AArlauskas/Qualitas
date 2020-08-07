@@ -64,7 +64,6 @@
     <NavigationProperty Name="Teams" Relationship="Self.ProjectsTeams" FromRole="Project" ToRole="Team" />
     <NavigationProperty Name="Users" Relationship="Self.ProjectsUsers" FromRole="Project" ToRole="User" />
     <NavigationProperty Name="EvaluationTemplates" Relationship="Self.TemplatesProjects" FromRole="Project" ToRole="EvaluationTemplate" />
-    <NavigationProperty Name="Users1" Relationship="DB_QualitasHostedModel.FK_User_Project" FromRole="Project" ToRole="User" />
   </EntityType>
   <EntityType Name="sysdiagram">
     <Key>
@@ -127,8 +126,6 @@
     <NavigationProperty Name="Team" Relationship="Self.FK_User_Team" FromRole="User" ToRole="Team" />
     <NavigationProperty Name="Projects" Relationship="Self.ProjectsUsers" FromRole="User" ToRole="Project" />
     <NavigationProperty Name="Evaluated" Relationship="DB_QualitasHostedModel.FK_Evaluation_Evaluators" FromRole="User" ToRole="Evaluation" />
-    <Property Name="ClientProjectId" Type="Int32" />
-    <NavigationProperty Name="Project" Relationship="DB_QualitasHostedModel.FK_User_Project" FromRole="User" ToRole="Project" />
   </EntityType>
   <Association Name="FK_Criteria_Topic">
     <End Role="Topic" Type="Self.Topic" Multiplicity="1" />
@@ -311,10 +308,6 @@
       <End Role="User" EntitySet="Users" />
       <End Role="Evaluation" EntitySet="Evaluations" />
     </AssociationSet>
-    <AssociationSet Name="FK_User_Project" Association="DB_QualitasHostedModel.FK_User_Project">
-      <End Role="Project" EntitySet="Projects" />
-      <End Role="User" EntitySet="Users" />
-    </AssociationSet>
     <EntitySet Name="Categories" EntityType="DB_QualitasHostedModel.Category" />
     <AssociationSet Name="FK_Category_EvaluationTemplate" Association="DB_QualitasHostedModel.FK_Category_EvaluationTemplate">
       <End Role="EvaluationTemplate" EntitySet="EvaluationTemplates" />
@@ -341,18 +334,6 @@
       </Principal>
       <Dependent Role="Evaluation">
         <PropertyRef Name="EvaluatorId" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_User_Project">
-    <End Type="DB_QualitasHostedModel.Project" Role="Project" Multiplicity="0..1" />
-    <End Type="DB_QualitasHostedModel.User" Role="User" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="Project">
-        <PropertyRef Name="id" />
-      </Principal>
-      <Dependent Role="User">
-        <PropertyRef Name="ClientProjectId" />
       </Dependent>
     </ReferentialConstraint>
   </Association>

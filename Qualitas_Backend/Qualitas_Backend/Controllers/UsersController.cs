@@ -140,6 +140,40 @@ namespace Qualitas_Backend.Controllers
         }
 
         [HttpGet]
+        [Route("api/Users/Client/Projects/list/{id}")]
+        public async Task<IHttpActionResult> GetClientProjects(int id, DateTime start, DateTime end)
+        {
+            var entry = await db.Users.Where(temp => !temp.IsArchived && !temp.IsDeleted).Select(user => new
+            {
+                user.id,
+                Projects = user.Projects.Where(project => !project.isDeleted).Select(project => new
+                {
+                    project.id,
+                    project.name,
+                    templates = project.EvaluationTemplates.Where(template => !template.isDeleted).Select(template => new
+                    {
+                        template.id,
+                        template.name
+                    }),
+                    userCount = project.Users.Where(temp => !temp.IsArchived && !temp.IsDeleted).Where(temp => temp.RoleType == "user").Count(),
+                    caseCount = project.Evaluations.Where(evaluation => evaluation.createdDate >= start && evaluation.createdDate <= end).Count(),
+                    score = project.Evaluations.Where(evaluation => !evaluation.isDeleted).Where(evaluation => evaluation.createdDate >= start && evaluation.createdDate <= end).Select(evaluation => evaluation.Topics.
+                    Select(topic => topic.Criteria.Select(criteria => (double?)criteria.score).ToList().Sum()).Sum()).Sum(),
+
+                    points = project.Evaluations.Where(evaluation => !evaluation.isDeleted).Where(evaluation => evaluation.createdDate >= start && evaluation.createdDate <= end).Select(evaluation => evaluation.Topics.
+                    Select(topic => topic.Criteria.Select(criteria => (int?)criteria.points).ToList().Sum()).Sum()).Sum(),
+                })
+            }).FirstOrDefaultAsync(user => user.id == id);
+
+            if(entry == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(entry);
+        }
+
+        [HttpGet]
         [Route("api/Users/review/{id}")]
         public async Task<IHttpActionResult> GetUserReview(int id, DateTime start, DateTime end)
         {
@@ -167,7 +201,7 @@ namespace Qualitas_Backend.Controllers
                         score = evaluation.Topics.Select(topic => topic.Criteria.Select(criteria => (double?)criteria.score).ToList().Sum()).Sum(),
                         points = evaluation.Topics.Select(topic => topic.Criteria.Select(criteria => (int?)criteria.points).ToList().Sum()).Sum(),
 
-                    }).ToList()
+                    }).OrderByDescending(temp => temp.createdDate).ToList()
                 }).FirstOrDefaultAsync(temp => temp.id == id);
 
             if (users == null)
@@ -187,8 +221,45 @@ namespace Qualitas_Backend.Controllers
                 }).OrderByDescending(temp => temp.average).ToList()
             }).FirstOrDefaultAsync(temp => temp.id == users.teamId);
 
+            if(users.teamId != null)
+            {
+                users.rating = teams.Users.FindIndex(temp => temp.id == users.id) + 1;
+            }
 
-            users.rating = teams.Users.FindIndex(temp => temp.id == users.id) + 1;
+            return Ok(users);
+        }
+
+        [HttpGet]
+        [Route("api/Users/Project/review")]
+        public async Task<IHttpActionResult> GetUserProjectReview(int userId, int projectId, DateTime start, DateTime end)
+        {
+            var users = await db.Users
+                .Select(user => new UserReviewResponse()
+                {
+                    id = user.id,
+                    firstname = user.firstname,
+                    lastname = user.lastname,
+                    valid = user.Projects.Any(project => project.Evaluations.Count() > 0),
+                    Evaluations = user.Evaluations.Where(evaluation => evaluation.ProjectId == projectId).Where(evaluation => !evaluation.isDeleted).Where(evaluation => evaluation.createdDate >= start && evaluation.createdDate <= end).Select(evaluation => new EvaluationResponse()
+                    {
+                        id = evaluation.id,
+                        name = evaluation.name,
+                        EvaluationTemplateName = evaluation.EvaluationTemplateName,
+                        projectName = evaluation.Project.name,
+                        projectId = evaluation.Project.id,
+                        createdDate = evaluation.createdDate,
+                        updatedDate = evaluation.updatedDate,
+                        evaluator = evaluation.Evaluator.firstname + " " + evaluation.Evaluator.lastname,
+                        score = evaluation.Topics.Select(topic => topic.Criteria.Select(criteria => (double?)criteria.score).ToList().Sum()).Sum(),
+                        points = evaluation.Topics.Select(topic => topic.Criteria.Select(criteria => (int?)criteria.points).ToList().Sum()).Sum(),
+
+                    }).ToList()
+                }).FirstOrDefaultAsync(temp => temp.id == userId);
+
+            if (users == null)
+            {
+                return NotFound();
+            }
 
             return Ok(users);
         }
@@ -208,7 +279,7 @@ namespace Qualitas_Backend.Controllers
                     lastname = user.lastname,
                     role = user.RoleType,
                     username = user.username,
-                    clientProjectId = user.ClientProjectId
+                    projectsCount = user.Projects.Where(project => !project.isDeleted).Count()
                 };
                 return Ok(response);
             }
@@ -281,17 +352,6 @@ namespace Qualitas_Backend.Controllers
                 projects.Add(item);
             }
 
-            ProjectsListItem clientProject = null;
-
-            if(user.ClientProjectId != null)
-            {
-                clientProject = new ProjectsListItem()
-                {
-                    id = user.Project.id,
-                    name = user.Project.name
-                };
-            }
-
             var entry = new UserListResponse
             {
                 id = user.id,
@@ -303,7 +363,6 @@ namespace Qualitas_Backend.Controllers
                 role = user.RoleType,
                 teamId = user.TeamId,
                 projects = projects,
-                clientProject = clientProject
                 
             };
 
@@ -456,40 +515,6 @@ namespace Qualitas_Backend.Controllers
                 var temp = db.Projects.Find(value);
                 user.Projects.Remove(temp);
             }
-
-            await db.SaveChangesAsync();
-
-            return Ok();
-        }
-
-        [HttpPut]
-        [Route("api/Users/addClientProject/{id}")]
-        public async Task<IHttpActionResult> AddClientProject(int id, [FromBody]int add)
-        {
-            User user = await db.Users.FindAsync(id);
-            if (user == null)
-            {
-                return NotFound();
-            }
-
-            user.ClientProjectId = add;
-
-            await db.SaveChangesAsync();
-
-            return Ok();
-        }
-
-        [HttpPut]
-        [Route("api/Users/removeClientProject/{id}")]
-        public async Task<IHttpActionResult> RemoveClientProject(int id, [FromBody]int remove)
-        {
-            User user = await db.Users.FindAsync(id);
-            if (user == null)
-            {
-                return NotFound();
-            }
-
-            user.ClientProjectId = null;
 
             await db.SaveChangesAsync();
 

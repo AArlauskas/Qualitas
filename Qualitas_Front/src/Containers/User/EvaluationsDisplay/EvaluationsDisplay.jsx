@@ -11,13 +11,25 @@ class EvaluationsDisplay extends Component {
         maxDate: new Date(),
     }
     componentDidMount() {
-        let id = window.localStorage.getItem("id");
+        let id;
+        if (this.props.match !== undefined) {
+            id = this.props.match.params.id;
+        }
+        else {
+            id = window.localStorage.getItem("id");
+        }
         FetchUserToReview(id, this.state.minDate, this.state.maxDate).then(response => this.setState({ User: response }));
     }
 
     componentDidUpdate(prevProps, prevState) {
         if (prevState.minDate !== this.state.minDate || prevState.maxDate !== this.state.maxDate) {
-            let id = window.localStorage.getItem("id");
+            let id;
+            if (this.props.match !== undefined) {
+                id = this.props.match.params.id;
+            }
+            else {
+                id = window.localStorage.getItem("id");
+            }
             FetchUserToReview(id, this.state.minDate, this.state.maxDate).then(response => this.setState({ User: response }));
         }
     }

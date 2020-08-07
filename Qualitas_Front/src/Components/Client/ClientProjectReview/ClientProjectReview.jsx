@@ -18,17 +18,13 @@ import ViewColumn from '@material-ui/icons/ViewColumn';
 import { KeyboardDatePicker, MuiPickersUtilsProvider } from '@material-ui/pickers';
 import DateFnsUtils from '@date-io/date-fns';
 
-class ClientUsersList extends Component {
+class ClientProjectReview extends Component {
     state = {
         columns: [
             {
                 title: "Name", field: "name", render: rowData => rowData.firstname + " " + rowData.lastname,
                 customFilterAndSearch: (term, rowData) => rowData.firstname.toLowerCase().startsWith(term.toLowerCase()) ||
                     rowData.lastname.toLowerCase().startsWith(term.toLowerCase())
-            },
-            {
-                title: "Team", field: "team", render: rowData => rowData.teamId === null ? "" : <a href={"/teamDetails/" + rowData.teamId}>{rowData.teamName}</a>,
-                customFilterAndSearch: (term, rowData) => rowData.teamName === null ? false : rowData.teamName.toLowerCase().startsWith(term.toLowerCase())
             },
             {
                 title: "Score", field: "score", render: rowData => isNaN(Math.trunc((rowData.score / rowData.points) * 100)) ? "0%" : Math.trunc((rowData.score / rowData.points) * 100) + "%",
@@ -39,11 +35,13 @@ class ClientUsersList extends Component {
             }
         ]
     }
+
     componentDidUpdate(prevProps) {
         if (prevProps.minDate !== this.props.minDate || prevProps.maxDate !== this.props.maxDate) {
             this.forceUpdate();
         }
     }
+
     render() {
         const tableIcons = {
             Add: forwardRef((props, ref) => <AddBox {...props} ref={ref} />),
@@ -64,6 +62,8 @@ class ClientUsersList extends Component {
             ThirdStateCheck: forwardRef((props, ref) => <Remove {...props} ref={ref} />),
             ViewColumn: forwardRef((props, ref) => <ViewColumn {...props} ref={ref} />)
         };
+
+
         return (
             <div>
                 <div>
@@ -117,11 +117,11 @@ class ClientUsersList extends Component {
 
                             ),
                         }}
-                        onRowClick={(event, rowData, togglePanel) => window.location.href = "/userDetails/" + rowData.id} />
+                        onRowClick={(event, rowData, togglePanel) => window.location.href = "/userDetails/" + rowData.id + "/" + this.props.projectId} />
                 </div>
             </div>
         );
     }
 }
 
-export default ClientUsersList;
+export default ClientProjectReview;

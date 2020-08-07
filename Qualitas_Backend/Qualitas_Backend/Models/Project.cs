@@ -21,7 +21,6 @@ namespace Qualitas_Backend.Models
             this.Teams = new HashSet<Team>();
             this.Users = new HashSet<User>();
             this.EvaluationTemplates = new HashSet<EvaluationTemplate>();
-            this.Users1 = new HashSet<User>();
         }
     
         public int id { get; set; }
@@ -36,7 +35,5 @@ namespace Qualitas_Backend.Models
         public virtual ICollection<User> Users { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<EvaluationTemplate> EvaluationTemplates { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<User> Users1 { get; set; }
     }
 }

@@ -12,16 +12,9 @@ class UsersProjects extends Component {
                 title: project.name,
             });
         });
-        if (this.props.isClient) {
-            if (this.props.user.clientProject !== null) {
-                targetKeys.push(this.props.user.clientProject.id);
-            }
-        }
-        else {
-            this.props.user.projects.forEach(project => {
-                targetKeys.push(project.id);
-            });
-        }
+        this.props.user.projects.forEach(project => {
+            targetKeys.push(project.id);
+        });
         this.state = {
             dataSource: dataSource,
             selectedKeys: [],
@@ -36,25 +29,10 @@ class UsersProjects extends Component {
 
         const handleChange = (nextTargetKeys, _direction, _moveKeys) => {
             if (_direction === "right") {
-                if (this.props.isClient) {
-                    if (nextTargetKeys.length === 1) {
-                        this.props.addProjectToUser(this.props.user.id, _moveKeys[0], this.props.isClient)
-                    }
-                    else return;
-                }
-                else {
-                    this.props.addProjectToUser(this.props.user.id, _moveKeys, this.props.isClient);
-                }
-
+                this.props.addProjectToUser(this.props.user.id, _moveKeys, this.props.isClient);
             }
             else {
-                if (this.props.isClient) {
-                    this.props.removeProjectFromUser(this.props.user.id, _moveKeys[0], this.props.isClient);
-                }
-                else {
-                    this.props.removeProjectFromUser(this.props.user.id, _moveKeys, this.props.isClient);
-                }
-
+                this.props.removeProjectFromUser(this.props.user.id, _moveKeys, this.props.isClient);
             }
             this.setState({ targetKeys: nextTargetKeys });
         }

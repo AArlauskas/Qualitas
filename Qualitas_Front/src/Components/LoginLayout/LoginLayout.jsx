@@ -122,15 +122,10 @@ export default function SignIn() {
                                                 window.localStorage.setItem("name", response.firstname + " " + response.lastname);
                                                 window.localStorage.setItem("id", response.Id);
                                                 window.localStorage.setItem("role", response.role);
-                                                if (response.role === "client") {
-                                                    if (response.clientProjectId === null) {
-                                                        window.localStorage.clear();
-                                                        setLoading(false);
-                                                        setErrorIsShowing(true);
-                                                    }
-                                                    else {
-                                                        window.localStorage.setItem("projectId", response.clientProjectId);
-                                                    }
+                                                if (response.role === "client" && response.projectsCount === 0) {
+                                                    window.localStorage.clear();
+                                                    setLoading(false);
+                                                    setErrorIsShowing(true);
                                                 }
                                                 window.location.reload(false);
                                             }

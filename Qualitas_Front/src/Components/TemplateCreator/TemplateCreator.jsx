@@ -112,7 +112,7 @@ class TemplateCreator extends Component {
                         <div style={{ marginLeft: "25%", marginRight: "25%", marginTop: 15, marginBottom: 15 }}>
                             <TextField value={this.state.currentCategory} label="Add category" onChange={e => this.setState({ currentCategory: e.target.value })} />
                             <IconButton style={{ marginTop: 5 }} onClick={() => {
-                                if (this.state.currentCategory !== "") {
+                                if (this.state.currentCategory !== "" && !this.state.categories.includes(this.state.currentCategory)) {
                                     let tempCategories = [...this.state.categories];
                                     tempCategories.push(this.state.currentCategory);
                                     this.setState({

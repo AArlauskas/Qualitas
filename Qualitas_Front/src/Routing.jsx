@@ -28,8 +28,12 @@ import NavigationBreadcrumbsUser from './Components/User/NavigationBreadcrumbsUs
 import CaseViewDisplay from './Containers/User/CaseViewDisplay/CaseViewDisplay';
 import UserProjectsListDisplay from './Containers/User/UserProjectsListDisplay/UserProjectsListDisplay';
 import NavigationBreadcrumbsClient from './Components/Client/NavigationBreadcrumbsClient';
-import ClientUsersDisplay from './Containers/Client/ClientUsersDisplay/ClientUsersDisplay';
-import ClientUsersDetailsDisplay from './Containers/Client/ClientUsersDetailsDisplay/ClientUsersDetailsDisplay';
+import ClientProjectsDisplay from './Containers/Client/ClientProjectsDisplay/ClientProjectsDisplay';
+import ClientProjectReviewDisplay from './Containers/Client/ClientProjectReviewDisplay/ClientProjectReviewDisplay';
+import ClientUserReviewDisplay from './Containers/Client/ClientUserReviewDisplay/ClientUserReviewDisplay';
+import ClientTemplatesDisplay from './Containers/Client/ClientTemplatesDisplay/ClientTemplatesDisplay';
+import TemplateViewerDisplay from './Containers/Client/TemplateViewerDisplay/TemplateViewerDisplay';
+import ClientReportsDisplay from './Containers/Client/ClientReportsDisplay/ClientReportsDisplay';
 
 class Routing extends Component {
     state = {}
@@ -86,6 +90,11 @@ class Routing extends Component {
                             <Route path="/archives">
                                 <ArchiveDisplay />
                             </Route>
+                            <Route path="/ArchivedUser/:id" component={EvaluationsDisplay}>
+                            </Route>
+                            <Route exact path="/viewCase/:id">
+                                <CaseViewDisplay />
+                            </Route>
                             <Route path="/users">
                                 <UserListDisplay />
                             </Route>
@@ -138,11 +147,26 @@ class Routing extends Component {
                 <div>
                     <NavigationBreadcrumbsClient />
                     <Switch>
-                        <Route path="/Users">
-                            <ClientUsersDisplay />
+                        <Route path="/projects">
+                            <ClientProjectsDisplay />
                         </Route>
-                        <Route exact path="/UserDetails/:id">
-                            <ClientUsersDetailsDisplay />
+                        <Route exact path="/projectReview/:id" component={ClientProjectReviewDisplay}>
+                        </Route>
+                        <Route exact path="/userDetails/:userId/:projectId" component={ClientUserReviewDisplay}>
+                        </Route>
+                        <Route exact path="/viewCase/:id">
+                            <CaseViewDisplay />
+                        </Route>
+                        <Route path="/templates">
+                            <ClientTemplatesDisplay />
+                        </Route>
+                        <Route path="/viewTemplate/:id" component={TemplateViewerDisplay}>
+                        </Route>
+                        <Route path="/reports">
+                            <ClientReportsDisplay />
+                        </Route>
+                        <Route>
+                            <Redirect to="/projects" />
                         </Route>
                     </Switch>
                 </div>

@@ -11,8 +11,7 @@ namespace Qualitas_Backend.Responses
         public string firstname { get; set; }
         public string lastname { get; set; }
         public string role { get; set; }
-
-        public int? clientProjectId { get; set; }
         public string username { get; set; }
+        public int projectsCount { get; set; }
     }
 }

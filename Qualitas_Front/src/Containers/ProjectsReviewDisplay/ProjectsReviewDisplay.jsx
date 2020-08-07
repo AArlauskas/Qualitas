@@ -40,7 +40,6 @@ class ProjectsReviewDisplay extends Component {
     render() {
         return (
             <div>
-                {console.log(this.state)}
                 {this.state.Project.length === 0 ? <LoadingScreen /> : <div>
                     <div style={{ textAlign: "center" }}>
                         <h2>Project's name: {this.state.Project.name}</h2>

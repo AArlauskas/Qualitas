@@ -141,27 +141,6 @@ export const RemoveFromProjectUser = async (id, data) => {
         });
 }
 
-export const AddToProjectClient = async (id, data) => {
-    console.log(data);
-    return await Api.put("/Users/addClientProject/" + id, data)
-        .then((response) => {
-            return response.data;
-        })
-        .catch((error) => {
-            throw Error("An error has occurred calling the api: " + error);
-        });
-}
-
-export const RemoveFromProjectClient = async (id, data) => {
-    return await Api.put("/Users/removeClientProject/" + id, data)
-        .then((response) => {
-            return response.data;
-        })
-        .catch((error) => {
-            throw Error("An error has occurred calling the api: " + error);
-        });
-}
-
 export const AddToProjectTeam = async (id, data) => {
     return await Api.put("/Projects/addTeam/" + id, data)
         .then((response) => {
@@ -297,20 +276,6 @@ export const FetchTeamsList = async (start, end) => {
         });
 };
 
-export const FetchClientTeamsList = async (id, start, end) => {
-    return await Api.get("/Teams/Client/list/" + id, {
-        params: {
-            start: start,
-            end: end
-        }
-    })
-        .then((response) => {
-            return response.data;
-        })
-        .catch((error) => {
-            throw Error("An error has occurred calling the api: " + error);
-        });
-};
 
 export const FetchTeamsSimple = async () => {
     return await Api.get("/Teams/simple")
@@ -458,6 +423,16 @@ export const FetchTemplatesList = async () => {
         });
 };
 
+export const FetchClientTemplatesList = async (id) => {
+    return await Api.get("/EvaluationTemplates/Client/list/" + id)
+        .then((response) => {
+            return response.data;
+        })
+        .catch((error) => {
+            throw Error("An error has occurred calling the api: " + error);
+        });
+};
+
 export const FetchTemplateProjects = async (id) => {
     return await Api.get("/EvaluationTemplates/projects/" + id)
         .then((response) => {
@@ -541,6 +516,38 @@ export const FetchProjectsList = async (start, end) => {
         params: {
             start: start,
             end: end
+        }
+    })
+        .then((response) => {
+            return response.data;
+        })
+        .catch((error) => {
+            throw Error("An error has occurred calling the api: " + error);
+        });
+};
+
+export const FetchClientProjectsList = async (id, start, end) => {
+    return await Api.get("/Users/Client/Projects/list/" + id, {
+        params: {
+            start: start,
+            end: end
+        }
+    })
+        .then((response) => {
+            return response.data;
+        })
+        .catch((error) => {
+            throw Error("An error has occurred calling the api: " + error);
+        });
+};
+
+export const FetchProjectUserToReview = async (userId, projectId, start, end) => {
+    return await Api.get("/Users/Project/review/", {
+        params: {
+            start: start,
+            end: end,
+            userId: userId,
+            projectId: projectId
         }
     })
         .then((response) => {

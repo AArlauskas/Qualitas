@@ -91,7 +91,7 @@ class CaseEditor extends Component {
                         {this.state.CategoryName === "" ? null : <h3>Category: {this.state.CategoryName}</h3>}
                         <div>
                             <h3>Points: {TotalScore(this.state.topics)} / {TotalPoints(this.state.topics)}</h3>
-                            <h3>Percent: {Math.trunc(TotalScore(this.state.topics) / TotalPoints(this.state.topics) * 100)}%</h3>
+                            <h3>Percent: {isNaN(Math.trunc(TotalScore(this.state.topics) / TotalPoints(this.state.topics) * 100)) ? 0 : Math.trunc(TotalScore(this.state.topics) / TotalPoints(this.state.topics) * 100)}%</h3>
                         </div>
                         <div>
                             <div>
@@ -161,7 +161,7 @@ class CaseEditor extends Component {
                                                 <ListItemSecondaryAction>
                                                     <div style={{ overflow: "hidden" }}>
                                                         <p style={{ float: "left" }}>{TopicScore(topic)} / {TopicPoints(topic)}</p>
-                                                        <p style={{ float: "right", paddingLeft: 10 }}>{Math.trunc(TopicScore(topic) / TopicPoints(topic) * 100)}%</p>
+                                                        <p style={{ float: "right", paddingLeft: 10 }}>{isNaN(Math.trunc(TotalScore(this.state.topics) / TotalPoints(this.state.topics) * 100)) ? 0 : Math.trunc(TotalScore(this.state.topics) / TotalPoints(this.state.topics) * 100)}%</p>
                                                     </div>
                                                 </ListItemSecondaryAction>
                                             </ListItem>

@@ -31,7 +31,6 @@ namespace Qualitas_Backend.Models
         public bool IsArchived { get; set; }
         public bool IsDeleted { get; set; }
         public Nullable<int> TeamId { get; set; }
-        public Nullable<int> ClientProjectId { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Evaluation> Evaluations { get; set; }
@@ -40,6 +39,5 @@ namespace Qualitas_Backend.Models
         public virtual ICollection<Project> Projects { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Evaluation> Evaluated { get; set; }
-        public virtual Project Project { get; set; }
     }
 }

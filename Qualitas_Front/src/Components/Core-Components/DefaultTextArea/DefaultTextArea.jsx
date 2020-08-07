@@ -13,6 +13,7 @@ class DefaultTextArea extends Component {
     return (
       <div>
         <TextField
+          disabled={this.props.disabled === undefined ? false : this.props.disabled}
           defaultValue={this.props.defaultValue}
           error={isRequiredErrorShown()}
           helperText={isRequiredErrorShown() ? "Required!" : null}

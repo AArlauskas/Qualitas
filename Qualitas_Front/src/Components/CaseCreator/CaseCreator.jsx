@@ -261,7 +261,7 @@ class CaseCreator extends Component {
                                 name: this.state.caseName,
                                 comment: this.state.overallComment,
                                 CategoryName: this.state.CategoryName,
-                                EvaluationTemplateName: this.state.templateName,
+                                EvaluationTemplateName: this.props.template.name,
                                 UserId: this.props.userId,
                                 ProjectId: this.props.projectId,
                                 EvaluatorId: window.localStorage.getItem("id"),

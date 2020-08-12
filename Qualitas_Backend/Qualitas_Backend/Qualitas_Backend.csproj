@@ -215,6 +215,13 @@
     <Compile Include="Responses\ProjectAverageResult.cs" />
     <Compile Include="Responses\ProjectScoreResponse.cs" />
     <Compile Include="Responses\ProjectsListItem.cs" />
+    <Compile Include="Responses\Reports\CriteriaReport.cs" />
+    <Compile Include="Responses\Reports\CriticalCategory.cs" />
+    <Compile Include="Responses\Reports\CrititalReport.cs" />
+    <Compile Include="Responses\Reports\ProjectReport.cs" />
+    <Compile Include="Responses\Reports\TemplateReport.cs" />
+    <Compile Include="Responses\Reports\TopicReport.cs" />
+    <Compile Include="Responses\Reports\UserReportListItem.cs" />
     <Compile Include="Responses\TeamListResponse.cs" />
     <Compile Include="Responses\TemplateListResponse.cs" />
     <Compile Include="Responses\TemplateProjectsResponse.cs" />

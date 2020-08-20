@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
-import { Backdrop, CircularProgress } from '@material-ui/core';
-
+import { Backdrop } from '@material-ui/core';
+import RingLoader from "react-spinners/RingLoader";
 class LoadingScreen extends Component {
     state = {}
     render() {
         return (
             <div style={{ textAlign: "center" }}>
                 <Backdrop open={true}>
-                    <CircularProgress style={{ width: 150, height: 150 }} />
+                    <RingLoader size={150} color={"#ce2b27"} />
                 </Backdrop>
             </div>
         );

@@ -215,9 +215,11 @@ export const reducer = (state = initialState, action) => {
 
         case ActionType.DELETE_EVALUATION: {
             let id = action.payload;
+            let tempEvaluations = state.Evaluations;
+            tempEvaluations.Evaluations = tempEvaluations.Evaluations.filter(temp => temp.id !== id);
             return {
                 ...state,
-                Teams: state.Evaluations.filter(temp => temp.id !== id)
+                Evaluations: tempEvaluations
             }
         }
 

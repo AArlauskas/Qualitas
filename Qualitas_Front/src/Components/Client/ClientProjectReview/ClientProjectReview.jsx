@@ -65,60 +65,58 @@ class ClientProjectReview extends Component {
 
 
         return (
-            <div>
-                <div>
-                    <MaterialTable
-                        title="Project's users"
-                        columns={this.state.columns}
-                        icons={tableIcons}
-                        data={this.props.users}
-                        options={{
-                            filtering: true,
-                            actionsColumnIndex: -1,
-                            pageSize: 10
-                        }}
-                        components={{
-                            Toolbar: props => (
-                                <div>
-                                    <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                                        <MTableToolbar {...props} />
-                                        <div style={{ marginLeft: 10 }}>
-                                            <KeyboardDatePicker
-                                                disableToolbar
-                                                variant="inline"
-                                                format="yyyy-MM-dd"
-                                                margin="normal"
-                                                label="Start date"
-                                                value={this.props.minDate}
-                                                maxDate={this.state.maxDate}
-                                                onChange={e => this.props.setMinDate(e)}
-                                                KeyboardButtonProps={{
-                                                    'aria-label': 'change date',
-                                                }}
-                                            />
-                                            <KeyboardDatePicker
-                                                style={{ marginLeft: 10 }}
-                                                disableToolbar
-                                                variant="inline"
-                                                format="yyyy-MM-dd"
-                                                margin="normal"
-                                                label="End date"
-                                                value={this.props.maxDate}
-                                                minDate={this.props.minDate}
-                                                maxDate={new Date()}
-                                                onChange={e => this.props.setMaxDate(e)}
-                                                KeyboardButtonProps={{
-                                                    'aria-label': 'change date',
-                                                }}
-                                            />
-                                        </div>
-                                    </MuiPickersUtilsProvider>
-                                </div>
+            <div style={{ padding: 10 }}>
+                <MaterialTable
+                    title="Project's users"
+                    columns={this.state.columns}
+                    icons={tableIcons}
+                    data={this.props.users}
+                    options={{
+                        filtering: true,
+                        actionsColumnIndex: -1,
+                        pageSize: 10
+                    }}
+                    components={{
+                        Toolbar: props => (
+                            <div>
+                                <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                                    <MTableToolbar {...props} />
+                                    <div style={{ marginLeft: 10 }}>
+                                        <KeyboardDatePicker
+                                            disableToolbar
+                                            variant="inline"
+                                            format="yyyy-MM-dd"
+                                            margin="normal"
+                                            label="Start date"
+                                            value={this.props.minDate}
+                                            maxDate={this.state.maxDate}
+                                            onChange={e => this.props.setMinDate(e)}
+                                            KeyboardButtonProps={{
+                                                'aria-label': 'change date',
+                                            }}
+                                        />
+                                        <KeyboardDatePicker
+                                            style={{ marginLeft: 10 }}
+                                            disableToolbar
+                                            variant="inline"
+                                            format="yyyy-MM-dd"
+                                            margin="normal"
+                                            label="End date"
+                                            value={this.props.maxDate}
+                                            minDate={this.props.minDate}
+                                            maxDate={new Date()}
+                                            onChange={e => this.props.setMaxDate(e)}
+                                            KeyboardButtonProps={{
+                                                'aria-label': 'change date',
+                                            }}
+                                        />
+                                    </div>
+                                </MuiPickersUtilsProvider>
+                            </div>
 
-                            ),
-                        }}
-                        onRowClick={(event, rowData, togglePanel) => window.location.href = "/userDetails/" + rowData.id + "/" + this.props.projectId} />
-                </div>
+                        ),
+                    }}
+                    onRowClick={(event, rowData, togglePanel) => window.location.href = "/userDetails/" + rowData.id + "/" + this.props.projectId} />
             </div>
         );
     }

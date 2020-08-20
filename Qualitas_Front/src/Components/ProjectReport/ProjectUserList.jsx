@@ -1,3 +1,5 @@
+import { IconButton, Collapse } from '@material-ui/core';
+import { KeyboardArrowDown, KeyboardArrowUp } from '@material-ui/icons';
 import React, { Component, forwardRef } from 'react';
 import MaterialTable from 'material-table';
 import AddBox from '@material-ui/icons/AddBox';
@@ -16,11 +18,20 @@ import SaveAlt from '@material-ui/icons/SaveAlt';
 import Search from '@material-ui/icons/Search';
 import ViewColumn from '@material-ui/icons/ViewColumn';
 
-
-class ClientTemplatesList extends Component {
+class ProjectUserList extends Component {
     state = {
+        open: false,
         columns: [
-            { title: 'Template name', field: 'name', customFilterAndSearch: (term, rowData) => rowData.name.toLowerCase().startsWith(term.toLowerCase()) },
+            {
+                title: "Name", field: "name",
+            },
+            {
+                title: "Score", field: "score", render: rowData => isNaN(Math.trunc((rowData.score / rowData.points) * 100)) ? "0%" : Math.trunc((rowData.score / rowData.points) * 100) + "%",
+                customFilterAndSearch: (term, rowData) => Math.trunc((rowData.score / rowData.points) * 100) === parseInt(term)
+            },
+            {
+                title: "Evaluated cases", field: "caseCount", customFilterAndSearch: (term, rowData) => rowData.caseCount === parseInt(term)
+            }
         ]
     }
     render() {
@@ -44,23 +55,27 @@ class ClientTemplatesList extends Component {
             ViewColumn: forwardRef((props, ref) => <ViewColumn {...props} ref={ref} />)
         };
         return (
-            <div style={{ padding: 10 }}>
-                {console.log(this.props.templates)}
-                <MaterialTable
-                    title="Templates"
-                    icons={tableIcons}
-                    data={this.props.templates}
-                    columns={this.state.columns}
-                    options={{
-                        actionsColumnIndex: -1,
-                        pageSize: 10,
-                        filtering: true
-                    }}
-                    onRowClick={(event, rowData, togglePanel) => window.location.href = "/viewTemplate/" + rowData.id}
-                />
+            <div>
+                {console.log(this.props.users)}
+                <div style={{ display: "flex", justifyContent: "center" }}>
+                    <IconButton style={{ float: "left" }} onClick={() => this.setState({ open: !this.state.open })}>
+                        {this.state.open ? <KeyboardArrowDown /> : <KeyboardArrowUp />}
+                    </IconButton>
+                    <h1 style={{ float: "left" }}>Users</h1>
+                </div>
+                <Collapse in={this.state.open}>
+                    <div style={{ paddingTop: 20, paddingBottom: 30, marginLeft: "15%", marginRight: "15%" }}>
+                        <MaterialTable
+                            title=""
+                            columns={this.state.columns}
+                            icons={tableIcons}
+                            data={this.props.users}
+                            onRowClick={(event, rowData, togglePanel) => this.props.changeToUserReport(rowData.id)} />
+                    </div>
+                </Collapse>
             </div>
         );
     }
 }
 
-export default ClientTemplatesList;
+export default ProjectUserList;

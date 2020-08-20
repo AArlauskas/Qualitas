@@ -6,6 +6,9 @@ import store from "./Store/store";
 
 class App extends Component {
   state = {}
+  componentDidMount() {
+    document.title = "Rate The Comrade"
+  }
   render() {
     return (
       <Provider store={store}>

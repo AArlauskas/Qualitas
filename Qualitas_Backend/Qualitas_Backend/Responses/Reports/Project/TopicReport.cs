@@ -5,11 +5,12 @@ using System.Web;
 
 namespace Qualitas_Backend.Responses.Reports
 {
-    public class CrititalReport
+    public class TopicReport
     {
         public int id { get; set; }
         public string name { get; set; }
-        public int breachedCount { get; set; }
-        public List<CriticalCategory> criticalCategories { get; set; }
+        public double? score { get; set; }
+        public int? points { get; set; }
+        public List<CriteriaReport> criterias { get; set; }
     }
 }

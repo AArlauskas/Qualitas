@@ -69,7 +69,7 @@ class UserEvaluationsList extends Component {
         };
 
         return (
-            <div>
+            <div style={{ padding: 10 }}>
                 <MaterialTable
                     data={this.props.evaluations}
                     columns={this.state.columns}

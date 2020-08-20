@@ -5,16 +5,16 @@ using System.Web;
 
 namespace Qualitas_Backend.Responses.Reports
 {
-    public class TemplateReport
+    public class ProjectReport
     {
         public int id { get; set; }
         public string name { get; set; }
         public int caseCount { get; set; }
         public double? score { get; set; }
         public int? points { get; set; }
-        public List<string> categories { get; set; }
-        public List<CrititalReport> criticals { get; set; }
-        public List<TopicReport> topics { get; set; }
-        public List<UserReportListItem> users { get; set; }
+
+        public double? overallScore { get; set; }
+        public int? overallPoints { get; set; }
+        public List<TemplateReport> templates { get; set; }
     }
 }

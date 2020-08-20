@@ -42,7 +42,7 @@ class ProjectsTemplates extends Component {
         }
         return (
             <div>
-                {console.log(this.props)}
+                {console.log(this.props.project)}
                 <div style={{ textAlign: "center" }}>
                     <h2>Project's name: {this.props.project.name}</h2>
                 </div>

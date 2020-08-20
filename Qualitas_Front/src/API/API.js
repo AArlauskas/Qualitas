@@ -721,3 +721,69 @@ export const FetchProjectReport = async (id, min, max) => {
             throw Error("An error has occurred calling the api: " + error);
         });
 };
+
+export const FetchUserReport = async (id, min, max) => {
+    return await Api.get("/Users/report/" + id, {
+        params: {
+            start: min,
+            end: max
+        }
+    })
+        .then((response) => {
+            return response.data;
+        })
+        .catch((error) => {
+            throw Error("An error has occurred calling the api: " + error);
+        });
+};
+
+export const FetchTeamReport = async (id, min, max) => {
+    return await Api.get("/Teams/report/" + id, {
+        params: {
+            start: min,
+            end: max
+        }
+    })
+        .then((response) => {
+            return response.data;
+        })
+        .catch((error) => {
+            throw Error("An error has occurred calling the api: " + error);
+        });
+};
+
+export const FetchClientUserReport = async (id, clientId, min, max) => {
+    return await Api.get("/Users/Client/report/" + id, {
+        params: {
+            clientId: clientId,
+            start: min,
+            end: max
+        }
+    })
+        .then((response) => {
+            return response.data;
+        })
+        .catch((error) => {
+            throw Error("An error has occurred calling the api: " + error);
+        });
+};
+
+export const FetchClientProjectsSimple = async (id) => {
+    return await Api.get("/Users/Client/Projects/simple/" + id)
+        .then((response) => {
+            return response.data;
+        })
+        .catch((error) => {
+            throw Error("An error has occurred calling the api: " + error);
+        });
+};
+
+export const FetchClientProjectsUsersSimple = async (id) => {
+    return await Api.get("/Users/Client/Users/simple/" + id)
+        .then((response) => {
+            return response.data;
+        })
+        .catch((error) => {
+            throw Error("An error has occurred calling the api: " + error);
+        });
+};

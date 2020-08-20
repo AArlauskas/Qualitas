@@ -48,11 +48,11 @@ namespace Qualitas_Backend.Controllers
                     team.id,
                     team.name
                 }),
-                caseCount = project.Evaluations.Where(evaluation => evaluation.createdDate >= start && evaluation.createdDate <= end).Count(),
-                score = project.Evaluations.Where(evaluation => !evaluation.isDeleted).Where(evaluation => evaluation.createdDate >= start && evaluation.createdDate <= end).Select(evaluation => evaluation.Topics.
+                caseCount = project.Evaluations.Where(evaluation => !evaluation.isDeleted && evaluation.EvaluationTemplateName != null).Where(evaluation => evaluation.createdDate >= start && evaluation.createdDate <= end).Count(),
+                score = project.Evaluations.Where(evaluation => !evaluation.isDeleted && evaluation.EvaluationTemplateName != null).Where(evaluation => evaluation.createdDate >= start && evaluation.createdDate <= end).Select(evaluation => evaluation.Topics.
                 Select(topic => topic.Criteria.Select(criteria => (double?)criteria.score).ToList().Sum()).Sum()).Sum(),
 
-                points = project.Evaluations.Where(evaluation => !evaluation.isDeleted).Where(evaluation => evaluation.createdDate >= start && evaluation.createdDate <= end).Select(evaluation => evaluation.Topics.
+                points = project.Evaluations.Where(evaluation => !evaluation.isDeleted && evaluation.EvaluationTemplateName != null).Where(evaluation => evaluation.createdDate >= start && evaluation.createdDate <= end).Select(evaluation => evaluation.Topics.
                 Select(topic => topic.Criteria.Select(criteria => (int?)criteria.points).ToList().Sum()).Sum()).Sum(),
             });
 
@@ -64,7 +64,7 @@ namespace Qualitas_Backend.Controllers
         [Route("api/Projects/report/{id}")]
         public async Task<IHttpActionResult> GetProjectReport(int id, DateTime start, DateTime end)
         {
-            var evaluations = db.Evaluations.Where(evaluation => !evaluation.isDeleted && evaluation.ProjectId == id && evaluation.EvaluationTemplateName != null)
+            var evaluations = db.Evaluations.Where(evaluation => !evaluation.isDeleted).Where(evaluation => evaluation.ProjectId == id && evaluation.EvaluationTemplateName != null)
                 .Where(evaluation => evaluation.createdDate >= start && evaluation.createdDate <= end).Select(evaluation => new
             {
                 evaluation.id,
@@ -78,13 +78,11 @@ namespace Qualitas_Backend.Controllers
                 },
                 Criticals = evaluation.Topics.Where(critical => critical.isCritical).Select(critical => new
                 {
-                    evaluation.CategoryName,
                     critical.name,
                     critical.failed
                 }).ToList(),
                 Topics = evaluation.Topics.Where(topic => !topic.isCritical).Select(topic => new
                 {
-                    evaluation.CategoryName,
                     topic.id,
                     topic.name,
                     crierias = topic.Criteria.Select(criteria => new
@@ -104,42 +102,60 @@ namespace Qualitas_Backend.Controllers
                 var evaluationTemplate = db.EvaluationTemplates.Where(temp => !temp.isDeleted).FirstOrDefault(temp => temp.name == evaluationGroup.Key);
                 template.id = evaluationTemplate.id;
                 template.name = evaluationTemplate.name;
+                template.caseCount = evaluationGroup.Count();
                 template.categories = evaluationTemplate.Categories.Select(category => category.name).ToList();
-                template.criticals = evaluationTemplate.TopicTemplates.Where(topic => topic.isCritical).Select(topic => new CrititalReport()
+                var categoryEvaluationGroup = evaluationGroup.GroupBy(temp => temp.CategoryName);
+
+                template.categoryReports = categoryEvaluationGroup.Select(category => new CategoryReport()
                 {
-                    name = topic.name,
-                    breachedCount = evaluationGroup.Select(group => group.Criticals.Where(critical => critical.name == topic.name).Where(critical => critical.failed).Count()).Sum(),
-                    criticalCategories = evaluationGroup.GroupBy(temp => temp.CategoryName).Select(category => new CriticalCategory()
+                    name = category.Key,
+                    caseCount = evaluationGroup.Where(group => group.CategoryName == category.Key).Count(),
+                    users = category.Select(temp => new UserReportListItem
                     {
-                        name = category.Key,
-                        breachedCount = category.Select(critical => critical.Criticals.Where(temp => temp.failed).Where(temp => temp.name == topic.name).Count()).Sum()
+                        id = temp.User.id,
+                        firstname = temp.User.firstname,
+                        lastname = temp.User.lastname,
+                        caseCount = category.Where(userGroup => userGroup.User.id == temp.User.id).Count(),
+                        score = category.Where(userGroup => userGroup.User.id == temp.User.id).Select(group => group.Topics.Select(topic => topic.crierias.Select(criteria => criteria.score).Sum()).Sum()).Sum(),
+                        points = category.Where(userGroup => userGroup.User.id == temp.User.id).Select(group => group.Topics.Select(topic => topic.crierias.Select(criteria => criteria.points).Sum()).Sum()).Sum()
+                    }).GroupBy(temp => temp.id).Select(temp => temp.First()).ToList(),
+                    criticals = evaluationTemplate.TopicTemplates.Where(topic => topic.isCritical).Select(topic => new CrititalReport() 
+                    {
+                        name = topic.name,
+                        breachedCount = category.Select(group => group.Criticals.Where(critical => critical.name == topic.name).Where(critical => critical.failed).Count()).Sum()
+                    }).ToList(),
+                    topics = evaluationTemplate.TopicTemplates.Where(topic => !topic.isCritical).Select(topic => new TopicReport()
+                    {
+                        name = topic.name,
+                        criterias = topic.CriteriaTemplates.Select(criteria => new CriteriaReport()
+                        {
+                            name = criteria.name,
+                            score = category.Select(group => group.Topics.Where(tempTopic => tempTopic.name == topic.name).Select(tempTopic => tempTopic.crierias.Where(tempCriteria => tempCriteria.name == criteria.name).Select(tempCriteria => tempCriteria.score).Sum()).Sum()).Sum(),
+                            points = category.Select(group => group.Topics.Where(tempTopic => tempTopic.name == topic.name).Select(tempTopic => tempTopic.crierias.Where(tempCriteria => tempCriteria.name == criteria.name).Select(tempCriteria => tempCriteria.points).Sum()).Sum()).Sum()
+                        }).ToList()
                     }).ToList()
                 }).ToList();
-                template.topics = evaluationTemplate.TopicTemplates.Where(topic => !topic.isCritical).Select(topic => new TopicReport()
-                {
-                    name = topic.name,
-                    criterias = topic.CriteriaTemplates.Select(criteria => new CriteriaReport()
-                    {
-                        name = criteria.name,
-                        score = evaluationGroup.Select(group => group.Topics.Where(Temptopic => Temptopic.name == topic.name).Select(TempTopic => TempTopic.crierias.Where(tempCriteria => criteria.name == tempCriteria.name).Select(tempCriteria => tempCriteria.score).Sum()).Sum()).Sum(),
-                        points = evaluationGroup.Select(group => group.Topics.Where(Temptopic => Temptopic.name == topic.name).Select(TempTopic => TempTopic.crierias.Where(tempCriteria => criteria.name == tempCriteria.name).Select(tempCriteria => tempCriteria.points).Sum()).Sum()).Sum()
-                    }).ToList(),
-                }).ToList();
-
-                template.caseCount = evaluationGroup.Count();
-                template.score = template.topics.Select(topic => topic.criterias.Select(criteria => criteria.score).Sum()).Sum();
-                template.points = template.topics.Select(topic => topic.criterias.Select(criteria => criteria.points).Sum()).Sum();
-
-                foreach(var topic in template.topics)
-                {
-                    topic.score = topic.criterias.Select(criteria => criteria.score).Sum();
-                    topic.points = topic.criterias.Select(criteria => criteria.points).Sum();
-                }
 
                 templates.Add(template);
             }
 
-            return Ok(evaluations);
+            foreach(var template in templates)
+            {
+                foreach(var category in template.categoryReports)
+                {
+                    foreach(var topic in category.topics)
+                    {
+                        topic.score = topic.criterias.Select(criteria => criteria.score).Sum();
+                        topic.points = topic.criterias.Select(criteria => criteria.points).Sum();
+                    }
+                    category.score = category.topics.Select(topic => topic.score).Sum();
+                    category.points = category.topics.Select(topic => topic.points).Sum();
+                }
+                template.score = template.categoryReports.Select(category => category.score).Sum();
+                template.points = template.categoryReports.Select(category => category.points).Sum();
+            }
+
+            return Ok(templates);
         }
 
         [HttpGet]
@@ -163,7 +179,7 @@ namespace Qualitas_Backend.Controllers
                 .Select(project => new {
                     id = project.id,
                     name = project.name,
-                    Users = project.Users.Where(user => !user.IsArchived || !user.IsDeleted).Where(user => user.RoleType == "user").Select(user => new
+                    Users = project.Users.Where(user => !user.IsArchived && !user.IsDeleted).Where(user => user.RoleType == "user").Select(user => new
                     {
                         user.id,
                         user.firstname,
@@ -208,7 +224,7 @@ namespace Qualitas_Backend.Controllers
             var project = await db.Projects
                 .Select(temp => new {
                     id = temp.id,
-                    nane = temp.name,
+                    name = temp.name,
                     Templates = temp.EvaluationTemplates.Where(template => !template.isDeleted).Select(template => new
                     {
                         id = template.id,
@@ -231,7 +247,7 @@ namespace Qualitas_Backend.Controllers
             var project = await db.Projects
                 .Select(temp => new { 
                     id =  temp.id,
-                    nane = temp.name,
+                    name = temp.name,
                     Users = temp.Users.Where(user => !user.IsDeleted && !user.IsArchived).Select(user => new
                     {
                         id = user.id,
@@ -254,7 +270,7 @@ namespace Qualitas_Backend.Controllers
             var project = await db.Projects
                 .Select(temp => new {
                     id = temp.id,
-                    nane = temp.name,
+                    name = temp.name,
                     Teams = temp.Teams.Select(team => new
                     {
                         id = team.id,

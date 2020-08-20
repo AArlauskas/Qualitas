@@ -21,7 +21,6 @@ class CaseCreatorDisplay extends Component {
     }
     componentDidUpdate() {
         if (this.state.templateId !== undefined) {
-            console.log("got here");
             FetchTemplateForCase(this.state.templateId).then(response => this.setState({ template: response }));
         }
     }

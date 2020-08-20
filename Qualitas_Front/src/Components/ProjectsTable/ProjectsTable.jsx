@@ -16,7 +16,6 @@ import SaveAlt from '@material-ui/icons/SaveAlt';
 import Search from '@material-ui/icons/Search';
 import ViewColumn from '@material-ui/icons/ViewColumn';
 import GroupAddIcon from '@material-ui/icons/GroupAdd';
-import GroupWorkIcon from '@material-ui/icons/GroupWork';
 import DashboardIcon from '@material-ui/icons/Dashboard';
 import { Chip } from '@material-ui/core';
 import { KeyboardDatePicker, MuiPickersUtilsProvider } from '@material-ui/pickers';
@@ -84,7 +83,8 @@ class ProjectsTable extends Component {
             ViewColumn: forwardRef((props, ref) => <ViewColumn {...props} ref={ref} />)
         };
         return (
-            <div style={{ marginTop: 10, paddingLeft: 10, paddingRight: 10 }}>
+            <div style={{ padding: 10 }}>
+                {console.log(this.props.projects)}
                 <MaterialTable
                     options={{
                         filtering: true,
@@ -108,18 +108,18 @@ class ProjectsTable extends Component {
                                 })
                             }
                         },
-                        {
-                            icon: () => <GroupWorkIcon />,
-                            tooltip: "Manage teams",
-                            onClick: (event, rowData) => {
-                                new Promise((resolve) => {
-                                    setTimeout(() => {
-                                        resolve();
-                                        window.location.href = "/ProjectTeams/" + rowData.id
-                                    }, 600);
-                                })
-                            }
-                        },
+                        // {
+                        //     icon: () => <GroupWorkIcon />,
+                        //     tooltip: "Manage teams",
+                        //     onClick: (event, rowData) => {
+                        //         new Promise((resolve) => {
+                        //             setTimeout(() => {
+                        //                 resolve();
+                        //                 window.location.href = "/ProjectTeams/" + rowData.id
+                        //             }, 600);
+                        //         })
+                        //     }
+                        // },
 
                         {
                             icon: () => <GroupAddIcon />,

@@ -67,8 +67,10 @@ class CaseCreator extends Component {
             tempTopic.criteria = criterias;
             topics.push(tempTopic);
         });
+        let categoryName = this.props.template.categories.length === 0 ? "" : this.props.template.categories[0];
         this.setState({
-            topics: topics
+            topics: topics,
+            CategoryName: categoryName
         });
     }
 
@@ -92,7 +94,7 @@ class CaseCreator extends Component {
                     <div style={{ textAlign: "center" }}>
                         <TextField style={{ marginLeft: 20, width: 400 }} label="Case name" onChange={e => this.setState({ caseName: e.target.value })} />
                         {this.props.template.categories.length === 0 ? null : <Select style={{ marginTop: 18, marginLeft: 15, width: 300 }} value={this.state.CategoryName} onChange={e => this.setState({ CategoryName: e.target.value })}>
-                            {this.props.template.categories.map(category => <MenuItem value={category}>{category}</MenuItem>)}
+                            {this.props.template.categories.map(category => <MenuItem key={category} value={category}>{category}</MenuItem>)}
                         </Select>}
                         <div>
                             <h3>Points: {TotalScore(this.state.topics)} / {TotalPoints(this.state.topics)}</h3>
@@ -176,8 +178,8 @@ class CaseCreator extends Component {
                                             <List style={{ color: "green" }}>
                                                 {topic.criteria.map(crit => {
                                                     return (
-                                                        <div>
-                                                            <ListItem button key={crit.id} style={{ paddingLeft: 40 }} >
+                                                        <div key={crit.id}>
+                                                            <ListItem button style={{ paddingLeft: 40 }} >
                                                                 <ListItemText onClick={() => {
                                                                     let tempTopics = [...this.state.topics];
                                                                     let score = tempTopics.find(tempTopic => tempTopic.id === topic.id).criteria.find(tempCriteria => tempCriteria.id === crit.id).score;

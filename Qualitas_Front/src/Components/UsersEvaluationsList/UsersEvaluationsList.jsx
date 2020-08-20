@@ -33,7 +33,7 @@ class UsersEvaluationsList extends Component {
             },
             {
                 title: "Project", field: "project", render: rowData => <Chip label={rowData.projectName} onClick={() => window.location.href = "/ProjectReview/" + rowData.projectId} />,
-                customFilterAndSearch: (term, rowData) => rowData.Projects.some(project => project.name.toLowerCase().startsWith(term.toLowerCase()))
+                customFilterAndSearch: (term, rowData) => rowData.projectName === undefined ? false : rowData.projectName.toLowerCase().startsWith(term.toLowerCase())
             },
             {
                 title: "Template", field: "EvaluationTemplateName"

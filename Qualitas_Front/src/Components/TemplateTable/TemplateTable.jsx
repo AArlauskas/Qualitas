@@ -54,7 +54,7 @@ class TemplateTable extends Component {
             ViewColumn: forwardRef((props, ref) => <ViewColumn {...props} ref={ref} />)
         };
         return (
-            <div>
+            <div style={{ padding: 10 }}>
                 {console.log(this.props.templates)}
                 <MaterialTable
                     title="Templates"

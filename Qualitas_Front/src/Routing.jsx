@@ -33,7 +33,7 @@ import ClientProjectReviewDisplay from './Containers/Client/ClientProjectReviewD
 import ClientUserReviewDisplay from './Containers/Client/ClientUserReviewDisplay/ClientUserReviewDisplay';
 import ClientTemplatesDisplay from './Containers/Client/ClientTemplatesDisplay/ClientTemplatesDisplay';
 import TemplateViewerDisplay from './Containers/Client/TemplateViewerDisplay/TemplateViewerDisplay';
-import ClientReportsDisplay from './Containers/Client/ClientReportsDisplay/ClientReportsDisplay';
+import UserReportsDisplay from './Containers/User/UserReportsDisplay/ClientReportsDisplay';
 
 class Routing extends Component {
     state = {}
@@ -135,6 +135,9 @@ class Routing extends Component {
                         <Route path="/projects">
                             <UserProjectsListDisplay />
                         </Route>
+                        <Route path="/reports">
+                            <UserReportsDisplay />
+                        </Route>
                         <Route>
                             <Redirect to="/evaluations" />
                         </Route>
@@ -163,7 +166,7 @@ class Routing extends Component {
                         <Route path="/viewTemplate/:id" component={TemplateViewerDisplay}>
                         </Route>
                         <Route path="/reports">
-                            <ClientReportsDisplay />
+                            <ReportsDisplay />
                         </Route>
                         <Route>
                             <Redirect to="/projects" />

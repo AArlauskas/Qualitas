@@ -12,6 +12,7 @@ using System.Web.Http.Cors;
 using System.Web.Http.Description;
 using Qualitas_Backend.Models;
 using Qualitas_Backend.Responses;
+using Qualitas_Backend.Responses.Reports;
 
 namespace Qualitas_Backend.Controllers
 {
@@ -98,6 +99,138 @@ namespace Qualitas_Backend.Controllers
             return Ok(teams);
         }
 
+        [HttpGet]
+        [Route("api/Teams/report/{id}")]
+        public async Task<IHttpActionResult> GetTeamReport(int id, DateTime start, DateTime end)
+        {
+            var evaluations = db.Evaluations.Where(evaluation => !evaluation.isDeleted && evaluation.User.TeamId == id && evaluation.EvaluationTemplateName != null)
+                .Where(evaluation => evaluation.createdDate >= start && evaluation.createdDate <= end).Select(evaluation => new
+                {
+                    evaluation.id,
+                    evaluation.EvaluationTemplateName,
+                    evaluation.CategoryName,
+                    User = new
+                    {
+                        evaluation.User.firstname,
+                        evaluation.User.lastname,
+                        evaluation.User.id
+                    },
+                    Project = new
+                    {
+                        evaluation.Project.id,
+                        evaluation.Project.name,
+                    },
+                    Criticals = evaluation.Topics.Where(critical => critical.isCritical).Select(critical => new
+                    {
+                        critical.name,
+                        critical.failed
+                    }).ToList(),
+                    Topics = evaluation.Topics.Where(topic => !topic.isCritical).Select(topic => new
+                    {
+                        topic.id,
+                        topic.name,
+                        crierias = topic.Criteria.Select(criteria => new
+                        {
+                            criteria.id,
+                            criteria.name,
+                            criteria.points,
+                            criteria.score
+                        })
+                    }).ToList(),
+                }).GroupBy(evaluation => evaluation.User.id).ToList();
+
+            var users = new List<UserReport>();
+
+            foreach(var userGroup in evaluations)
+            {
+                UserReport user = new UserReport()
+                {
+                    id = userGroup.Key,
+                    name = userGroup.FirstOrDefault(temp => temp.User.id == userGroup.Key).User.firstname + " " + userGroup.FirstOrDefault(temp => temp.User.id == userGroup.Key).User.lastname
+                };
+                var projectGroup = userGroup.GroupBy(temp => temp.Project.id).ToList();
+                var projects = new List<ProjectReport>();
+                foreach(var project in projectGroup)
+                {
+                    ProjectReport projectEntry = new ProjectReport()
+                    {
+                        id = project.Key,
+                        name = project.FirstOrDefault(temp => temp.Project.id == project.Key).Project.name
+                    };
+                    var ProjectTemplateGroup = project.GroupBy(group => group.EvaluationTemplateName).ToList();
+                    List<TemplateReport> templates = new List<TemplateReport>();
+                    foreach(var evaluationGroup in ProjectTemplateGroup)
+                    {
+                        var template = new TemplateReport();
+                        var evaluationTemplate = db.EvaluationTemplates.Where(temp => !temp.isDeleted).FirstOrDefault(temp => temp.name == evaluationGroup.Key);
+                        template.id = evaluationTemplate.id;
+                        template.name = evaluationTemplate.name;
+                        template.caseCount = evaluationGroup.Count();
+                        template.categories = evaluationTemplate.Categories.Select(category => category.name).ToList();
+
+                        var categoryEvaluationGroup = evaluationGroup.GroupBy(temp => temp.CategoryName);
+                        template.categoryReports = categoryEvaluationGroup.Select(category => new CategoryReport()
+                        {
+                            name = category.Key,
+                            caseCount = evaluationGroup.Where(group => group.CategoryName == category.Key).Count(),
+
+                            criticals = evaluationTemplate.TopicTemplates.Where(topic => topic.isCritical).Select(topic => new CrititalReport()
+                            {
+                                name = topic.name,
+                                breachedCount = category.Select(group => group.Criticals.Where(critical => critical.name == topic.name).Where(critical => critical.failed).Count()).Sum()
+                            }).ToList(),
+                            topics = evaluationTemplate.TopicTemplates.Where(topic => !topic.isCritical).Select(topic => new TopicReport()
+                            {
+                                name = topic.name,
+                                criterias = topic.CriteriaTemplates.Select(criteria => new CriteriaReport()
+                                {
+                                    name = criteria.name,
+                                    score = category.Select(group => group.Topics.Where(tempTopic => tempTopic.name == topic.name).Select(tempTopic => tempTopic.crierias.Where(tempCriteria => tempCriteria.name == criteria.name).Select(tempCriteria => tempCriteria.score).Sum()).Sum()).Sum(),
+                                    points = category.Select(group => group.Topics.Where(tempTopic => tempTopic.name == topic.name).Select(tempTopic => tempTopic.crierias.Where(tempCriteria => tempCriteria.name == criteria.name).Select(tempCriteria => tempCriteria.points).Sum()).Sum()).Sum()
+                                }).ToList()
+                            }).ToList()
+                        }).ToList();
+
+                        templates.Add(template);
+                    }
+                    projectEntry.templates = templates;
+                    projects.Add(projectEntry);
+                }
+                user.projects = projects;
+                users.Add(user);
+            }
+
+            foreach(var user in users)
+            {
+                foreach (var project in user.projects)
+                {
+                    foreach (var template in project.templates)
+                    {
+                        foreach (var category in template.categoryReports)
+                        {
+                            foreach (var topic in category.topics)
+                            {
+                                topic.score = topic.criterias.Select(criteria => criteria.score).Sum();
+                                topic.points = topic.criterias.Select(criteria => criteria.points).Sum();
+                            }
+                            category.score = category.topics.Select(topic => topic.score).Sum();
+                            category.points = category.topics.Select(topic => topic.points).Sum();
+                        }
+                        template.score = template.categoryReports.Select(category => category.score).Sum();
+                        template.points = template.categoryReports.Select(category => category.points).Sum();
+                    }
+                    project.score = project.templates.Select(temp => temp.score).Sum();
+                    project.points = project.templates.Select(temp => temp.points).Sum();
+                    project.caseCount = project.templates.Select(temp => temp.caseCount).Sum();
+                }
+                user.score = user.projects.Select(temp => temp.score).Sum();
+                user.points = user.projects.Select(temp => temp.points).Sum();
+                user.caseCount = user.projects.Select(temp => temp.caseCount).Sum();
+            }
+
+            return Ok(users);
+        }
+
         [ResponseType(typeof(Project))]
         [HttpGet]
         [Route("api/Teams/Projects/{id}")]
@@ -106,7 +239,7 @@ namespace Qualitas_Backend.Controllers
             var team = await db.Teams
                 .Select(temp => new {
                     id = temp.id,
-                    nane = temp.name,
+                    name = temp.name,
                     Projects = temp.Projects.Select(project => new
                     {
                         id = project.id,
@@ -129,7 +262,7 @@ namespace Qualitas_Backend.Controllers
             var team = await db.Teams
                 .Select(temp => new {
                     id = temp.id,
-                    nane = temp.name,
+                    name = temp.name,
                     Users = temp.Users.Where(user => !user.IsArchived && !user.IsDeleted).Select(user => new
                     {
                         id = user.id,

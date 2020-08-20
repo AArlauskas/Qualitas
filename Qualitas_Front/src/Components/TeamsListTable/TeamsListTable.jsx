@@ -16,7 +16,6 @@ import SaveAlt from '@material-ui/icons/SaveAlt';
 import Search from '@material-ui/icons/Search';
 import ViewColumn from '@material-ui/icons/ViewColumn';
 import GroupAddIcon from '@material-ui/icons/GroupAdd';
-import WorkIcon from '@material-ui/icons/Work';
 import { Chip } from '@material-ui/core';
 import { KeyboardDatePicker, MuiPickersUtilsProvider } from '@material-ui/pickers';
 import DateFnsUtils from '@date-io/date-fns';
@@ -71,7 +70,7 @@ class TeamsListTable extends Component {
             ViewColumn: forwardRef((props, ref) => <ViewColumn {...props} ref={ref} />)
         };
         return (
-            <div>
+            <div style={{ padding: 10 }}>
                 <MaterialTable
                     columns={this.state.columns}
                     data={this.props.teamsList}
@@ -83,18 +82,18 @@ class TeamsListTable extends Component {
                         pageSize: 10
                     }}
                     actions={[
-                        {
-                            icon: () => <WorkIcon />,
-                            tooltip: "Team projects",
-                            onClick: (event, rowData) => {
-                                new Promise((resolve) => {
-                                    setTimeout(() => {
-                                        resolve();
-                                        window.location.href = "/teamProjects/" + rowData.id
-                                    }, 600);
-                                })
-                            }
-                        },
+                        // {
+                        //     icon: () => <WorkIcon />,
+                        //     tooltip: "Team projects",
+                        //     onClick: (event, rowData) => {
+                        //         new Promise((resolve) => {
+                        //             setTimeout(() => {
+                        //                 resolve();
+                        //                 window.location.href = "/teamProjects/" + rowData.id
+                        //             }, 600);
+                        //         })
+                        //     }
+                        // },
                         {
                             icon: () => <GroupAddIcon />,
                             tooltip: "Team members",

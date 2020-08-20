@@ -1,11 +1,13 @@
 import React, { Component } from 'react';
 import { Select, MenuItem, Button } from '@material-ui/core';
-import { FetchProjectsSimple, FetchUserListSimple, FetchTeamsSimple } from '../../API/API';
+import { FetchProjectsSimple, FetchUserListSimple, FetchTeamsSimple, FetchClientProjectsSimple, FetchClientProjectsUsersSimple, FetchClientUserReport, FetchTeamReport } from '../../API/API';
 import { KeyboardDatePicker, MuiPickersUtilsProvider } from '@material-ui/pickers';
 import DateFnsUtils from '@date-io/date-fns';
-import { FetchProjectReport } from "../../API/API";
+import { FetchProjectReport, FetchUserReport } from "../../API/API";
 import LoadingScreen from '../../Components/LoadingScreen/LoadingScreen';
 import ProjectReport from '../../Components/ProjectReport/ProjectReport';
+import UserReport from '../../Components/UserReport/UserReport';
+import TeamReport from '../../Components/TeamReport/TeamReport';
 
 let date = new Date();
 class ReportsDisplay extends Component {
@@ -19,20 +21,51 @@ class ReportsDisplay extends Component {
         loading: false
     }
     componentDidMount() {
-        FetchProjectsSimple().then(response => this.setState({ reportObjects: response }));
+        if (window.localStorage.getItem("role") === "client") {
+            FetchClientProjectsSimple(window.localStorage.getItem("id")).then(response => this.setState({ reportObjects: response }));
+        }
+        else {
+            FetchProjectsSimple().then(response => this.setState({ reportObjects: response }));
+        }
+
     }
     reportByChanged(newType) {
         if (newType === "Project") {
-            FetchProjectsSimple().then(response => this.setState({ reportObjects: response }));
+            if (window.localStorage.getItem("role") === "client") {
+                FetchClientProjectsSimple(window.localStorage.getItem("id")).then(response => this.setState({ reportObjects: response }));
+            }
+            else {
+                FetchProjectsSimple().then(response => this.setState({ reportObjects: response }));
+            }
         }
         else if (newType === "User") {
-            FetchUserListSimple().then(response => this.setState({ reportObjects: response }));
+            if (window.localStorage.getItem("role") === "client") {
+                FetchClientProjectsUsersSimple(window.localStorage.getItem("id")).then(response => this.setState({ reportObjects: response }));
+            }
+            else {
+                FetchUserListSimple().then(response => this.setState({ reportObjects: response }));
+            }
+
         }
         else {
             FetchTeamsSimple().then(response => this.setState({ reportObjects: response }));
         }
     }
+
     render() {
+        const changeToUserReport = (id) => {
+            this.setState({ Report: [], loading: true });
+            this.setState({ reportBy: "User" });
+            this.reportByChanged("User");
+            this.setState({ reportItemId: id });
+            if (window.localStorage.getItem("role") === "client") {
+                FetchClientUserReport(this.state.reportItemId, window.localStorage.getItem("id"), this.state.minDate, this.state.maxDate).then(response => this.setState({ Report: response, loading: false }))
+            }
+            else {
+                FetchUserReport(id, this.state.minDate, this.state.maxDate).then(response => this.setState({ Report: response, loading: false }))
+            }
+
+        }
         return (
             <div>
                 <div style={{ marginLeft: 10, marginTop: 15, display: "block" }}>
@@ -47,7 +80,7 @@ class ReportsDisplay extends Component {
                             }}
                         >
                             <MenuItem value="Project">Project</MenuItem>
-                            <MenuItem value="Team">Team</MenuItem>
+                            {window.localStorage.getItem("role") === "client" ? null : <MenuItem value="Team">Team</MenuItem>}
                             <MenuItem value="User">User</MenuItem>
                         </Select>
 
@@ -94,9 +127,25 @@ class ReportsDisplay extends Component {
                             </MuiPickersUtilsProvider>
                             <Button style={{ marginTop: 30, marginLeft: 15 }} variant="outlined" color="secondary"
                                 onClick={() => {
+                                    if (this.state.Report.length !== 0) {
+                                        this.setState({ Report: [] });
+                                    }
                                     if (this.state.reportBy === "Project") {
-                                        this.setState({ loading: true })
-                                        FetchProjectReport(this.state.reportItemId, this.state.minDate, this.state.maxDate).then(response => this.setState({ Report: response, loading: false }))
+                                        this.setState({ loading: true });
+                                        FetchProjectReport(this.state.reportItemId, this.state.minDate, this.state.maxDate).then(response => this.setState({ Report: response, loading: false }));
+                                    }
+                                    else if (this.state.reportBy === "User") {
+                                        this.setState({ loading: true });
+                                        if (window.localStorage.getItem("role") === "client") {
+                                            FetchClientUserReport(this.state.reportItemId, window.localStorage.getItem("id"), this.state.minDate, this.state.maxDate).then(response => this.setState({ Report: response, loading: false }))
+                                        }
+                                        else {
+                                            FetchUserReport(this.state.reportItemId, this.state.minDate, this.state.maxDate).then(response => this.setState({ Report: response, loading: false }))
+                                        }
+                                    }
+                                    else if (this.state.reportBy === "Team") {
+                                        this.setState({ loading: true });
+                                        FetchTeamReport(this.state.reportItemId, this.state.minDate, this.state.maxDate).then(response => this.setState({ Report: response, loading: false }));
                                     }
                                 }}
                             >Generate report</Button>
@@ -104,7 +153,9 @@ class ReportsDisplay extends Component {
                 </div>
                 <div style={{ clear: "both" }}>
                     {this.state.Report.length === 0 ? this.state.loading ? <LoadingScreen /> : null :
-                        this.state.reportBy === "Project" ? <ProjectReport report={this.state.Report} /> : null}
+                        this.state.reportBy === "Project" ? <ProjectReport report={this.state.Report} changeToUserReport={changeToUserReport} /> :
+                            this.state.reportBy === "User" ? <UserReport report={this.state.Report} /> :
+                                this.state.reportBy === "Team" ? <TeamReport report={this.state.Report} /> : null}
                 </div>
             </div>
         );

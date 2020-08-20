@@ -126,7 +126,7 @@ class TemplateCreator extends Component {
                             <div>
                                 {this.state.categories.map(category => {
                                     return (
-                                        <Chip label={category} onDelete={() => {
+                                        <Chip style={{ margin: 2 }} key={category} label={category} onDelete={() => {
                                             let tempCategories = [...this.state.categories];
                                             this.setState({
                                                 categories: tempCategories.filter(temp => temp !== category)
@@ -165,12 +165,15 @@ class TemplateCreator extends Component {
                                             <ListItemSecondaryAction>
                                                 <IconButton edge="end" aria-label="Save" onClick={() => {
                                                     let id = entry.id;
-                                                    let tempTopics = [...this.state.topics];
-                                                    tempTopics.find(critical => critical.id === id).editing = false;
-                                                    this.setState({
-                                                        editing: false,
-                                                        topics: tempTopics
-                                                    })
+                                                    if (this.state.topics.filter(topic => topic.name === this.state.topics.find(critical => critical.id === id).name).length === 1) {
+
+                                                        let tempTopics = [...this.state.topics];
+                                                        tempTopics.find(critical => critical.id === id).editing = false;
+                                                        this.setState({
+                                                            editing: false,
+                                                            topics: tempTopics
+                                                        })
+                                                    }
                                                 }}>
                                                     <DoneIcon />
                                                 </IconButton>
@@ -266,12 +269,14 @@ class TemplateCreator extends Component {
                                             <ListItemSecondaryAction>
                                                 <IconButton edge="end" aria-label="Save" onClick={() => {
                                                     let id = entry.id;
-                                                    let tempTopics = [...this.state.topics];
-                                                    tempTopics.find(critical => critical.id === id).editing = false;
-                                                    this.setState({
-                                                        editing: false,
-                                                        topics: tempTopics
-                                                    })
+                                                    if (this.state.topics.filter(topic => topic.name === this.state.topics.find(critical => critical.id === id).name).length === 1) {
+                                                        let tempTopics = [...this.state.topics];
+                                                        tempTopics.find(critical => critical.id === id).editing = false;
+                                                        this.setState({
+                                                            editing: false,
+                                                            topics: tempTopics
+                                                        })
+                                                    }
                                                 }}>
                                                     <DoneIcon />
                                                 </IconButton>
@@ -399,12 +404,14 @@ class TemplateCreator extends Component {
                                                             <ListItemSecondaryAction>
                                                                 <IconButton edge="end" aria-label="Save" onClick={() => {
                                                                     let id = criteria.id;
-                                                                    let tempCriteria = [...this.state.criteria];
-                                                                    tempCriteria.find(critical => critical.id === id).editing = false;
-                                                                    this.setState({
-                                                                        editing: false,
-                                                                        criteria: tempCriteria
-                                                                    })
+                                                                    if (this.state.criteria.filter(temp => temp.name === this.state.criteria.find(critical => critical.id === id).name).length === 1) {
+                                                                        let tempCriteria = [...this.state.criteria];
+                                                                        tempCriteria.find(critical => critical.id === id).editing = false;
+                                                                        this.setState({
+                                                                            editing: false,
+                                                                            criteria: tempCriteria
+                                                                        })
+                                                                    }
                                                                 }}>
                                                                     <DoneIcon />
                                                                 </IconButton>

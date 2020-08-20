@@ -1,10 +1,9 @@
 import React, { Component } from 'react';
 import { ListSubheader, List, ListItemText, ListItem, ListItemSecondaryAction, ListItemIcon } from '@material-ui/core';
 import { KeyboardArrowDown, KeyboardArrowUp } from '@material-ui/icons';
-import CriticalListItem from './CriticalListItem';
-import TopicListItem from './TopicListItem';
+import CriticalListItem from '../ProjectReport/CriticalListItem';
+import TopicListItem from '../ProjectReport/TopicListItem';
 import DefaultMultiSelect from '../Core-Components/DefaultMultiSelect/DefaultMultiSelect';
-import ProjectUserList from './ProjectUserList';
 
 const calculateScore = (report, categories) => {
 
@@ -97,50 +96,6 @@ const getTopics = (report, categories) => {
     return result;
 }
 
-const getUsers = (report, categories) => {
-    let users = [];
-    let result = [];
-    if (categories.length === 0) {
-        report.categoryReports.forEach(category => category.users.forEach(user => users.push(user)));
-    }
-    else {
-        let filtered = report.categoryReports.filter(temp => categories.includes(temp.name));
-        filtered.forEach(category => category.users.forEach(user => users.push(user)));
-    }
-    let group = users.reduce((r, a) => {
-        r[a.id] = [...r[a.id] || [], a];
-        return r;
-    }, {});
-    Object.keys(group).forEach(key => {
-        let caseCount = 0;
-        let score = 0;
-        let points = 0;
-        group[key].forEach(member => {
-            caseCount += member.caseCount;
-            score += member.score;
-            points += member.points;
-        });
-        result.push({
-            id: key,
-            name: group[key][0].firstname + " " + group[key][0].lastname,
-            caseCount: caseCount,
-            score: score,
-            points: points
-        })
-    });
-    return result;
-}
-
-const OverallScore = (reports) => {
-    let score = 0;
-    let points = 0;
-    reports.forEach(report => {
-        score += report.score;
-        points += report.points;
-    });
-    return isNaN(Math.trunc(score / points * 100)) ? "0" : Math.trunc(score / points * 100)
-
-}
 
 class ProjectReport extends Component {
     state = {
@@ -150,10 +105,9 @@ class ProjectReport extends Component {
     render() {
         return (
             <div>
-                <h2 style={{ textAlign: "center", paddingTop: 10 }}>Project score: {OverallScore(this.props.report)}%</h2>
-                <div style={{ paddingTop: 50, paddingBottom: 50 }}>
+                <div>
                     {console.log(this.state.categories)}
-                    <div style={{ marginLeft: "15%", marginRight: "15%", background: "rgba(255, 204, 204, 0.2)" }}>
+                    <div style={{ paddingLeft: 50 }}>
                         {console.log(this.props.report)}
                         <List>
                             <ListSubheader disableSticky>Templates</ListSubheader>
@@ -172,7 +126,7 @@ class ProjectReport extends Component {
                                                 {this.state.openId === report.id ? <KeyboardArrowDown /> : <KeyboardArrowUp />}
                                             </ListItemIcon>
                                             <ListItemText>{report.name}</ListItemText>
-                                            {this.state.openId === report.id ? <ListItemText style={{ marginRight: 15 }}><DefaultMultiSelect options={report.categories}
+                                            {this.state.openId === report.id ? <ListItemText><DefaultMultiSelect options={report.categories}
                                                 onChange={(value, type) => {
                                                     if (type === "clear") {
                                                         this.setState({ categories: [] })
@@ -190,14 +144,14 @@ class ProjectReport extends Component {
                                         {
                                             this.state.openId === report.id ?
                                                 <React.Fragment>
-                                                    <List style={{ color: "red" }}>
-                                                        <ListSubheader disableSticky style={{ color: "red" }}>
+                                                    <List style={{ color: "red", paddingLeft: 50 }}>
+                                                        <ListSubheader style={{ color: "red" }}>
                                                             Criticals
                                     </ListSubheader>
                                                         {getCriticals(report, this.state.categories).map(critical => <CriticalListItem critical={critical} />)}
                                                     </List>
-                                                    <List style={{ color: "blue" }}>
-                                                        <ListSubheader disableSticky style={{ color: "blue" }}>
+                                                    <List style={{ color: "blue", paddingLeft: 30 }}>
+                                                        <ListSubheader style={{ color: "blue" }}>
                                                             Topics
                                     </ListSubheader>
                                                         {getTopics(report, this.state.categories).map(topic => <TopicListItem topic={topic} />)}
@@ -213,10 +167,6 @@ class ProjectReport extends Component {
                     <div>
                     </div>
                 </div>
-                {this.state.openId === null ? null :
-                    <div>
-                        <ProjectUserList changeToUserReport={this.props.changeToUserReport} users={getUsers(this.props.report.find(e => e.id === this.state.openId), this.state.categories)} />
-                    </div>}
             </div>
         );
     }

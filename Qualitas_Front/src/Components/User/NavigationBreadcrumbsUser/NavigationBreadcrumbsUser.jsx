@@ -1,6 +1,6 @@
 import React from "react";
 import { Breadcrumbs, Link } from "@material-ui/core";
-import { FilterFramesRounded, ContactsRounded, WorkRounded } from "@material-ui/icons";
+import { FilterFramesRounded, ContactsRounded, WorkRounded, AssignmentTurnedInOutlined } from "@material-ui/icons";
 import QLogo from "../../../Images/QLogo.png";
 import "./NavigationBreadcrumbs.scss";
 
@@ -26,6 +26,14 @@ const NavigationBreadcrumbsUser = () => {
                 >
                     <WorkRounded className="Icon" fontSize="small" />
                     Projects
+                </Link>
+
+                <Link
+                    href="/reports"
+                    className={currentPage === "/reports" ? "LinkBold" : "Link"}
+                >
+                    <AssignmentTurnedInOutlined className="Icon" fontSize="small" />
+                    Reports
                 </Link>
 
                 <Link

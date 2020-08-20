@@ -55,7 +55,7 @@ class ArchivedUserListTable extends Component {
         };
         return (
             <div>
-                <div style={{ marginTop: 10, paddingLeft: 10, paddingRight: 10 }}>
+                <div style={{ padding: 10 }}>
                     <MaterialTable
                         options={{
                             filtering: true,

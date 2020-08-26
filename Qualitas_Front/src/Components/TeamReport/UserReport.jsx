@@ -9,7 +9,7 @@ class UserReport extends Component {
         return (
             <div style={{ paddingLeft: 30 }}>
                 <List>
-                    <ListSubheader>Projects</ListSubheader>
+                    <ListSubheader disableSticky>Projects</ListSubheader>
                     {this.props.report.map(report => {
                         return (
                             <React.Fragment key={report.id}>

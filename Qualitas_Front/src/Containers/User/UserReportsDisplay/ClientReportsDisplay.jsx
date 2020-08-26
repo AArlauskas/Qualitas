@@ -5,6 +5,7 @@ import DateFnsUtils from '@date-io/date-fns';
 import { FetchUserReport } from "../../../API/API";
 import LoadingScreen from '../../../Components/LoadingScreen/LoadingScreen';
 import UserReport from '../../../Components/UserReport/UserReport';
+import { DownloadUserReport } from '../../../API/DownloadAPI';
 
 let date = new Date();
 class UserReportsDisplay extends Component {
@@ -64,7 +65,7 @@ class UserReportsDisplay extends Component {
                 </div>
                 <div style={{ clear: "both" }}>
                     {this.state.Report.length === 0 ? this.state.loading ? <LoadingScreen /> : null :
-                        <UserReport report={this.state.Report} />}
+                        <UserReport report={this.state.Report} download={() => DownloadUserReport(window.localStorage.getItem("id"), this.state.minDate, this.state.maxDate)} />}
                 </div>
             </div>
         );

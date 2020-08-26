@@ -8,6 +8,7 @@ import LoadingScreen from '../../Components/LoadingScreen/LoadingScreen';
 import ProjectReport from '../../Components/ProjectReport/ProjectReport';
 import UserReport from '../../Components/UserReport/UserReport';
 import TeamReport from '../../Components/TeamReport/TeamReport';
+import { DownloadProjectReport, DownloadUserReport } from '../../API/DownloadAPI';
 
 let date = new Date();
 class ReportsDisplay extends Component {
@@ -153,8 +154,8 @@ class ReportsDisplay extends Component {
                 </div>
                 <div style={{ clear: "both" }}>
                     {this.state.Report.length === 0 ? this.state.loading ? <LoadingScreen /> : null :
-                        this.state.reportBy === "Project" ? <ProjectReport report={this.state.Report} changeToUserReport={changeToUserReport} /> :
-                            this.state.reportBy === "User" ? <UserReport report={this.state.Report} /> :
+                        this.state.reportBy === "Project" ? <ProjectReport report={this.state.Report} changeToUserReport={changeToUserReport} download={() => DownloadProjectReport(this.state.reportItemId, this.state.minDate, this.state.maxDate)} /> :
+                            this.state.reportBy === "User" ? <UserReport report={this.state.Report} download={() => DownloadUserReport(this.state.reportItemId, this.state.minDate, this.state.maxDate)} /> :
                                 this.state.reportBy === "Team" ? <TeamReport report={this.state.Report} /> : null}
                 </div>
             </div>

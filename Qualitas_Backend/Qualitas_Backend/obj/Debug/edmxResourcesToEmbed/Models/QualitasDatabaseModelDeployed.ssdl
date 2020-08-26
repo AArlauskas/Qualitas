@@ -5,7 +5,7 @@
       <PropertyRef Name="id" />
     </Key>
     <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="name" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="name" Type="nvarchar(max)" Nullable="false" />
     <Property Name="EvaluationTemplateId" Type="int" Nullable="false" />
   </EntityType>
   <EntityType Name="Criteria">
@@ -13,7 +13,7 @@
       <PropertyRef Name="id" />
     </Key>
     <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="name" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="name" Type="nvarchar(max)" Nullable="false" />
     <Property Name="points" Type="int" Nullable="false" />
     <Property Name="score" Type="float" Nullable="false" />
     <Property Name="TopicId" Type="int" Nullable="false" />
@@ -24,7 +24,7 @@
       <PropertyRef Name="id" />
     </Key>
     <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="name" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="name" Type="nvarchar(max)" Nullable="false" />
     <Property Name="points" Type="int" Nullable="false" />
     <Property Name="TopicId" Type="int" Nullable="false" />
   </EntityType>
@@ -33,7 +33,7 @@
       <PropertyRef Name="id" />
     </Key>
     <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="name" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="name" Type="nvarchar(max)" Nullable="false" />
     <Property Name="createdDate" Type="date" Nullable="false" />
     <Property Name="isDeleted" Type="bit" Nullable="false" />
     <Property Name="UserId" Type="int" Nullable="false" />
@@ -41,15 +41,15 @@
     <Property Name="EvaluatorId" Type="int" />
     <Property Name="updatedDate" Type="date" />
     <Property Name="comment" Type="nvarchar(max)" />
-    <Property Name="EvaluationTemplateName" Type="nvarchar" MaxLength="50" />
-    <Property Name="CategoryName" Type="nvarchar" MaxLength="50" />
+    <Property Name="EvaluationTemplateName" Type="nvarchar(max)" />
+    <Property Name="CategoryName" Type="nvarchar(max)" />
   </EntityType>
   <EntityType Name="EvaluationTemplate">
     <Key>
       <PropertyRef Name="id" />
     </Key>
     <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="name" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="name" Type="nvarchar(max)" Nullable="false" />
     <Property Name="isDeleted" Type="bit" Nullable="false" />
   </EntityType>
   <EntityType Name="Project">
@@ -57,7 +57,7 @@
       <PropertyRef Name="id" />
     </Key>
     <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="name" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="name" Type="nvarchar(max)" Nullable="false" />
     <Property Name="isDeleted" Type="bit" Nullable="false" />
   </EntityType>
   <EntityType Name="ProjectsTeams">
@@ -91,7 +91,8 @@
       <PropertyRef Name="id" />
     </Key>
     <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="name" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="name" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="isDeleted" Type="bit" Nullable="false" />
   </EntityType>
   <EntityType Name="TemplatesProjects">
     <Key>
@@ -106,7 +107,7 @@
       <PropertyRef Name="id" />
     </Key>
     <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="name" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="name" Type="nvarchar(max)" Nullable="false" />
     <Property Name="isCritical" Type="bit" Nullable="false" />
     <Property Name="EvaluationId" Type="int" Nullable="false" />
     <Property Name="failed" Type="bit" Nullable="false" />
@@ -117,7 +118,7 @@
       <PropertyRef Name="id" />
     </Key>
     <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="name" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="name" Type="nvarchar(max)" Nullable="false" />
     <Property Name="isCritical" Type="bit" Nullable="false" />
     <Property Name="TemplateId" Type="int" Nullable="false" />
     <Property Name="description" Type="nvarchar(max)" />

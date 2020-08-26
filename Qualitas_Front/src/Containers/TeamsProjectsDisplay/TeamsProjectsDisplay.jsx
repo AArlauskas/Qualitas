@@ -5,8 +5,8 @@ import LoadingScreen from '../../Components/LoadingScreen/LoadingScreen';
 
 class TeamsProjectsDisplay extends Component {
     state = {
-        team: [],
-        projects: []
+        team: null,
+        projects: null
     }
     componentDidMount() {
         let id = window.location.href.toLowerCase().split("/teamprojects/")[1];
@@ -16,7 +16,7 @@ class TeamsProjectsDisplay extends Component {
     render() {
         return (
             <div>
-                {this.state.projects.length === 0 || this.state.team.length === 0 ?
+                {this.state.projects === null || this.state.team === null ?
                     <LoadingScreen /> : <TeamsProjects
                         team={this.state.team}
                         projects={this.state.projects}

@@ -72,6 +72,7 @@
     <EntitySetMapping Name="Teams">
       <EntityTypeMapping TypeName="DB_QualitasHostedModel.Team">
         <MappingFragment StoreEntitySet="Team">
+          <ScalarProperty Name="isDeleted" ColumnName="isDeleted" />
           <ScalarProperty Name="id" ColumnName="id" />
           <ScalarProperty Name="name" ColumnName="name" />
         </MappingFragment>

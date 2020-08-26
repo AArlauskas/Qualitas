@@ -71,4 +71,4 @@ C:\Users\Aurimas\Desktop\Qualitas\Qualitas_Backend\Qualitas_Backend\bin\EntityFr
 C:\Users\Aurimas\Desktop\Qualitas\Qualitas_Backend\Qualitas_Backend\bin\System.Web.Cors.dll
 C:\Users\Aurimas\Desktop\Qualitas\Qualitas_Backend\Qualitas_Backend\bin\System.Web.Http.Cors.dll
 C:\Users\Aurimas\Desktop\Qualitas\Qualitas_Backend\Qualitas_Backend\bin\System.Web.Http.Cors.xml
-C:\Users\Aurimas\Desktop\Qualitas\Qualitas_Backend\Qualitas_Backend\obj\Debug\Qualitas_Backend.csprojAssemblyReference.cache
+C:\Users\Aurimas\Desktop\Qualitas\Qualitas_Backend\Qualitas_Backend\obj\Debug\Qualitas_Backend.csproj.ResolveComReference.cache

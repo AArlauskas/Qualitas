@@ -9,7 +9,7 @@ const ButtonBlock = (props) => {
             <div className="innerButton">
                 <DefaultButton
                     purpose="save"
-                    label="Save"
+                    label="Exit"
                     type={props.saveType}
                     onClick={props.onSave}
                 />

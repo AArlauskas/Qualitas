@@ -12,7 +12,7 @@ class ArchiveDisplay extends Component {
     render() {
         return (
             <div>
-                {this.props.archivedUserData.length === 0 ? <LoadingScrren /> :
+                {this.props.archivedUserData === null ? <LoadingScrren /> :
                     <ArchivedUserListTable
                         archivedUserData={this.props.archivedUserData}
                         unarchiveUser={this.props.unarchiveUser}

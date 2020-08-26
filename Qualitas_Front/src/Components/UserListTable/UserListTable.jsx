@@ -72,7 +72,7 @@ class UserListTable extends Component {
                 title: 'Surname', field: 'lastname',
             },
             {
-                title: "Team", field: "team",
+                title: "Team", field: "team", editable: "never",
                 render: rowData => rowData.teamName === null ? "" : <a href={"/teamDetails/" + rowData.teamId}>{rowData.teamName} </a>,
                 customFilterAndSearch: (term, rowData) => rowData.teamName === null ? false : rowData.teamName.toLowerCase().startsWith(term.toLowerCase())
             },
@@ -102,6 +102,7 @@ class UserListTable extends Component {
                 {console.log(this.props.userData)}
                 <MaterialTable
                     options={{
+                        addRowPosition: "first",
                         filtering: true,
                         actionsColumnIndex: -1,
                         pageSize: 10
@@ -133,12 +134,15 @@ class UserListTable extends Component {
                                     setTimeout(() => {
                                         resolve();
                                         this.props.archiveUser(rowData);
+                                        if (rowData.id === parseInt(window.localStorage.getItem("id"))) {
+                                            localStorage.clear();
+                                            window.location.reload();
+                                        }
                                     }, 600);
                                 })
                             }
                         }]}
                     editable={{
-                        isEditable: rowData => rowData.role === "user",
                         onRowAdd: (newData) =>
                             new Promise((resolve) => {
                                 setTimeout(() => {
@@ -146,6 +150,9 @@ class UserListTable extends Component {
                                     if (newData.firstname === "" || newData.lastname === "" ||
                                         newData.role === "" || newData.username === "" ||
                                         newData.password === "") {
+                                        return;
+                                    }
+                                    if (this.props.userData.some(user => user.username === newData.username)) {
                                         return;
                                     }
                                     let newUser = {
@@ -160,7 +167,8 @@ class UserListTable extends Component {
                                         pass: newData.lastname,
                                         teamId: parseInt(newData.teamId)
                                     }
-                                    this.props.addUser(newUser)
+                                    this.props.addUser(newUser);
+                                    this.forceUpdate();
                                 }, 600);
                             }),
                         onRowUpdate: (newData, oldData) =>
@@ -219,7 +227,7 @@ class UserListTable extends Component {
 
                         ),
                     }}
-                    onRowClick={(event, rowData, togglePanel) => rowData.role === "user" ? window.location.href = "/userDetails/" + rowData.id : null}
+                    onRowClick={(event, rowData, togglePanel) => rowData.role === "user" && rowData.id !== undefined ? window.location.href = "/userDetails/" + rowData.id : null}
                 />
             </div>
         );

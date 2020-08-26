@@ -97,7 +97,7 @@ class CaseEditor extends Component {
                             <div>
                                 <List style={{ color: "red" }}>
                                     <div>
-                                        <ListSubheader component="div" style={{ color: "red" }} >
+                                        <ListSubheader disableSticky component="div" style={{ color: "red" }} >
                                             <h3 style={{ color: "red" }}>Criticals</h3>
                                         </ListSubheader>
                                     </div>
@@ -144,7 +144,7 @@ class CaseEditor extends Component {
                             </div>
                             <hr />
                             <List style={{ color: "blue" }}>
-                                <ListSubheader component="div" style={{ color: "red" }} >
+                                <ListSubheader disableSticky component="div" style={{ color: "red" }} >
                                     <h3 style={{ color: "blue" }}>Topics and Criterias</h3>
                                 </ListSubheader>
                                 {this.state.topics.filter(topic => !topic.isCritical).map(topic => {

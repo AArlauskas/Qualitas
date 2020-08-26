@@ -145,13 +145,13 @@ class ProjectReport extends Component {
                                             this.state.openId === report.id ?
                                                 <React.Fragment>
                                                     <List style={{ color: "red", paddingLeft: 50 }}>
-                                                        <ListSubheader style={{ color: "red" }}>
+                                                        <ListSubheader disableSticky style={{ color: "red" }}>
                                                             Criticals
                                     </ListSubheader>
                                                         {getCriticals(report, this.state.categories).map(critical => <CriticalListItem critical={critical} />)}
                                                     </List>
                                                     <List style={{ color: "blue", paddingLeft: 30 }}>
-                                                        <ListSubheader style={{ color: "blue" }}>
+                                                        <ListSubheader disableSticky style={{ color: "blue" }}>
                                                             Topics
                                     </ListSubheader>
                                                         {getTopics(report, this.state.categories).map(topic => <TopicListItem topic={topic} />)}

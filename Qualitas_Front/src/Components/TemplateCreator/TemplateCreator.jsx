@@ -77,8 +77,8 @@ class TemplateCreator extends Component {
                     }} />
                     <ButtonBlock onSave={() => this.setState({ modalOpen: false, commentTopicId: null })} />
                 </UnifiedModal>
-                <div style={{ marginLeft: "25%", marginRight: "25%", marginTop: 25, background: "rgba(200, 200, 200, 0.5)", textAlign: "center" }}>
-                    <TextField style={{ paddingBottom: 15, width: 250 }} defaultValue="" label="Template name" onChange={e => this.setState({ templateName: e.target.value })} />
+                <div style={{ marginLeft: "15%", marginRight: "15%", marginTop: 25, background: "rgba(200, 200, 200, 0.5)", textAlign: "center" }}>
+                    <TextField inputProps={{ style: { textAlign: 'center' } }} style={{ paddingBottom: 15, width: 250 }} defaultValue="" label="Template name" onChange={e => this.setState({ templateName: e.target.value })} />
                     <div className="ButtonBlock" >
                         <Button color="secondary" variant="contained" onClick={() => {
                             let tempTopics = [...this.state.topics]
@@ -110,7 +110,18 @@ class TemplateCreator extends Component {
                             Add topic
                     </Button>
                         <div style={{ marginLeft: "25%", marginRight: "25%", marginTop: 15, marginBottom: 15 }}>
-                            <TextField value={this.state.currentCategory} label="Add category" onChange={e => this.setState({ currentCategory: e.target.value })} />
+                            <TextField inputProps={{ style: { textAlign: 'center' } }} onKeyPress={e => {
+                                if (e.key === "Enter") {
+                                    if (this.state.currentCategory !== "" && !this.state.categories.includes(this.state.currentCategory)) {
+                                        let tempCategories = [...this.state.categories];
+                                        tempCategories.push(this.state.currentCategory);
+                                        this.setState({
+                                            currentCategory: "",
+                                            categories: tempCategories
+                                        })
+                                    }
+                                }
+                            }} value={this.state.currentCategory} label="Add category" onChange={e => this.setState({ currentCategory: e.target.value })} />
                             <IconButton style={{ marginTop: 5 }} onClick={() => {
                                 if (this.state.currentCategory !== "" && !this.state.categories.includes(this.state.currentCategory)) {
                                     let tempCategories = [...this.state.categories];
@@ -137,9 +148,9 @@ class TemplateCreator extends Component {
                             </div>
                         </div>
                     </div>
-                    <p style={{ marginTop: 10 }}><b>Overall Points: {calculateSum(this.state.criteria)}</b></p>
+                    <p style={{ paddingTop: 10 }}><b>Overall Points: {calculateSum(this.state.criteria)}</b></p>
                     <List style={{ color: "red" }}>
-                        <ListSubheader component="div" style={{ color: "red" }} >
+                        <ListSubheader disableSticky component="div" style={{ color: "red" }} >
                             Criticals
                     </ListSubheader>
                         {this.state.topics.filter(topic => topic.critical).map(entry => {
@@ -243,7 +254,7 @@ class TemplateCreator extends Component {
                     </List>
                     <hr />
                     <List style={{ color: "blue" }}>
-                        <ListSubheader style={{ color: "blue" }} component="div" >
+                        <ListSubheader disableSticky style={{ color: "blue" }} component="div" >
                             Topics and Criterias
                     </ListSubheader>
                         {this.state.topics.filter(topic => !topic.critical).map(entry => {
@@ -373,25 +384,35 @@ class TemplateCreator extends Component {
                                                 if (criteria.editing) {
                                                     return (
                                                         <ListItem button key={criteria.id}>
-                                                            <div style={{ paddingLeft: 80 }} onKeyPress={e => {
-                                                                if (e.key === "Enter") {
-                                                                    let id = criteria.id;
-                                                                    let tempCriteria = [...this.state.criteria];
-                                                                    tempCriteria.find(critical => critical.id === id).editing = false;
-                                                                    this.setState({
-                                                                        editing: false,
-                                                                        criteria: tempCriteria
-                                                                    })
-                                                                }
-                                                            }}>
-                                                                <TextField autoFocus style={{ width: 500 }} defaultValue={criteria.name} onChange={e => {
+                                                            <div style={{ paddingLeft: 80 }} >
+                                                                <TextField onKeyPress={e => {
+                                                                    if (e.key === "Enter") {
+                                                                        let id = criteria.id;
+                                                                        let tempCriteria = [...this.state.criteria];
+                                                                        tempCriteria.find(critical => critical.id === id).editing = false;
+                                                                        this.setState({
+                                                                            editing: false,
+                                                                            criteria: tempCriteria
+                                                                        })
+                                                                    }
+                                                                }} autoFocus style={{ width: "80%" }} defaultValue={criteria.name} onChange={e => {
                                                                     let tempCriteria = [...this.state.criteria];
                                                                     tempCriteria.find(critical => critical.id === criteria.id).name = e.target.value;
                                                                     this.setState({ criteria: tempCriteria })
                                                                 }} />
                                                             </div>
                                                             <div>
-                                                                <TextField style={{ width: 40, marginLeft: 60 }} type="number" focused={true} defaultValue={criteria.points} onChange={(e) => {
+                                                                <TextField onKeyPress={e => {
+                                                                    if (e.key === "Enter") {
+                                                                        let id = criteria.id;
+                                                                        let tempCriteria = [...this.state.criteria];
+                                                                        tempCriteria.find(critical => critical.id === id).editing = false;
+                                                                        this.setState({
+                                                                            editing: false,
+                                                                            criteria: tempCriteria
+                                                                        })
+                                                                    }
+                                                                }} style={{ width: 40, marginLeft: 60 }} type="number" focused={true} defaultValue={criteria.points} onChange={(e) => {
                                                                     let tempCriteria = [...this.state.criteria];
                                                                     let points = e.target.value;
                                                                     if (points === "") {

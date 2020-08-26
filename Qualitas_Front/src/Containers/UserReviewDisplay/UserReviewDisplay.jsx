@@ -33,7 +33,7 @@ class UserReviewDisplay extends Component {
             points += evaluation.points;
         });
 
-        let average = Math.trunc((score / points) * 100);
+        let average = Math.round((score / points) * 10000) / 100;
         if (isNaN(average)) {
             average = 0;
         }
@@ -43,7 +43,7 @@ class UserReviewDisplay extends Component {
     render() {
         return (
             <div>
-                {this.props.evaluations.length === 0 ? <LoadingScreen /> :
+                {this.props.evaluations === null ? <LoadingScreen /> :
                     <div>
                         <div style={{ textAlign: "center" }}>
                             <h3>User: {this.props.evaluations.firstname + " " + this.props.evaluations.lastname}</h3>
@@ -57,7 +57,7 @@ class UserReviewDisplay extends Component {
                                 </div>}
                         </div>
                         <div style={{ marginTop: 20, marginBottom: 100 }}>
-                            <Button disabled={!this.props.evaluations.valid} color="primary" variant="outlined" href={"/newCase/" + window.location.href.toLowerCase().split("/userdetails/")[1]} style={{ marginBottom: 10 }}>Evaluate case</Button>
+                            <Button disabled={this.props.evaluations.projectCount === 0} color="primary" variant="outlined" href={"/newCase/" + window.location.href.toLowerCase().split("/userdetails/")[1]} style={{ marginBottom: 10 }}>Evaluate case</Button>
                             <UsersEvaluationsList
                                 evaluations={this.props.evaluations.Evaluations}
                                 deleteEvaluation={this.props.deleteEvaluation}

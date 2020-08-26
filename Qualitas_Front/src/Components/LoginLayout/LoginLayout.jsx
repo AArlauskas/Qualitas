@@ -53,8 +53,38 @@ export default function SignIn() {
     const [loading, setLoading] = useState(false);
     const [errorIsShowing, setErrorIsShowing] = useState(false);
 
+    const attemtSignIn = () => {
+        setLoading(true);
+        let data = {
+            username: username,
+            password: password
+        };
+        Login(data).then(response => {
+            if (response === "notFound") {
+                setLoading(false);
+                setErrorIsShowing(true);
+            }
+            else {
+                window.localStorage.setItem("username", response.username);
+                window.localStorage.setItem("name", response.firstname + " " + response.lastname);
+                window.localStorage.setItem("id", response.Id);
+                window.localStorage.setItem("role", response.role);
+                if (response.role === "client" && response.projectsCount === 0) {
+                    window.localStorage.clear();
+                    setLoading(false);
+                    setErrorIsShowing(true);
+                }
+                window.location.reload(false);
+            }
+        });
+    }
+
     return (
-        <div>
+        <div onKeyPress={e => {
+            if (e.key === "Enter") {
+                attemtSignIn();
+            }
+        }}>
             <div style={{ textAlign: "center" }}>
                 <img src={RTCLogo} alt="RTC_Logo" style={{ width: 400, height: 400 }} />
             </div>
@@ -106,31 +136,7 @@ export default function SignIn() {
                                     color="primary"
                                     disabled={username.length < 4 || password.length < 4}
                                     className={classes.submit}
-                                    onClick={() => {
-                                        setLoading(true);
-                                        let data = {
-                                            username: username,
-                                            password: password
-                                        };
-                                        Login(data).then(response => {
-                                            if (response === "notFound") {
-                                                setLoading(false);
-                                                setErrorIsShowing(true);
-                                            }
-                                            else {
-                                                window.localStorage.setItem("username", response.username);
-                                                window.localStorage.setItem("name", response.firstname + " " + response.lastname);
-                                                window.localStorage.setItem("id", response.Id);
-                                                window.localStorage.setItem("role", response.role);
-                                                if (response.role === "client" && response.projectsCount === 0) {
-                                                    window.localStorage.clear();
-                                                    setLoading(false);
-                                                    setErrorIsShowing(true);
-                                                }
-                                                window.location.reload(false);
-                                            }
-                                        });
-                                    }}
+                                    onClick={() => attemtSignIn()}
                                 >
                                     Sign In
           </Button>

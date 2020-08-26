@@ -24,7 +24,7 @@ class UserProjectsListDisplay extends Component {
         return (
             <div>
                 {console.log(this.props.projects)}
-                {this.props.projects.length === 0 ? <LoadingScreen /> :
+                {this.props.projects === null ? <LoadingScreen /> :
                     <UserProjectsList
                         projects={this.props.projects}
                         minDate={this.state.minDate}

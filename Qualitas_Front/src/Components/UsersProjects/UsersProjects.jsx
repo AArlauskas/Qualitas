@@ -4,6 +4,11 @@ import Transfer from 'react-virtualized-transfer';
 class UsersProjects extends Component {
     constructor(props) {
         super(props);
+        this.state = {
+            selectedKeys: [],
+            targetKeys: [],
+            dataSource: [],
+        };
         const dataSource = [];
         const targetKeys = [];
         this.props.projects.forEach(project => {
@@ -15,6 +20,8 @@ class UsersProjects extends Component {
         this.props.user.projects.forEach(project => {
             targetKeys.push(project.id);
         });
+        console.log("SOURCE", dataSource);
+        console.log("KEYS", targetKeys);
         this.state = {
             dataSource: dataSource,
             selectedKeys: [],
@@ -50,10 +57,10 @@ class UsersProjects extends Component {
                 </div>
                 <div>
                     <Transfer
-                        render={item => `${item.title}`}
                         dataSource={this.state.dataSource}
                         targetKeys={this.state.targetKeys}
                         selectedKeys={this.state.selectedKeys}
+                        render={item => `${item.title}`}
                         onSelectChange={handleSelectChange}
                         filterOption={filterOption}
                         onChange={handleChange}

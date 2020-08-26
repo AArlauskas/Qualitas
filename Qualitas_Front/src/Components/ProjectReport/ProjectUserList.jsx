@@ -66,6 +66,12 @@ class ProjectUserList extends Component {
                 <Collapse in={this.state.open}>
                     <div style={{ paddingTop: 20, paddingBottom: 30, marginLeft: "15%", marginRight: "15%" }}>
                         <MaterialTable
+                            style={{ background: "rgba(255, 204, 204, 0.2)" }}
+                            options={{
+                                headerStyle: {
+                                    background: "rgba(255, 204, 204, 0.2)"
+                                }
+                            }}
                             title=""
                             columns={this.state.columns}
                             icons={tableIcons}

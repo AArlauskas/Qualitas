@@ -31,7 +31,7 @@ namespace Qualitas_Backend.Controllers
         [Route("api/Teams/simple")]
         public async Task<IHttpActionResult> GetTeamListSimple()
         {
-            var teams = db.Teams.Select(team => new
+            var teams = db.Teams.Where(team => !team.isDeleted).Select(team => new
             {
                 team.id,
                 team.name
@@ -46,7 +46,7 @@ namespace Qualitas_Backend.Controllers
         [Route("api/Teams/list")]
         public async Task<IHttpActionResult> GetTeamList(DateTime start, DateTime end)
         {
-            var teams = db.Teams.Select(team => new
+            var teams = db.Teams.Where(team => !team.isDeleted).Select(team => new
             {
                 team.id,
                 team.name,
@@ -69,7 +69,7 @@ namespace Qualitas_Backend.Controllers
         [Route("api/Teams/review/{id}")]
         public async Task<IHttpActionResult> GetTeamReview (int id, DateTime start, DateTime end)
         {
-            var teams = await db.Teams
+            var teams = await db.Teams.Where(team => !team.isDeleted)
                 .Select(team => new {
                     id = team.id,
                     name = team.name,
@@ -236,7 +236,7 @@ namespace Qualitas_Backend.Controllers
         [Route("api/Teams/Projects/{id}")]
         public async Task<IHttpActionResult> GetTeamsProjects(int id)
         {
-            var team = await db.Teams
+            var team = await db.Teams.Where(teams => !teams.isDeleted)
                 .Select(temp => new {
                     id = temp.id,
                     name = temp.name,
@@ -259,7 +259,7 @@ namespace Qualitas_Backend.Controllers
         [Route("api/Teams/users/{id}")]
         public async Task<IHttpActionResult> GetTeamsUsers(int id)
         {
-            var team = await db.Teams
+            var team = await db.Teams.Where(teams => !teams.isDeleted)
                 .Select(temp => new {
                     id = temp.id,
                     name = temp.name,
@@ -441,6 +441,19 @@ namespace Qualitas_Backend.Controllers
                 userCount = 0
             };
             return Ok(response.id);
+        }
+
+        [ResponseType(typeof(void))]
+        [Route("api/Teams/markdeleted/{id}")]
+        public async Task<IHttpActionResult> MarkDeleted([FromUri] int id)
+        {
+            db.Teams.Find(id).isDeleted = true;
+            foreach(var user in db.Users.Where(temp => temp.TeamId == id))
+            {
+                user.TeamId = null;
+            }
+            await db.SaveChangesAsync();
+            return Ok(id);
         }
 
         // DELETE: api/Teams/5

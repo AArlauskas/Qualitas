@@ -72,3 +72,4 @@ C:\Users\Aurimas\Desktop\Qualitas\Qualitas_Backend\Qualitas_Backend\obj\Release\
 C:\Users\Aurimas\Desktop\Qualitas\Qualitas_Backend\Qualitas_Backend\obj\Release\Qualitas_Backend.csproj.CopyComplete
 C:\Users\Aurimas\Desktop\Qualitas\Qualitas_Backend\Qualitas_Backend\obj\Release\Qualitas_Backend.dll
 C:\Users\Aurimas\Desktop\Qualitas\Qualitas_Backend\Qualitas_Backend\obj\Release\Qualitas_Backend.pdb
+C:\Users\Aurimas\Desktop\Qualitas\Qualitas_Backend\Qualitas_Backend\obj\Release\Qualitas_Backend.csproj.ResolveComReference.cache

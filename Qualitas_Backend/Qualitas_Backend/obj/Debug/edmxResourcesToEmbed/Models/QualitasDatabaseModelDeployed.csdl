@@ -5,7 +5,7 @@
       <PropertyRef Name="id" />
     </Key>
     <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="name" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
     <Property Name="points" Type="Int32" Nullable="false" />
     <Property Name="score" Type="Double" Nullable="false" />
     <Property Name="TopicId" Type="Int32" Nullable="false" />
@@ -17,7 +17,7 @@
       <PropertyRef Name="id" />
     </Key>
     <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="name" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
     <Property Name="points" Type="Int32" Nullable="false" />
     <Property Name="TopicId" Type="Int32" Nullable="false" />
     <NavigationProperty Name="TopicTemplate" Relationship="Self.FK_CriteriaTemplate_TopicTemplate" FromRole="CriteriaTemplate" ToRole="TopicTemplate" />
@@ -27,7 +27,7 @@
       <PropertyRef Name="id" />
     </Key>
     <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="name" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
     <Property Name="createdDate" Type="DateTime" Nullable="false" Precision="0" />
     <Property Name="isDeleted" Type="Boolean" Nullable="false" />
     <Property Name="UserId" Type="Int32" Nullable="false" />
@@ -39,15 +39,15 @@
     <NavigationProperty Name="Evaluator" Relationship="DB_QualitasHostedModel.FK_Evaluation_Evaluators" FromRole="Evaluation" ToRole="User" />
     <Property Name="updatedDate" Type="DateTime" Precision="0" />
     <Property Name="comment" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-    <Property Name="EvaluationTemplateName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-    <Property Name="CategoryName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="EvaluationTemplateName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="CategoryName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
   </EntityType>
   <EntityType Name="EvaluationTemplate">
     <Key>
       <PropertyRef Name="id" />
     </Key>
     <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="name" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
     <Property Name="isDeleted" Type="Boolean" Nullable="false" />
     <NavigationProperty Name="TopicTemplates" Relationship="Self.FK_TopicTemplate_EvaluationTemplate" FromRole="EvaluationTemplate" ToRole="TopicTemplate" />
     <NavigationProperty Name="Projects" Relationship="Self.TemplatesProjects" FromRole="EvaluationTemplate" ToRole="Project" />
@@ -58,7 +58,7 @@
       <PropertyRef Name="id" />
     </Key>
     <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="name" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
     <Property Name="isDeleted" Type="Boolean" Nullable="false" />
     <NavigationProperty Name="Evaluations" Relationship="Self.FK_Evaluation_Project" FromRole="Project" ToRole="Evaluation" />
     <NavigationProperty Name="Teams" Relationship="Self.ProjectsTeams" FromRole="Project" ToRole="Team" />
@@ -80,16 +80,17 @@
       <PropertyRef Name="id" />
     </Key>
     <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="name" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
     <NavigationProperty Name="Users" Relationship="Self.FK_User_Team" FromRole="Team" ToRole="User" />
     <NavigationProperty Name="Projects" Relationship="Self.ProjectsTeams" FromRole="Team" ToRole="Project" />
+    <Property Name="isDeleted" Type="Boolean" Nullable="false" />
   </EntityType>
   <EntityType Name="Topic">
     <Key>
       <PropertyRef Name="id" />
     </Key>
     <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="name" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
     <Property Name="isCritical" Type="Boolean" Nullable="false" />
     <Property Name="EvaluationId" Type="Int32" Nullable="false" />
     <Property Name="failed" Type="Boolean" Nullable="false" />
@@ -102,7 +103,7 @@
       <PropertyRef Name="id" />
     </Key>
     <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="name" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
     <Property Name="isCritical" Type="Boolean" Nullable="false" />
     <Property Name="TemplateId" Type="Int32" Nullable="false" />
     <NavigationProperty Name="CriteriaTemplates" Relationship="Self.FK_CriteriaTemplate_TopicTemplate" FromRole="TopicTemplate" ToRole="CriteriaTemplate" />
@@ -342,7 +343,7 @@
       <PropertyRef Name="id" />
     </Key>
     <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="name" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
     <Property Name="EvaluationTemplateId" Type="Int32" Nullable="false" />
     <NavigationProperty Name="EvaluationTemplate" Relationship="DB_QualitasHostedModel.FK_Category_EvaluationTemplate" FromRole="Category" ToRole="EvaluationTemplate" />
   </EntityType>

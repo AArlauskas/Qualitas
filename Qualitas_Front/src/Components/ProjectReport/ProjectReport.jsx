@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import { ListSubheader, List, ListItemText, ListItem, ListItemSecondaryAction, ListItemIcon } from '@material-ui/core';
-import { KeyboardArrowDown, KeyboardArrowUp } from '@material-ui/icons';
+import { ListSubheader, List, ListItemText, ListItem, ListItemSecondaryAction, ListItemIcon, IconButton } from '@material-ui/core';
+import { KeyboardArrowDown, KeyboardArrowUp, GetAppRounded } from '@material-ui/icons';
 import CriticalListItem from './CriticalListItem';
 import TopicListItem from './TopicListItem';
 import DefaultMultiSelect from '../Core-Components/DefaultMultiSelect/DefaultMultiSelect';
@@ -89,6 +89,7 @@ const getTopics = (report, categories) => {
         });
         result.push({
             name: key,
+            description: group[key][0].description,
             score: score,
             points: points,
             criterias: criterias
@@ -150,9 +151,13 @@ class ProjectReport extends Component {
     render() {
         return (
             <div>
-                <h2 style={{ textAlign: "center", paddingTop: 10 }}>Project score: {OverallScore(this.props.report)}%</h2>
+                <div style={{ textAlign: "center" }}>
+                    <h2 style={{ paddingTop: 10 }}>Project score: {OverallScore(this.props.report)}%</h2>
+                    <IconButton style={{ marginLeft: 5, paddingTop: 10 }} onClick={() => this.props.download()}>
+                        <GetAppRounded fontSize="large" />
+                    </IconButton>
+                </div>
                 <div style={{ paddingTop: 50, paddingBottom: 50 }}>
-                    {console.log(this.state.categories)}
                     <div style={{ marginLeft: "15%", marginRight: "15%", background: "rgba(255, 204, 204, 0.2)" }}>
                         {console.log(this.props.report)}
                         <List>

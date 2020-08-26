@@ -1,11 +1,11 @@
 import { ActionType } from "../Constants/ActionType";
 
 const initialState = {
-    Users: [],
-    Templates: [],
-    Projects: [],
-    Teams: [],
-    Evaluations: []
+    Users: null,
+    Templates: null,
+    Projects: null,
+    Teams: null,
+    Evaluations: null
 };
 
 export const reducer = (state = initialState, action) => {

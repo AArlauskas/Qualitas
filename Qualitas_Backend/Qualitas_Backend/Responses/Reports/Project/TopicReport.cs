@@ -11,6 +11,7 @@ namespace Qualitas_Backend.Responses.Reports
         public string name { get; set; }
         public double? score { get; set; }
         public int? points { get; set; }
+        public string description { get; set; }
         public List<CriteriaReport> criterias { get; set; }
     }
 }

@@ -6,7 +6,7 @@ import { FetchUserToReview } from '../../../API/API';
 let date = new Date();
 class EvaluationsDisplay extends Component {
     state = {
-        User: [],
+        User: null,
         minDate: new Date(date.getFullYear(), date.getMonth(), 1),
         maxDate: new Date(),
     }
@@ -53,7 +53,7 @@ class EvaluationsDisplay extends Component {
         return (
             <div>
                 {console.log(this.state.User)}
-                {this.state.User.length === 0 ? <LoadingScreen /> :
+                {this.state.User === null ? <LoadingScreen /> :
                     <div>
                         <div style={{ textAlign: "center" }}>
                             <h3>User: {this.state.User.firstname + " " + this.state.User.lastname}</h3>

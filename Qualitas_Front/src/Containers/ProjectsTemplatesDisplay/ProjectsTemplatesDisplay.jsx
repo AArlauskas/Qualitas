@@ -5,8 +5,8 @@ import LoadingScreen from '../../Components/LoadingScreen/LoadingScreen';
 
 class ProjectsTemplatesDisplay extends Component {
     state = {
-        project: [],
-        templates: []
+        project: null,
+        templates: null
     }
     componentDidMount() {
         let id = window.location.href.toLowerCase().split("/projecttemplates/")[1];
@@ -17,7 +17,7 @@ class ProjectsTemplatesDisplay extends Component {
 
         return (
             <div>
-                {this.state.project.length === 0 || this.state.templates.length === 0 ? <LoadingScreen /> :
+                {this.state.project === null || this.state.templates === null ? <LoadingScreen /> :
                     <ProjectsTemplates
                         project={this.state.project}
                         templates={this.state.templates}

@@ -36,15 +36,15 @@ class ProjectsTable extends Component {
                     onClick={() => window.location.href = "/EditTemplate/" + template.id} />)}</div>,
                 customFilterAndSearch: (term, rowData) => rowData.templates.some(template => template.name.toLowerCase().startsWith(term.toLowerCase()))
             },
-            {
-                editable: "never",
-                title: "Teams",
-                field: "teams",
-                render: rowData => <div>{rowData.teams.map(team => <Chip style={{ marginRight: 2, marginTop: 2 }} key={team.id}
-                    label={team.name}
-                    onClick={() => window.location.href = "/TeamDetails/" + team.id} />)}</div>,
-                customFilterAndSearch: (term, rowData) => rowData.teams.some(team => team.name.toLowerCase().startsWith(term.toLowerCase()))
-            },
+            // {
+            //     editable: "never",
+            //     title: "Teams",
+            //     field: "teams",
+            //     render: rowData => <div>{rowData.teams.map(team => <Chip style={{ marginRight: 2, marginTop: 2 }} key={team.id}
+            //         label={team.name}
+            //         onClick={() => window.location.href = "/TeamDetails/" + team.id} />)}</div>,
+            //     customFilterAndSearch: (term, rowData) => rowData.teams.some(team => team.name.toLowerCase().startsWith(term.toLowerCase()))
+            // },
             {
                 editable: "never", title: "Score", field: "score", render: rowData => isNaN(Math.trunc((rowData.score / rowData.points) * 100)) ? "0%" : Math.trunc((rowData.score / rowData.points) * 100) + "%",
                 customFilterAndSearch: (term, rowData) => Math.trunc((rowData.score / rowData.points) * 100) === parseInt(term)
@@ -87,6 +87,7 @@ class ProjectsTable extends Component {
                 {console.log(this.props.projects)}
                 <MaterialTable
                     options={{
+                        addRowPosition: "first",
                         filtering: true,
                         actionsColumnIndex: -1,
                         pageSize: 10

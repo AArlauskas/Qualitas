@@ -3,7 +3,7 @@ import { ListItem, ListItemText, ListItemSecondaryAction } from '@material-ui/co
 
 const CriticalListItem = (props) => {
     return (
-        <div key={props.critical.name} style={{ paddingLeft: 50 }}>
+        <div key={props.critical.name}>
             <ListItem>
                 <ListItemText>{props.critical.name}</ListItemText>
                 <ListItemSecondaryAction>

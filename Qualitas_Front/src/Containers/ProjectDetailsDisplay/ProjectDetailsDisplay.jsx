@@ -6,8 +6,8 @@ import LoadingScreen from '../../Components/LoadingScreen/LoadingScreen';
 
 class ProjectDetailsDisplay extends Component {
     state = {
-        project: [],
-        users: []
+        project: null,
+        users: null
     }
     componentDidMount() {
         let id = window.location.href.toLowerCase().split("/projectdetails/")[1];
@@ -17,7 +17,7 @@ class ProjectDetailsDisplay extends Component {
     render() {
         return (
             <div>
-                {this.state.project.length === 0 || this.state.users.length === 0 ? <LoadingScreen /> :
+                {this.state.project === null || this.state.users === null ? <LoadingScreen /> :
                     <ProjectDetails
                         project={this.state.project}
                         users={this.state.users}

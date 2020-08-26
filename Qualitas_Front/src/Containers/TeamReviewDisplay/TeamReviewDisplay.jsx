@@ -6,7 +6,7 @@ import LoadingScreen from '../../Components/LoadingScreen/LoadingScreen';
 let date = new Date();
 class TeamReviewDisplay extends Component {
     state = {
-        Team: [],
+        Team: null,
         minDate: new Date(date.getFullYear(), date.getMonth(), 1),
         maxDate: new Date(),
     }
@@ -40,7 +40,7 @@ class TeamReviewDisplay extends Component {
         return (
             <div>
                 {console.log(this.state.Team)}
-                {this.state.Team.length === 0 ? <LoadingScreen /> :
+                {this.state.Team === null ? <LoadingScreen /> :
                     <div>
                         <div style={{ textAlign: "center" }}>
                             <h2>Team: {this.state.Team.name}</h2>

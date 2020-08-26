@@ -22,7 +22,7 @@ class ProjectsDisplay extends Component {
 
         return (
             <div>
-                {this.props.projects.length === 0 ? <LoadingScreen /> :
+                {this.props.projects === null ? <LoadingScreen /> :
                     <ProjectsTable
                         projects={this.props.projects}
                         addProject={this.props.addProject}

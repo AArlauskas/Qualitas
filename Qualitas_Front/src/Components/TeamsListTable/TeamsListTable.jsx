@@ -16,7 +16,6 @@ import SaveAlt from '@material-ui/icons/SaveAlt';
 import Search from '@material-ui/icons/Search';
 import ViewColumn from '@material-ui/icons/ViewColumn';
 import GroupAddIcon from '@material-ui/icons/GroupAdd';
-import { Chip } from '@material-ui/core';
 import { KeyboardDatePicker, MuiPickersUtilsProvider } from '@material-ui/pickers';
 import DateFnsUtils from '@date-io/date-fns';
 
@@ -26,13 +25,13 @@ class TeamsListTable extends Component {
             {
                 title: "Name", field: "name"
             },
-            {
-                title: "Projects", field: "projects", editable: "never",
-                render: rowData => <div>{rowData.projects.map(project => <Chip style={{ marginRight: 2, marginTop: 2 }} key={project.id}
-                    label={project.name}
-                    onClick={() => window.location.href = "/projectReview/" + project.id} />)}</div>,
-                customFilterAndSearch: (term, rowData) => rowData.projects.some(project => project.name.toLowerCase().startsWith(term.toLowerCase()))
-            },
+            // {
+            //     title: "Projects", field: "projects", editable: "never",
+            //     render: rowData => <div>{rowData.projects.map(project => <Chip style={{ marginRight: 2, marginTop: 2 }} key={project.id}
+            //         label={project.name}
+            //         onClick={() => window.location.href = "/projectReview/" + project.id} />)}</div>,
+            //     customFilterAndSearch: (term, rowData) => rowData.projects.some(project => project.name.toLowerCase().startsWith(term.toLowerCase()))
+            // },
             {
                 title: "Number of users", field: "userCount", editable: "never"
             },
@@ -77,6 +76,7 @@ class TeamsListTable extends Component {
                     icons={tableIcons}
                     title="Teams"
                     options={{
+                        addRowPosition: "first",
                         filtering: true,
                         actionsColumnIndex: -1,
                         pageSize: 10

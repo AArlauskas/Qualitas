@@ -18,7 +18,8 @@ export const fetchTeamNames = () => async (dispatch) => {
 };
 
 export const addUser = (data) => async (dispatch) => {
-    await CreateUser(data);
+    let id = await CreateUser(data);
+    data.id = id;
     dispatch({
         type: ActionType.CREATE_USER,
         payload: data

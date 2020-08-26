@@ -61,10 +61,10 @@ class TemplateViewer extends Component {
                             topics: [...TempTopics]
                         })
                     }} />
-                    <ButtonBlock onSave={() => this.setState({ modalOpen: false, commentTopicId: null })} />
+                    <ButtonBlock label="Exit" onSave={() => this.setState({ modalOpen: false, commentTopicId: null })} />
                 </UnifiedModal>
                 <div style={{ marginLeft: "25%", marginRight: "25%", marginTop: 25, background: "rgba(200, 200, 200, 0.5)", textAlign: "center" }}>
-                    <TextField disabled={true} style={{ paddingBottom: 15, width: 250 }} defaultValue={this.state.templateName} label="Template name" onChange={e => this.setState({ templateName: e.target.value })} />
+                    <TextField inputProps={{ style: { textAlign: 'center' } }} disabled={true} style={{ paddingBottom: 15, width: 250 }} defaultValue={this.state.templateName} label="Template name" onChange={e => this.setState({ templateName: e.target.value })} />
                     <div className="ButtonBlock" >
                         <div style={{ marginLeft: "25%", marginRight: "25%", marginTop: 15, marginBottom: 15 }}>
                             {this.state.categories.map(category => {
@@ -76,7 +76,7 @@ class TemplateViewer extends Component {
                     </div>
                     <p style={{ marginTop: 10 }}><b>Overall Points: {calculateSum(this.state.criteria)}</b></p>
                     <List style={{ color: "red" }}>
-                        <ListSubheader component="div" style={{ color: "red" }} >
+                        <ListSubheader disableSticky component="div" style={{ color: "red" }} >
                             Criticals
                     </ListSubheader>
                         {this.state.topics.filter(topic => topic.critical).map(entry => {
@@ -96,7 +96,7 @@ class TemplateViewer extends Component {
                     </List>
                     <hr />
                     <List style={{ color: "blue" }}>
-                        <ListSubheader component="div" >
+                        <ListSubheader disableSticky component="div" >
                             Topics and Criterias
                     </ListSubheader>
                         {this.state.topics.filter(topic => !topic.critical).map(entry => {

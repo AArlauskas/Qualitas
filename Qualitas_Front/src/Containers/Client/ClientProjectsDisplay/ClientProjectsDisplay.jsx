@@ -23,7 +23,7 @@ class ClientProjectsDisplay extends Component {
     render() {
         return (
             <div>
-                {this.props.projects.length === 0 ? <LoadingScreen /> :
+                {this.props.projects === null ? <LoadingScreen /> :
                     <ClientProjectsList
                         projects={this.props.projects.Projects}
                         minDate={this.state.minDate}

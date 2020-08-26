@@ -1,6 +1,6 @@
 import axios from "axios";
 
-let baseUri = "https://localhost:44326/api"
+let baseUri = "http://infomedia-001-site1.ftempurl.com/api"
 let Api = axios.create({
     baseURL: baseUri,
     headers: {
@@ -332,15 +332,6 @@ export const UpdateTeam = async (data) => {
         });
 };
 
-export const DeleteTeam = async (id) => {
-    return await Api.delete("/Teams/" + id)
-        .then((response) => {
-            return response.data;
-        })
-        .catch((error) => {
-            throw Error("An error has occurred calling the api: " + error);
-        });
-};
 
 export const GetTeam = async (id) => {
     return await Api.get("/Teams/" + id)
@@ -604,6 +595,16 @@ export const UpadateProjectName = async (id, data) => {
 
 export const DeleteProject = async (id) => {
     return await Api.post("/Projects/markdeleted/" + id)
+        .then((response) => {
+            return response.data;
+        })
+        .catch((error) => {
+            throw Error("An error has occurred calling the api: " + error);
+        });
+};
+
+export const DeleteTeam = async (id) => {
+    return await Api.post("/Teams/markdeleted/" + id)
         .then((response) => {
             return response.data;
         })

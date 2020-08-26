@@ -21,7 +21,7 @@ class UserListDisplay extends Component {
     }
     render() {
         return (
-            this.props.userData.length !== 0 ?
+            this.props.userData !== null ?
                 <UserListTable
                     userData={this.props.userData}
                     teams={this.props.teams}

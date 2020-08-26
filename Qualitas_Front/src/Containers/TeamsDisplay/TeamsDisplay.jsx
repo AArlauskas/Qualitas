@@ -21,7 +21,7 @@ class TeamsDisplay extends Component {
     render() {
         return (
             <div>
-                {this.props.teamsList.length === 0 ? <LoadingScreen /> :
+                {this.props.teamsList === null ? <LoadingScreen /> :
                     <TeamListTable
                         teamsList={this.props.teamsList}
                         createTeam={this.props.createTeam}

@@ -1,6 +1,16 @@
 import React, { useState } from 'react';
-import { ListItem, ListItemText, ListItemIcon, ListItemSecondaryAction, List, ListSubheader } from '@material-ui/core';
-import { KeyboardArrowDown, KeyboardArrowUp } from '@material-ui/icons';
+import { ListItem, ListItemText, ListItemIcon, ListItemSecondaryAction, List, ListSubheader, Tooltip } from '@material-ui/core';
+import { KeyboardArrowDown, KeyboardArrowUp, DescriptionOutlined } from '@material-ui/icons';
+import Fade from '@material-ui/core/Fade';
+import { withStyles } from "@material-ui/styles";
+
+const CustomTooltip = withStyles({
+    tooltip: {
+        color: "black",
+        backgroundColor: "white",
+        fontSize: 15
+    }
+})(Tooltip);
 
 const getCriterias = (topic) => {
     let result = [];
@@ -32,6 +42,13 @@ const TopicListItem = (props) => {
                 <ListItemIcon>
                     {open ? <KeyboardArrowDown /> : <KeyboardArrowUp />}
                 </ListItemIcon>
+
+                {props.topic.description === "" || props.topic.description === undefined ? null :
+                    <ListItemIcon>
+                        <CustomTooltip arrow TransitionComponent={Fade} title={props.topic.description} interactive>
+                            <DescriptionOutlined />
+                        </CustomTooltip>  </ListItemIcon>}
+
                 <ListItemText>{props.topic.name}</ListItemText>
                 <ListItemSecondaryAction>
                     <ListItemText>Score: {isNaN(Math.trunc(props.topic.score / props.topic.points * 100)) ? "0%" : Math.trunc(props.topic.score / props.topic.points * 100) + "%"}</ListItemText>

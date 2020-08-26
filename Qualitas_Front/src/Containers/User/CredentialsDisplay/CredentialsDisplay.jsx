@@ -5,7 +5,7 @@ import LoadingScreen from '../../../Components/LoadingScreen/LoadingScreen';
 
 class CredentialsDisplay extends Component {
     state = {
-        User: []
+        User: null
     }
     componentDidMount() {
         let id = window.localStorage.getItem("id");
@@ -14,7 +14,7 @@ class CredentialsDisplay extends Component {
     render() {
         return (
             <div>
-                {this.state.User.length === 0 ? <LoadingScreen /> :
+                {this.state.User === null ? <LoadingScreen /> :
                     <Credentials
                         user={this.state.User}
                         updateCredentials={updateUserCredentials} />}

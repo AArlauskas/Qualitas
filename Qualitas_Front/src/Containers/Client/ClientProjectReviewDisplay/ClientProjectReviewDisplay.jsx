@@ -6,7 +6,7 @@ import LoadingScreen from '../../../Components/LoadingScreen/LoadingScreen';
 let date = new Date();
 class ClientProjectReviewDisplay extends Component {
     state = {
-        Project: [],
+        Project: null,
         minDate: new Date(date.getFullYear(), date.getMonth(), 1),
         maxDate: new Date(),
     }
@@ -41,7 +41,7 @@ class ClientProjectReviewDisplay extends Component {
         return (
             <div>
                 {console.log(this.props)}
-                {this.state.Project.length === 0 ? <LoadingScreen /> : <div>
+                {this.state.Project === null ? <LoadingScreen /> : <div>
                     <div style={{ textAlign: "center" }}>
                         <h2>Project's name: {this.state.Project.name}</h2>
                         <h2>Overall score: {this.calculateOverallScore()}%</h2>

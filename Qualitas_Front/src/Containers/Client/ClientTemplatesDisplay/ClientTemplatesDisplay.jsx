@@ -14,7 +14,7 @@ class ClientTemplatesDisplay extends Component {
         return (
             <div>
                 {console.log(this.props.templates)}
-                {this.props.templates.length === 0 ? <LoadingScreen /> :
+                {this.props.templates === null ? <LoadingScreen /> :
                     <div>
                         <ClientTemplatesList
                             templates={this.props.templates} />

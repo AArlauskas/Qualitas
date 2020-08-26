@@ -18,6 +18,7 @@
     <Property Name="score" Type="float" Nullable="false" />
     <Property Name="TopicId" Type="int" Nullable="false" />
     <Property Name="comment" Type="nvarchar(max)" />
+    <Property Name="description" Type="nvarchar(max)" />
   </EntityType>
   <EntityType Name="CriteriaTemplate">
     <Key>
@@ -27,6 +28,7 @@
     <Property Name="name" Type="nvarchar(max)" Nullable="false" />
     <Property Name="points" Type="int" Nullable="false" />
     <Property Name="TopicId" Type="int" Nullable="false" />
+    <Property Name="description" Type="nvarchar(max)" />
   </EntityType>
   <EntityType Name="Evaluation">
     <Key>

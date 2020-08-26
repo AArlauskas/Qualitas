@@ -24,12 +24,12 @@ class UserProjectsList extends Component {
         let columns = [
             { title: "Project name", field: "name", customFilterAndSearch: (term, rowData) => rowData.name.toLowerCase().startsWith(term.toLowerCase()) },
             {
-                editable: "never", title: "Project's score", field: "projectScore", render: rowData => isNaN(Math.trunc((rowData.overallScore / rowData.overallPoints) * 100)) ? "0%" : Math.trunc((rowData.overallScore / rowData.overallPoints) * 100) + "%",
-                customFilterAndSearch: (term, rowData) => Math.trunc((rowData.overallScore / rowData.overallPoints) * 100) === parseInt(term)
+                editable: "never", title: "Project's score", field: "projectScore", render: rowData => isNaN(Math.round((rowData.overallScore / rowData.overallPoints) * 10000) / 100) ? "0%" : Math.round((rowData.overallScore / rowData.overallPoints) * 10000) / 100 + "%",
+                customFilterAndSearch: (term, rowData) => Math.round((rowData.overallScore / rowData.overallPoints) * 10000) / 100 === parseInt(term)
             },
             {
-                editable: "never", title: "Your score", field: "score", render: rowData => isNaN(Math.trunc((rowData.score / rowData.points) * 100)) ? "0%" : Math.trunc((rowData.score / rowData.points) * 100) + "%",
-                customFilterAndSearch: (term, rowData) => Math.trunc((rowData.score / rowData.points) * 100) === parseInt(term)
+                editable: "never", title: "Your score", field: "score", render: rowData => isNaN(Math.round((rowData.score / rowData.points) * 10000) / 100) ? "0%" : Math.round((rowData.score / rowData.points) * 10000) / 100 + "%",
+                customFilterAndSearch: (term, rowData) => Math.round((rowData.score / rowData.points) * 10000) / 100 === parseInt(term)
             },
             {
                 editable: "never", title: "Rating", field: "rating", render: rowData => rowData.rating + " / " + rowData.userCount

@@ -20,6 +20,7 @@ namespace Qualitas_Backend.Models
         public double score { get; set; }
         public int TopicId { get; set; }
         public string comment { get; set; }
+        public string description { get; set; }
     
         public virtual Topic Topic { get; set; }
     }

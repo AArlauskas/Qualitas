@@ -27,8 +27,8 @@ class ClientProjectReview extends Component {
                     rowData.lastname.toLowerCase().startsWith(term.toLowerCase())
             },
             {
-                title: "Score", field: "score", render: rowData => isNaN(Math.trunc((rowData.score / rowData.points) * 100)) ? "0%" : Math.trunc((rowData.score / rowData.points) * 100) + "%",
-                customFilterAndSearch: (term, rowData) => Math.trunc((rowData.score / rowData.points) * 100) === parseInt(term)
+                title: "Score", field: "score", render: rowData => isNaN(Math.round((rowData.score / rowData.points) * 10000) / 100) ? "0%" : Math.round((rowData.score / rowData.points) * 10000) / 100 + "%",
+                customFilterAndSearch: (term, rowData) => Math.round((rowData.score / rowData.points) * 10000) / 100 === parseFloat(term)
             },
             {
                 title: "Evaluated cases", field: "caseCount", customFilterAndSearch: (term, rowData) => rowData.caseCount === parseInt(term)

@@ -19,9 +19,11 @@ class CaseCreatorDisplay extends Component {
             this.setState({ templateId: this.state.user.Projects[0].EvaluationTemplates[0].id });
         });
     }
-    componentDidUpdate() {
-        if (this.state.templateId !== undefined) {
-            FetchTemplateForCase(this.state.templateId).then(response => this.setState({ template: response }));
+    componentDidUpdate(prevProps, prevState) {
+        if (prevState.templateId !== this.state.templateId || prevState.projectId !== this.state.projectId) {
+            if (this.state.templateId !== undefined) {
+                FetchTemplateForCase(this.state.templateId).then(response => this.setState({ template: response }));
+            }
         }
     }
     render() {
@@ -37,7 +39,7 @@ class CaseCreatorDisplay extends Component {
                                 label="Select Project"
                                 value={this.state.projectId}
                                 defaultValue={this.state.user.Projects[0].id}
-                                onChange={e => this.setState({ projectId: parseInt(e.target.value), templateId: this.state.user.Projects[0].EvaluationTemplates[0].id })}>
+                                onChange={e => this.setState({ projectId: parseInt(e.target.value), templateId: this.state.user.Projects.find(temp => temp.id === parseInt(e.target.value)).EvaluationTemplates[0].id })}>
                                 {this.state.user.Projects.map(project => {
                                     return <option key={project.id} value={project.id}>{project.name}</option>
                                 })}
@@ -55,7 +57,7 @@ class CaseCreatorDisplay extends Component {
                                     })}
                                 </Select>}
                         </div>
-                        {this.state.projectId === undefined || this.state.templateId === undefined || this.state.template.length === 0 ? <LoadingScreen /> :
+                        {this.state.projectId === undefined || this.state.template.length === 0 ? <LoadingScreen /> :
                             <CaseCreator
                                 projectId={this.state.projectId}
                                 userId={this.state.userId}

@@ -58,6 +58,7 @@ class CaseCreator extends Component {
                 criterias.push({
                     id: criteria.id,
                     name: criteria.name,
+                    description: criteria.description,
                     points: criteria.points,
                     score: 0,
                     comment: ""
@@ -98,7 +99,7 @@ class CaseCreator extends Component {
                         </Select>}
                         <div>
                             <h3>Points: {TotalScore(this.state.topics)} / {TotalPoints(this.state.topics)}</h3>
-                            <h3>Percent: {isNaN(Math.trunc(TotalScore(this.state.topics) / TotalPoints(this.state.topics) * 100)) ? 0 : Math.trunc(TotalScore(this.state.topics) / TotalPoints(this.state.topics) * 100)}%</h3>
+                            <h3>Percent: {isNaN(Math.round(TotalScore(this.state.topics) / TotalPoints(this.state.topics) * 10000) / 100) ? 0 : Math.round(TotalScore(this.state.topics) / TotalPoints(this.state.topics) * 10000) / 100}%</h3>
                         </div>
                         <div>
                             <div>
@@ -125,6 +126,13 @@ class CaseCreator extends Component {
                                                     breached: !isChecked
                                                 })
                                             }} button key={topic.id}>
+
+                                                {topic.description === "" || topic.description === null ? null :
+                                                    <ListItemIcon>
+                                                        <CustomTooltip arrow TransitionComponent={Fade} title={topic.description} interactive>
+                                                            <DescriptionOutlined />
+                                                        </CustomTooltip> </ListItemIcon>}
+
                                                 <ListItemText>{topic.name}</ListItemText>
                                                 <ListItemSecondaryAction>
                                                     <Checkbox
@@ -170,7 +178,7 @@ class CaseCreator extends Component {
                                                 <ListItemSecondaryAction>
                                                     <div style={{ overflow: "hidden" }}>
                                                         <p style={{ float: "left" }}>{TopicScore(topic)} / {TopicPoints(topic)}</p>
-                                                        <p style={{ float: "right", paddingLeft: 10 }}>{isNaN(Math.trunc(TopicScore(topic) / TopicPoints(topic) * 100)) ? 0 : Math.trunc(TopicScore(topic) / TopicPoints(topic) * 100)}%</p>
+                                                        <p style={{ float: "right", paddingLeft: 10 }}>{isNaN(Math.round(TopicScore(topic) / TopicPoints(topic) * 10000) / 100) ? 0 : Math.round(TopicScore(topic) / TopicPoints(topic) * 10000) / 100}%</p>
                                                     </div>
                                                 </ListItemSecondaryAction>
                                             </ListItem>
@@ -180,7 +188,12 @@ class CaseCreator extends Component {
                                                     return (
                                                         <div key={crit.id}>
                                                             <ListItem button style={{ paddingLeft: 40 }} >
-                                                                <ListItemText onClick={() => {
+                                                                {crit.description === "" || crit.description === null ? null :
+                                                                    <ListItemIcon>
+                                                                        <CustomTooltip arrow TransitionComponent={Fade} title={crit.description} interactive>
+                                                                            <DescriptionOutlined />
+                                                                        </CustomTooltip> </ListItemIcon>}
+                                                                <ListItemText style={{ paddingRight: 100 }} onClick={() => {
                                                                     let tempTopics = [...this.state.topics];
                                                                     let score = tempTopics.find(tempTopic => tempTopic.id === topic.id).criteria.find(tempCriteria => tempCriteria.id === crit.id).score;
                                                                     if (score === 0) {

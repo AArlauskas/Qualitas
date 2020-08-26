@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Button } from '@material-ui/core';
 import TemplateTable from '../../Components/TemplateTable/TemplateTable';
 import { connect } from "react-redux";
-import { fetchTemplates, deleteTemplate } from '../../Actions/TemplateDisplayActions';
+import { fetchTemplates, deleteTemplate, copyTemplate } from '../../Actions/TemplateDisplayActions';
 import LoadingScreen from '../../Components/LoadingScreen/LoadingScreen';
 
 class TemplatesDisplay extends Component {
@@ -17,6 +17,7 @@ class TemplatesDisplay extends Component {
                     <div><Button color="primary" variant="outlined" href="/newTemplate" style={{ marginBottom: 10 }}>Create new template</Button>
                         <TemplateTable
                             templates={this.props.templates}
+                            copyTemplate={this.props.copyTemplate}
                             deleteTemplate={this.props.deleteTemplate} /></div>}
             </div>
         );
@@ -29,6 +30,7 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => ({
     fetchTemplates: () => dispatch(fetchTemplates()),
+    copyTemplate: (id, name) => dispatch(copyTemplate(id, name)),
     deleteTemplate: (id) => dispatch(deleteTemplate(id))
 });
 

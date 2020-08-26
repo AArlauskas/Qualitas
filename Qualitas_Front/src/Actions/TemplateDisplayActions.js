@@ -1,5 +1,5 @@
 import { ActionType } from "../Constants/ActionType";
-import { FetchTemplatesList, DeleteTemplate, FetchClientTemplatesList } from "../API/API";
+import { FetchTemplatesList, DeleteTemplate, FetchClientTemplatesList, CopyTemplate } from "../API/API";
 
 export const fetchTemplates = () => async (dispatch) => {
     let templates = await FetchTemplatesList();
@@ -16,6 +16,19 @@ export const fetchClientTemplates = (id) => async (dispatch) => {
         payload: templates
     });
 };
+
+export const copyTemplate = (ids, name) => async (dispatch) => {
+    let id = await CopyTemplate(ids);
+    let data = {
+        id: id,
+        name: name + "-Copy",
+        Projects: [],
+    }
+    dispatch({
+        type: ActionType.COPY_TEMPLATE,
+        payload: data
+    })
+}
 
 export const deleteTemplate = (id) => async (dispatch) => {
     await DeleteTemplate(id);

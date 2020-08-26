@@ -23,7 +23,21 @@ class TeamsListTable extends Component {
     state = {
         columns: [
             {
-                title: "Name", field: "name"
+                title: "Name", field: "name", validate: rowData => {
+                    if (rowData.name === "" || rowData.name === undefined) {
+                        return {
+                            isValid: false,
+                            helperText: "Name must not be empty"
+                        };
+                    }
+                    else if (this.props.teamsList.some(project => project.name === rowData.name)) {
+                        return {
+                            isValid: false,
+                            helperText: "Names must be unique"
+                        };
+                    }
+                    else return true;
+                }
             },
             // {
             //     title: "Projects", field: "projects", editable: "never",
@@ -36,8 +50,8 @@ class TeamsListTable extends Component {
                 title: "Number of users", field: "userCount", editable: "never"
             },
             {
-                editable: "never", title: "Score", field: "score", render: rowData => isNaN(Math.trunc((rowData.score / rowData.points) * 100)) ? "0%" : Math.trunc((rowData.score / rowData.points) * 100) + "%",
-                customFilterAndSearch: (term, rowData) => Math.trunc((rowData.score / rowData.points) * 100) === parseInt(term)
+                editable: "never", title: "Score", field: "score", render: rowData => isNaN(Math.round((rowData.score / rowData.points) * 10000) / 100) ? "0%" : Math.round((rowData.score / rowData.points) * 10000) / 100 + "%",
+                customFilterAndSearch: (term, rowData) => Math.round((rowData.score / rowData.points) * 10000) / 100 === parseInt(term)
             },
         ]
     }
@@ -76,6 +90,7 @@ class TeamsListTable extends Component {
                     icons={tableIcons}
                     title="Teams"
                     options={{
+
                         addRowPosition: "first",
                         filtering: true,
                         actionsColumnIndex: -1,

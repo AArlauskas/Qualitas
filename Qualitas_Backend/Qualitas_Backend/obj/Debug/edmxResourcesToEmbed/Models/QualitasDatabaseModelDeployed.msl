@@ -4,6 +4,7 @@
     <EntitySetMapping Name="Criteria">
       <EntityTypeMapping TypeName="DB_QualitasHostedModel.Criterion">
         <MappingFragment StoreEntitySet="Criteria">
+          <ScalarProperty Name="description" ColumnName="description" />
           <ScalarProperty Name="id" ColumnName="id" />
           <ScalarProperty Name="name" ColumnName="name" />
           <ScalarProperty Name="points" ColumnName="points" />
@@ -16,6 +17,7 @@
     <EntitySetMapping Name="CriteriaTemplates">
       <EntityTypeMapping TypeName="DB_QualitasHostedModel.CriteriaTemplate">
         <MappingFragment StoreEntitySet="CriteriaTemplate">
+          <ScalarProperty Name="description" ColumnName="description" />
           <ScalarProperty Name="id" ColumnName="id" />
           <ScalarProperty Name="name" ColumnName="name" />
           <ScalarProperty Name="points" ColumnName="points" />

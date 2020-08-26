@@ -82,6 +82,7 @@ namespace Qualitas_Backend.Controllers
             var users = db.Users.Where(user => !user.IsArchived && !user.IsDeleted).Select(user => new
             {
                 user.id,
+                role = user.RoleType,
                 firstname = user.firstname,
                 lastname = user.lastname,
             });
@@ -112,9 +113,10 @@ namespace Qualitas_Backend.Controllers
         [Route("api/Users/Teams/simple/{id}")]
         public async Task<IHttpActionResult> GetUserListSimpleForTeam(int id)
         {
-            var users = db.Users.Where(user => !user.IsArchived && !user.IsDeleted).Where(user => user.TeamId == id || user.TeamId == null).Select(user => new
+            var users = db.Users.Where(user => !user.IsArchived && !user.IsDeleted).Where(user => user.TeamId == id || user.TeamId == null).Where(user => user.RoleType == "user").Select(user => new
             {
                 user.id,
+                role = user.RoleType,
                 firstname = user.firstname,
                 lastname = user.lastname,
             });
@@ -296,6 +298,7 @@ namespace Qualitas_Backend.Controllers
                             criteria.id,
                             criteria.name,
                             criteria.points,
+                            criteria.description,
                             criteria.score,
                             criteria.comment
                         })
@@ -330,6 +333,7 @@ namespace Qualitas_Backend.Controllers
                         criticals = evaluationTemplate.TopicTemplates.Where(topic => topic.isCritical).Select(topic => new CrititalReport()
                         {
                             name = topic.name,
+                            description = topic.description,
                             breachedCount = category.Select(group => group.Criticals.Where(critical => critical.name == topic.name).Where(critical => critical.failed).Count()).Sum()
                         }).ToList(),
                         topics = evaluationTemplate.TopicTemplates.Where(topic => !topic.isCritical).Select(topic => new TopicReport()
@@ -339,6 +343,7 @@ namespace Qualitas_Backend.Controllers
                             criterias = topic.CriteriaTemplates.Select(criteria => new CriteriaReport()
                             {
                                 name = criteria.name,
+                                description = criteria.description,
                                 score = category.Select(group => group.Topics.Where(tempTopic => tempTopic.name == topic.name).Select(tempTopic => tempTopic.crierias.Where(tempCriteria => tempCriteria.name == criteria.name).Select(tempCriteria => tempCriteria.score).Sum()).Sum()).Sum(),
                                 points = category.Select(group => group.Topics.Where(tempTopic => tempTopic.name == topic.name).Select(tempTopic => tempTopic.crierias.Where(tempCriteria => tempCriteria.name == criteria.name).Select(tempCriteria => tempCriteria.points).Sum()).Sum()).Sum()
                             }).ToList()
@@ -557,14 +562,13 @@ namespace Qualitas_Backend.Controllers
 
                         startColumn = 5;
 
-                        int criteriaCount = topic.CriteriaTemplates.Count();
-                        xlWorkSheet.Range[xlWorkSheet.Cells[topicStartRow + 1, 3], xlWorkSheet.Cells[topicStartRow + 2 * criteriaCount, 3]].Merge();
-                        xlWorkSheet.Cells[topicStartRow + 1, 3] = topic.description;
                         xlWorkSheet.Cells[topicStartRow, 4] = topic.CriteriaTemplates.Select(temp => temp.points).Sum();
                         foreach (var criteria in topic.CriteriaTemplates)
                         {
                             xlWorkSheet.Range[xlWorkSheet.Cells[topicStartRow + 1, 2], xlWorkSheet.Cells[topicStartRow + 2, 2]].Merge();
                             xlWorkSheet.Cells[topicStartRow + 1, 2] = criteria.name;
+                            xlWorkSheet.Range[xlWorkSheet.Cells[topicStartRow + 1, 3], xlWorkSheet.Cells[topicStartRow + 2, 3]].Merge();
+                            xlWorkSheet.Cells[topicStartRow + 1, 3] = criteria.description;
                             xlWorkSheet.Range[xlWorkSheet.Cells[topicStartRow + 1, 4], xlWorkSheet.Cells[topicStartRow + 2, 4]].Merge();
                             xlWorkSheet.Cells[topicStartRow + 1, 4] = criteria.points;
                             foreach (var evaluation in category)

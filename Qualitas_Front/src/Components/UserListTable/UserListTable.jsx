@@ -54,7 +54,23 @@ class UserListTable extends Component {
                     "client": "Client"
                 }
             },
-            { title: "Username", field: "username" },
+            {
+                title: "Username", field: "username", validate: rowData => {
+                    if (rowData.username === "" || rowData.username === undefined) {
+                        return {
+                            isValid: false,
+                            helperText: "Username must not be empty"
+                        }
+                    }
+                    // else if (this.props.userData.some(user => user.username === rowData.username)) {
+                    //     return {
+                    //         isValid: false,
+                    //         helperText: "Username must be unique"
+                    //     }
+                    // }
+                    return true;
+                }
+            },
             {
                 title: "Password", field: "password", filtering: false, render: rowData => {
                     let password = "";
@@ -65,20 +81,47 @@ class UserListTable extends Component {
                 },
                 editComponent: props => (
                     <TextField type="password" value={props.value} onChange={e => props.onChange(e.target.value)} />
-                )
+                ),
+                validate: rowData => {
+                    if (rowData.password === "" || rowData.password === undefined) {
+                        return {
+                            isValid: false,
+                            helperText: "Password must not be empty"
+                        }
+                    }
+                    return true;
+                }
             },
-            { title: 'Name', field: 'firstname' },
             {
-                title: 'Surname', field: 'lastname',
+                title: 'Name', field: 'firstname', validate: rowData => {
+                    if (rowData.firstname === "" || rowData.firstname === undefined) {
+                        return {
+                            isValid: false,
+                            helperText: "Firstname must not be empty"
+                        }
+                    }
+                    return true;
+                }
+            },
+            {
+                title: 'Surname', field: 'lastname', validate: rowData => {
+                    if (rowData.lastname === "" || rowData.lastname === undefined) {
+                        return {
+                            isValid: false,
+                            helperText: "Lastname must not be empty"
+                        }
+                    }
+                    return true;
+                }
             },
             {
                 title: "Team", field: "team", editable: "never",
                 render: rowData => rowData.teamName === null ? "" : <a href={"/teamDetails/" + rowData.teamId}>{rowData.teamName} </a>,
-                customFilterAndSearch: (term, rowData) => rowData.teamName === null ? false : rowData.teamName.toLowerCase().startsWith(term.toLowerCase())
+                customFilterAndSearch: (term, rowData) => rowData.teamName === null ? false : rowData.teamName.toLowerCase().startsWith(term.toLowerCase()),
             },
             {
-                editable: "never", title: "Score", field: "score", render: rowData => rowData.role === "user" ? isNaN(Math.trunc((rowData.score / rowData.points) * 100)) ? "0%" : Math.trunc((rowData.score / rowData.points) * 100) + "%" : null,
-                customFilterAndSearch: (term, rowData) => Math.trunc((rowData.score / rowData.points) * 100) === parseInt(term)
+                editable: "never", title: "Score", field: "score", render: rowData => rowData.role === "user" ? isNaN(Math.round((rowData.score / rowData.points) * 10000) / 100) ? "0%" : Math.round((rowData.score / rowData.points) * 10000) / 100 + "%" : null,
+                customFilterAndSearch: (term, rowData) => Math.round((rowData.score / rowData.points) * 10000) / 100 === parseInt(term)
             },
             {
                 title: "Evaluated cases", field: "caseCount", customFilterAndSearch: (term, rowData) => rowData.caseCount === parseInt(term), editable: "never",

@@ -16,7 +16,7 @@ class TeamReport extends Component {
                 score += report.score;
                 points += report.points;
             });
-            return isNaN(Math.trunc(score / points * 100)) ? "0" : Math.trunc(score / points * 100)
+            return isNaN(Math.round(score / points * 10000) / 100) ? "0" : Math.round(score / points * 10000) / 100
         }
         return (
             <div>
@@ -44,7 +44,7 @@ class TeamReport extends Component {
                                                 </ListItemIcon>
                                                 <ListItemText>{report.name}</ListItemText>
                                                 <ListItemSecondaryAction>
-                                                    <ListItemText>Score: {isNaN(Math.trunc(report.score / report.points * 100)) ? "0" : Math.trunc(report.score / report.points * 100) + "%"} {"   "}
+                                                    <ListItemText>Score: {isNaN(Math.round(report.score / report.points * 10000) / 100) ? "0" : Math.round(report.score / report.points * 10000) / 100 + "%"} {"   "}
                                     Evaluated cases: {report.caseCount}
                                                     </ListItemText>
                                                 </ListItemSecondaryAction>

@@ -39,8 +39,8 @@ class UsersEvaluationsList extends Component {
                 title: "Template", field: "EvaluationTemplateName"
             },
             {
-                title: "Score", field: "score", render: rowData => isNaN(Math.trunc((rowData.score / rowData.points) * 100)) ? "0%" : Math.trunc((rowData.score / rowData.points) * 100) + "%",
-                customFilterAndSearch: (term, rowData) => isNaN(Math.trunc((rowData.score / rowData.points) * 100)) ? parseInt(term) === 0 : Math.trunc((rowData.score / rowData.points) * 100) === parseInt(term)
+                title: "Score", field: "score", render: rowData => isNaN(Math.round((rowData.score / rowData.points) * 10000) / 100) ? "0%" : Math.round((rowData.score / rowData.points) * 10000) / 100 + "%",
+                customFilterAndSearch: (term, rowData) => isNaN(Math.round((rowData.score / rowData.points) * 10000) / 100) ? parseInt(term) === 0 : Math.round((rowData.score / rowData.points) * 10000) / 100 === parseInt(term)
             },
             {
                 title: "Evaluator", field: "evaluator"
@@ -133,6 +133,7 @@ class UsersEvaluationsList extends Component {
                                 setTimeout(() => {
                                     resolve();
                                     this.props.deleteEvaluation(oldData.id);
+                                    window.location.reload();
                                 }, 600);
                             })
                     }}

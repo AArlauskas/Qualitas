@@ -1,6 +1,6 @@
 import axios from "axios";
 
-let baseUri = "http://infomedia-001-site1.ftempurl.com/api"
+let baseUri = "https://localhost:44326/api"
 let Api = axios.create({
     baseURL: baseUri,
     headers: {
@@ -491,6 +491,16 @@ export const EditTemplate = async (id, data) => {
             throw Error("An error has occured calling the api: " + error);
         });
 }
+
+export const CopyTemplate = async (id) => {
+    return await Api.post("/EvaluationTemplates/copy/" + id)
+        .then((response) => {
+            return response.data;
+        })
+        .catch((error) => {
+            throw Error("An error has occurred calling the api: " + error);
+        });
+};
 
 export const DeleteTemplate = async (id) => {
     return await Api.put("/EvaluationTemplates/markdeleted/" + id)

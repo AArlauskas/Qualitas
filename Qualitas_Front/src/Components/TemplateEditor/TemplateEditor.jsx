@@ -23,7 +23,9 @@ class TemplateCreator extends Component {
     UNSAFE_componentWillMount() {
         this.setState({
             modalOpen: false,
+            criteriaModalOpen: false,
             commentTopicId: null,
+            criteriaId: null,
             id: this.props.template.id,
             editing: false,
             templateName: this.props.template.TemplateName,
@@ -48,6 +50,7 @@ class TemplateCreator extends Component {
                 id: temp.id,
                 name: temp.name,
                 points: temp.points,
+                description: temp.description,
                 parentId: temp.parentId,
                 editing: false,
             });
@@ -71,6 +74,16 @@ class TemplateCreator extends Component {
                         })
                     }} />
                     <ButtonBlock onSave={() => this.setState({ modalOpen: false, commentTopicId: null })} />
+                </UnifiedModal>
+                <UnifiedModal open={this.state.criteriaModalOpen} title="Description">
+                    <DefaultTextArea defaultValue={this.state.criteriaModalOpen ? this.state.criteria.find(topic => topic.id === this.state.criteriaId).description : ""} label="Add description..." maxLength={600} onChange={e => {
+                        let TempCriteria = [...this.state.criteria];
+                        TempCriteria.find(topic => topic.id === this.state.criteriaId).description = e.target.value;
+                        this.setState({
+                            criteria: [...TempCriteria]
+                        })
+                    }} />
+                    <ButtonBlock onSave={() => this.setState({ criteriaModalOpen: false, criteriaId: null })} />
                 </UnifiedModal>
                 <div style={{ marginLeft: "15%", marginRight: "15%", marginTop: 25, background: "rgba(200, 200, 200, 0.5)", textAlign: "center" }}>
                     <TextField inputProps={{ style: { textAlign: 'center' } }} focused={true} style={{ paddingBottom: 15, width: 250 }} defaultValue={this.state.templateName} label="Template name" onChange={e => this.setState({ templateName: e.target.value })} />
@@ -104,7 +117,7 @@ class TemplateCreator extends Component {
                         }}>
                             Add topic
                     </Button>
-                        <div style={{ marginLeft: "25%", marginRight: "25%", marginTop: 15, marginBottom: 15 }}>
+                        <div style={{ marginLeft: "15%", marginRight: "15%", marginTop: 15, marginBottom: 15 }}>
                             <TextField onKeyPress={e => {
                                 if (e.key === "Enter") {
                                     if (this.state.currentCategory !== "" && !this.state.categories.includes(this.state.currentCategory)) {
@@ -204,15 +217,12 @@ class TemplateCreator extends Component {
                             }
                             else {
                                 return (
-                                    <ListItem button key={entry.id} onClick={e => {
-                                        let id = entry.id;
-                                        let tempTopics = [...this.state.topics];
-                                        tempTopics.find(critical => critical.id === id).editing = true;
-                                        this.setState({
-                                            editing: true,
-                                            topics: tempTopics
-                                        });
-                                    }}>
+                                    <ListItem button key={entry.id}>
+                                        <ListItemIcon>
+                                            <IconButton onClick={() => this.setState({ modalOpen: true, commentTopicId: entry.id })}>
+                                                <DescriptionIcon style={{ color: entry.description === "" ? null : "green" }} />
+                                            </IconButton>
+                                        </ListItemIcon>
                                         <ListItemText>{entry.name}</ListItemText>
                                         <ListItemSecondaryAction>
                                             <IconButton disabled={this.state.editing} edge="end" aria-label="Edit" onClick={() => {
@@ -326,7 +336,7 @@ class TemplateCreator extends Component {
                                                     }}> {entry.open ? <ExpandLess /> : <ExpandMore />}</IconButton>
                                                 </ListItemIcon>
                                                 <ListItemText>{entry.name}</ListItemText>
-                                                <ListItemText style={{ textAlign: "right", marginRight: 200 }}>{<p>Points: {calculateSum(this.state.criteria.filter(temp => temp.parentId === entry.id))}</p>}</ListItemText>
+                                                <ListItemText style={{ textAlign: "right", marginRight: 80 }}>{<p style={{ paddingTop: 10 }}>Points: {calculateSum(this.state.criteria.filter(temp => temp.parentId === entry.id))}</p>}</ListItemText>
                                                 <ListItemSecondaryAction>
                                                     <IconButton disabled={this.state.editing} edge="end" aria-label="Add" onClick={() => {
                                                         let newCriteria = {
@@ -451,17 +461,14 @@ class TemplateCreator extends Component {
                                                     return (
 
                                                         <Collapse in={entry.open} key={criteria.id}>
-                                                            <ListItem key={criteria.id} button style={{ paddingLeft: 80 }} onClick={() => {
-                                                                let id = criteria.id;
-                                                                let tempCriteria = [...this.state.criteria];
-                                                                tempCriteria.find(criteria => criteria.id === id).editing = true;
-                                                                this.setState({
-                                                                    editing: true,
-                                                                    criteria: tempCriteria
-                                                                })
-                                                            }}>
-                                                                <ListItemText>{criteria.name}</ListItemText>
-                                                                <ListItemText style={{ textAlign: "right", paddingRight: 200 }}>{criteria.points}</ListItemText>
+                                                            <ListItem key={criteria.id}>
+                                                                <ListItemIcon>
+                                                                    <IconButton onClick={() => this.setState({ criteriaModalOpen: true, criteriaId: criteria.id })}>
+                                                                        <DescriptionIcon style={{ color: criteria.description === null ? null : "green" }} />
+                                                                    </IconButton>
+                                                                </ListItemIcon>
+                                                                <ListItemText style={{ marginRight: 30 }}>{criteria.name}</ListItemText>
+                                                                <ListItemText style={{ textAlign: "right", marginRight: 80, marginLeft: 30 }}>{criteria.points}</ListItemText>
                                                                 <ListItemSecondaryAction>
                                                                     <IconButton edge="end" aria-label="edit" onClick={() => {
                                                                         let id = criteria.id;
@@ -516,6 +523,7 @@ class TemplateCreator extends Component {
                         this.state.criteria.forEach(criteria => outputData.Criteria.push({
                             id: criteria.id,
                             name: criteria.name,
+                            description: criteria.description,
                             points: criteria.points,
                             parentId: criteria.parentId
                         }));

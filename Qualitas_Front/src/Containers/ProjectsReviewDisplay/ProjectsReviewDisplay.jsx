@@ -30,7 +30,7 @@ class ProjectsReviewDisplay extends Component {
             points += evaluation.points;
         });
 
-        let average = Math.trunc((score / points) * 100);
+        let average = Math.round((score / points) * 10000) / 100;
         if (isNaN(average)) {
             average = 0;
         }

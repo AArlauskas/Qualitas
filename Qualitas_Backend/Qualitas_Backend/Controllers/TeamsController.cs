@@ -133,6 +133,7 @@ namespace Qualitas_Backend.Controllers
                         {
                             criteria.id,
                             criteria.name,
+                            criteria.description,
                             criteria.points,
                             criteria.score
                         })
@@ -177,6 +178,7 @@ namespace Qualitas_Backend.Controllers
                             criticals = evaluationTemplate.TopicTemplates.Where(topic => topic.isCritical).Select(topic => new CrititalReport()
                             {
                                 name = topic.name,
+                                description = topic.description,
                                 breachedCount = category.Select(group => group.Criticals.Where(critical => critical.name == topic.name).Where(critical => critical.failed).Count()).Sum()
                             }).ToList(),
                             topics = evaluationTemplate.TopicTemplates.Where(topic => !topic.isCritical).Select(topic => new TopicReport()
@@ -185,6 +187,7 @@ namespace Qualitas_Backend.Controllers
                                 criterias = topic.CriteriaTemplates.Select(criteria => new CriteriaReport()
                                 {
                                     name = criteria.name,
+                                    description = criteria.description,
                                     score = category.Select(group => group.Topics.Where(tempTopic => tempTopic.name == topic.name).Select(tempTopic => tempTopic.crierias.Where(tempCriteria => tempCriteria.name == criteria.name).Select(tempCriteria => tempCriteria.score).Sum()).Sum()).Sum(),
                                     points = category.Select(group => group.Topics.Where(tempTopic => tempTopic.name == topic.name).Select(tempTopic => tempTopic.crierias.Where(tempCriteria => tempCriteria.name == criteria.name).Select(tempCriteria => tempCriteria.points).Sum()).Sum()).Sum()
                                 }).ToList()
@@ -266,6 +269,7 @@ namespace Qualitas_Backend.Controllers
                     Users = temp.Users.Where(user => !user.IsArchived && !user.IsDeleted).Select(user => new
                     {
                         id = user.id,
+                        role = user.RoleType,
                         name = user.firstname + user.lastname
                     })
                 }).FirstOrDefaultAsync(temp => temp.id == id);

@@ -16,6 +16,7 @@ import SaveAlt from '@material-ui/icons/SaveAlt';
 import Search from '@material-ui/icons/Search';
 import ViewColumn from '@material-ui/icons/ViewColumn';
 import WorkIcon from '@material-ui/icons/Work';
+import FileCopyIcon from '@material-ui/icons/FileCopy';
 import { Chip } from '@material-ui/core';
 
 class TemplateTable extends Component {
@@ -67,6 +68,18 @@ class TemplateTable extends Component {
                         filtering: true
                     }}
                     actions={[
+                        {
+                            icon: () => <FileCopyIcon />,
+                            tooltip: "Template projects",
+                            onClick: (event, rowData) => {
+                                new Promise((resolve) => {
+                                    setTimeout(() => {
+                                        resolve();
+                                        this.props.copyTemplate(rowData.id, rowData.name);
+                                    }, 600);
+                                })
+                            }
+                        },
                         {
                             icon: () => <WorkIcon />,
                             tooltip: "Template projects",

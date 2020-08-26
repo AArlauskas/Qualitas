@@ -52,6 +52,7 @@ namespace Qualitas_Backend.Controllers
                         criteria.id,
                         criteria.name,
                         criteria.points,
+                        criteria.description,
                         criteria.score,
                         criteria.comment
                     })

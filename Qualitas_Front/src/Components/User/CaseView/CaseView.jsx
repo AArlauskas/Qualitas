@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { List, ListSubheader, ListItem, ListItemText, ListItemSecondaryAction, Checkbox, IconButton, Tooltip, TextField } from '@material-ui/core';
+import { List, ListSubheader, ListItem, ListItemText, ListItemSecondaryAction, Checkbox, IconButton, Tooltip, TextField, ListItemIcon } from '@material-ui/core';
 import AddCommentIcon from '@material-ui/icons/AddComment';
 import UnifiedModal from "../../Core-Components/UnifiedModal";
 import InsertEmoticonIcon from '@material-ui/icons/InsertEmoticon';
@@ -46,6 +46,7 @@ class CaseView extends Component {
                 criterias.push({
                     id: criteria.id,
                     name: criteria.name,
+                    description: criteria.description,
                     points: criteria.points,
                     score: criteria.score,
                     comment: criteria.comment
@@ -68,7 +69,7 @@ class CaseView extends Component {
         return (
             <div>
                 {console.log(this.state)}
-                <div style={{ marginLeft: "25%", marginRight: "25%", background: "rgba(200, 200, 200, 0.5)" }}>
+                <div style={{ marginLeft: "15%", marginRight: "15%", background: "rgba(200, 200, 200, 0.5)" }}>
                     <UnifiedModal open={this.state.modalOpen} title="Comment">
                         <p>{this.state.modalOpen ? this.state.topics.find(topic => topic.id === this.state.commentTopicId)
                             .criteria.find(criteria => criteria.id === this.state.commentCriteriaId).comment : ""}</p>
@@ -78,7 +79,7 @@ class CaseView extends Component {
                         {this.state.CategoryName === "" ? null : <h2>Category: {this.state.CategoryName}</h2>}
                         <div>
                             <h3>Points: {TotalScore(this.state.topics)} / {TotalPoints(this.state.topics)}</h3>
-                            <h3>Percent: {isNaN(Math.trunc(TotalScore(this.state.topics) / TotalPoints(this.state.topics) * 100)) ? "0" : Math.trunc(TotalScore(this.state.topics) / TotalPoints(this.state.topics) * 100)}%</h3>
+                            <h3>Percent: {isNaN(Math.round(TotalScore(this.state.topics) / TotalPoints(this.state.topics) * 10000) / 100) ? "0" : Math.round(TotalScore(this.state.topics) / TotalPoints(this.state.topics) * 10000) / 100}%</h3>
                         </div>
                         <div>
                             <div>
@@ -91,6 +92,11 @@ class CaseView extends Component {
                                     {this.state.topics.filter(topic => topic.isCritical).map(topic => {
                                         return (
                                             <ListItem key={topic.id}>
+                                                {topic.description === "" || topic.description === null ? null :
+                                                    <ListItemIcon>
+                                                        <CustomTooltip arrow TransitionComponent={Fade} title={topic.description} interactive>
+                                                            <DescriptionOutlined />
+                                                        </CustomTooltip> </ListItemIcon>}
                                                 <ListItemText>{topic.name}</ListItemText>
                                                 <ListItemSecondaryAction>
                                                     <Checkbox
@@ -112,14 +118,15 @@ class CaseView extends Component {
                                         <div key={topic.id}>
                                             <ListItem >
                                                 {topic.description === "" || topic.description === null ? null :
-                                                    <CustomTooltip arrow TransitionComponent={Fade} title={topic.description} interactive>
-                                                        <DescriptionOutlined style={{ color: "green" }} />
-                                                    </CustomTooltip>}
+                                                    <ListItemIcon>
+                                                        <CustomTooltip arrow TransitionComponent={Fade} title={topic.description} interactive>
+                                                            <DescriptionOutlined />
+                                                        </CustomTooltip> </ListItemIcon>}
                                                 <ListItemText>{topic.name}</ListItemText>
                                                 <ListItemSecondaryAction>
                                                     <div style={{ overflow: "hidden" }}>
                                                         <p style={{ float: "left" }}>{TopicScore(topic)} / {TopicPoints(topic)}</p>
-                                                        <p style={{ float: "right", paddingLeft: 10 }}>{isNaN(Math.trunc(TopicScore(topic) / TopicPoints(topic) * 100)) ? 0 : Math.trunc(TopicScore(topic) / TopicPoints(topic) * 100)}%</p>
+                                                        <p style={{ float: "right", paddingLeft: 10 }}>{isNaN(Math.round(TopicScore(topic) / TopicPoints(topic) * 10000) / 100) ? 0 : Math.round(TopicScore(topic) / TopicPoints(topic) * 10000) / 100}%</p>
                                                     </div>
                                                 </ListItemSecondaryAction>
                                             </ListItem>
@@ -129,6 +136,11 @@ class CaseView extends Component {
                                                     return (
                                                         <div key={crit.id}>
                                                             <ListItem key={crit.id} style={{ paddingLeft: 40 }} >
+                                                                {crit.description === "" || crit.description === null ? null :
+                                                                    <ListItemIcon>
+                                                                        <CustomTooltip arrow TransitionComponent={Fade} title={crit.description} interactive>
+                                                                            <DescriptionOutlined />
+                                                                        </CustomTooltip> </ListItemIcon>}
                                                                 <ListItemText>{crit.name}</ListItemText>
                                                                 <ListItemSecondaryAction>
                                                                     <IconButton disabled={true} edge="end" aria-label="Perfect" style={{ backgroundColor: crit.score === crit.points ? "rgba(0,255,0, 0.2)" : null }}>
@@ -160,7 +172,7 @@ class CaseView extends Component {
 
                 </div >
                 {this.state.overallComment === null ? null :
-                    <div style={{ textAlign: "center", marginTop: 10, marginLeft: "25%", marginRight: "25%" }}>
+                    <div style={{ textAlign: "center", marginTop: 10, marginLeft: "15%", marginRight: "15%" }}>
                         <TextField
                             disabled={true}
                             rows={6}

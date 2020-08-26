@@ -34,8 +34,8 @@ class ClientProjectsList extends Component {
                 customFilterAndSearch: (term, rowData) => rowData.templates.some(template => template.name.toLowerCase().startsWith(term.toLowerCase()))
             },
             {
-                editable: "never", title: "Score", field: "score", render: rowData => isNaN(Math.trunc((rowData.score / rowData.points) * 100)) ? "0%" : Math.trunc((rowData.score / rowData.points) * 100) + "%",
-                customFilterAndSearch: (term, rowData) => Math.trunc((rowData.score / rowData.points) * 100) === parseInt(term)
+                editable: "never", title: "Score", field: "score", render: rowData => isNaN(Math.round((rowData.score / rowData.points) * 10000) / 100) ? "0%" : Math.round((rowData.score / rowData.points) * 10000) / 100 + "%",
+                customFilterAndSearch: (term, rowData) => Math.round((rowData.score / rowData.points) * 10000) / 100 === parseFloat(term)
             },
             {
                 title: "Number of users", field: "userCount", customFilterAndSearch: (term, rowData) => rowData.userCount === parseInt(term), editable: "never"

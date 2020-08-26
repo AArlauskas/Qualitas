@@ -137,6 +137,16 @@ export const reducer = (state = initialState, action) => {
             }
         }
 
+        case ActionType.COPY_TEMPLATE: {
+            let newTemplate = action.payload;
+            let templates = [...state.Templates];
+            templates.push(newTemplate);
+            return {
+                ...state,
+                Templates: templates
+            }
+        }
+
         case ActionType.LOAD_PROJECTS: {
             return {
                 ...state,

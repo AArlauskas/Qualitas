@@ -26,7 +26,26 @@ class ProjectsTable extends Component {
 
     componentDidMount() {
         let columns = [
-            { title: "Project name", field: "name", customFilterAndSearch: (term, rowData) => rowData.name.toLowerCase().startsWith(term.toLowerCase()) },
+            {
+                title: "Project name",
+                field: "name",
+                customFilterAndSearch: (term, rowData) => rowData.name.toLowerCase().startsWith(term.toLowerCase()),
+                validate: rowData => {
+                    if (rowData.name === "" || rowData.name === undefined) {
+                        return {
+                            isValid: false,
+                            helperText: "Name must not be empty"
+                        };
+                    }
+                    // else if (this.props.projects.some(project => project.name === rowData.name)) {
+                    //     return {
+                    //         isValid: false,
+                    //         helperText: "Names must be unique"
+                    //     };
+                    // }
+                    else return true;
+                }
+            },
             {
                 editable: "never",
                 title: "Templates",
@@ -46,8 +65,8 @@ class ProjectsTable extends Component {
             //     customFilterAndSearch: (term, rowData) => rowData.teams.some(team => team.name.toLowerCase().startsWith(term.toLowerCase()))
             // },
             {
-                editable: "never", title: "Score", field: "score", render: rowData => isNaN(Math.trunc((rowData.score / rowData.points) * 100)) ? "0%" : Math.trunc((rowData.score / rowData.points) * 100) + "%",
-                customFilterAndSearch: (term, rowData) => Math.trunc((rowData.score / rowData.points) * 100) === parseInt(term)
+                editable: "never", title: "Score", field: "score", render: rowData => isNaN(Math.round((rowData.score / rowData.points) * 10000) / 100) ? "0%" : Math.round((rowData.score / rowData.points) * 10000) / 100 + "%",
+                customFilterAndSearch: (term, rowData) => Math.round((rowData.score / rowData.points) * 10000) / 100 === parseInt(term)
             },
             {
                 title: "Evaluated cases", field: "caseCount", customFilterAndSearch: (term, rowData) => rowData.caseCount === parseInt(term), editable: "never"
@@ -138,11 +157,9 @@ class ProjectsTable extends Component {
                     editable={{
                         onRowAdd: (newData) =>
                             new Promise((resolve) => {
+                                console.log("helloui")
                                 setTimeout(() => {
                                     resolve();
-                                    if (newData.name === "") {
-                                        return;
-                                    }
                                     this.props.addProject(newData);
                                 }, 600);
                             }),

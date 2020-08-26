@@ -10,7 +10,7 @@ export default class ProjectDetails extends React.Component {
         this.props.users.forEach(user => {
             dataSource.push({
                 key: user.id,
-                title: user.firstname + " " + user.lastname,
+                title: user.role + ": " + user.firstname + " " + user.lastname,
             });
         });
         this.props.project.Users.forEach(user => {

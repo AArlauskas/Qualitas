@@ -8,7 +8,7 @@ import DefaultMultiSelect from '../Core-Components/DefaultMultiSelect/DefaultMul
 const calculateScore = (report, categories) => {
 
     if (categories.length === 0) {
-        return isNaN(Math.trunc(report.score / report.points * 100)) ? "0" : Math.trunc(report.score / report.points * 100)
+        return isNaN(Math.round(report.score / report.points * 10000) / 100) ? "0" : Math.round(report.score / report.points * 10000) / 100
     }
     else {
         let score = 0;
@@ -18,7 +18,7 @@ const calculateScore = (report, categories) => {
             score += temp.score;
             points += temp.points;
         });
-        return isNaN(Math.trunc(score / points * 100)) ? "0" : Math.trunc(score / points * 100)
+        return isNaN(Math.round(score / points * 10000) / 100) ? "0" : Math.round(score / points * 10000) / 100
     }
 }
 
@@ -56,6 +56,7 @@ const getCriticals = (report, categories) => {
         group[key].forEach(member => breachCount += member.breachedCount);
         result.push({
             name: key,
+            description: group[key][0].description === null ? "" : group[key][0].description,
             breachedCount: breachCount
         })
     })
@@ -89,6 +90,7 @@ const getTopics = (report, categories) => {
         result.push({
             name: key,
             score: score,
+            description: group[key][0].description === null ? "" : group[key][0].description,
             points: points,
             criterias: criterias
         })

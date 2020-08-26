@@ -11,6 +11,7 @@
     <Property Name="TopicId" Type="Int32" Nullable="false" />
     <Property Name="comment" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
     <NavigationProperty Name="Topic" Relationship="Self.FK_Criteria_Topic" FromRole="Criteria" ToRole="Topic" />
+    <Property Name="description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
   </EntityType>
   <EntityType Name="CriteriaTemplate">
     <Key>
@@ -21,6 +22,7 @@
     <Property Name="points" Type="Int32" Nullable="false" />
     <Property Name="TopicId" Type="Int32" Nullable="false" />
     <NavigationProperty Name="TopicTemplate" Relationship="Self.FK_CriteriaTemplate_TopicTemplate" FromRole="CriteriaTemplate" ToRole="TopicTemplate" />
+    <Property Name="description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
   </EntityType>
   <EntityType Name="Evaluation">
     <Key>

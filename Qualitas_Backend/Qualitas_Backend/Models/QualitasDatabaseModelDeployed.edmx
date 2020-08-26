@@ -23,6 +23,7 @@
           <Property Name="score" Type="float" Nullable="false" />
           <Property Name="TopicId" Type="int" Nullable="false" />
           <Property Name="comment" Type="nvarchar(max)" />
+          <Property Name="description" Type="nvarchar(max)" />
         </EntityType>
         <EntityType Name="CriteriaTemplate">
           <Key>
@@ -32,6 +33,7 @@
           <Property Name="name" Type="nvarchar(max)" Nullable="false" />
           <Property Name="points" Type="int" Nullable="false" />
           <Property Name="TopicId" Type="int" Nullable="false" />
+          <Property Name="description" Type="nvarchar(max)" />
         </EntityType>
         <EntityType Name="Evaluation">
           <Key>
@@ -444,6 +446,7 @@
           <Property Name="TopicId" Type="Int32" Nullable="false" />
           <Property Name="comment" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="Topic" Relationship="Self.FK_Criteria_Topic" FromRole="Criteria" ToRole="Topic" />
+          <Property Name="description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="CriteriaTemplate">
           <Key>
@@ -454,6 +457,7 @@
           <Property Name="points" Type="Int32" Nullable="false" />
           <Property Name="TopicId" Type="Int32" Nullable="false" />
           <NavigationProperty Name="TopicTemplate" Relationship="Self.FK_CriteriaTemplate_TopicTemplate" FromRole="CriteriaTemplate" ToRole="TopicTemplate" />
+          <Property Name="description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="Evaluation">
           <Key>
@@ -801,6 +805,7 @@
           <EntitySetMapping Name="Criteria">
             <EntityTypeMapping TypeName="DB_QualitasHostedModel.Criterion">
               <MappingFragment StoreEntitySet="Criteria">
+                <ScalarProperty Name="description" ColumnName="description" />
                 <ScalarProperty Name="id" ColumnName="id" />
                 <ScalarProperty Name="name" ColumnName="name" />
                 <ScalarProperty Name="points" ColumnName="points" />
@@ -813,6 +818,7 @@
           <EntitySetMapping Name="CriteriaTemplates">
             <EntityTypeMapping TypeName="DB_QualitasHostedModel.CriteriaTemplate">
               <MappingFragment StoreEntitySet="CriteriaTemplate">
+                <ScalarProperty Name="description" ColumnName="description" />
                 <ScalarProperty Name="id" ColumnName="id" />
                 <ScalarProperty Name="name" ColumnName="name" />
                 <ScalarProperty Name="points" ColumnName="points" />

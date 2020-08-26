@@ -28,6 +28,7 @@ const getCriterias = (topic) => {
         result.push({
             name: key,
             score: score,
+            description: group[key][0].description === null ? "" : group[key][0].description,
             points: points
         })
     });
@@ -51,7 +52,7 @@ const TopicListItem = (props) => {
 
                 <ListItemText>{props.topic.name}</ListItemText>
                 <ListItemSecondaryAction>
-                    <ListItemText>Score: {isNaN(Math.trunc(props.topic.score / props.topic.points * 100)) ? "0%" : Math.trunc(props.topic.score / props.topic.points * 100) + "%"}</ListItemText>
+                    <ListItemText>Score: {isNaN(Math.round(props.topic.score / props.topic.points * 10000) / 100) ? "0%" : Math.round(props.topic.score / props.topic.points * 10000) / 100 + "%"}</ListItemText>
                 </ListItemSecondaryAction>
             </ListItem>
             {open ?
@@ -61,9 +62,14 @@ const TopicListItem = (props) => {
                         return (
                             <React.Fragment key={criteria.name}>
                                 <ListItem>
+                                    {criteria.description === "" || criteria.description === undefined ? null :
+                                        <ListItemIcon>
+                                            <CustomTooltip arrow TransitionComponent={Fade} title={criteria.description} interactive>
+                                                <DescriptionOutlined />
+                                            </CustomTooltip>  </ListItemIcon>}
                                     <ListItemText>{criteria.name}</ListItemText>
                                     <ListItemSecondaryAction>
-                                        <ListItemText>{isNaN(Math.trunc(criteria.score / criteria.points * 100)) ? "0%" : Math.trunc(criteria.score / criteria.points * 100) + "%"}</ListItemText>
+                                        <ListItemText>{isNaN(Math.round(criteria.score / criteria.points * 10000) / 100) ? "0%" : Math.round(criteria.score / criteria.points * 10000) / 100 + "%"}</ListItemText>
                                     </ListItemSecondaryAction>
                                 </ListItem>
                                 <hr style={{ borderTop: "1px solid green" }} />

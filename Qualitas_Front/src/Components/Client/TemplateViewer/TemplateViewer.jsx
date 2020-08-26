@@ -16,6 +16,10 @@ const calculateSum = (criteria) => {
 class TemplateViewer extends Component {
     UNSAFE_componentWillMount() {
         this.setState({
+            modalOpen: false,
+            criteriaModalOpen: false,
+            commentTopicId: null,
+            criteriaId: null,
             id: this.props.template.id,
             templateName: this.props.template.TemplateName,
             topics: [],
@@ -39,6 +43,7 @@ class TemplateViewer extends Component {
                 id: temp.id,
                 name: temp.name,
                 points: temp.points,
+                description: temp.description,
                 parentId: temp.parentId,
                 editing: false,
             });
@@ -63,10 +68,20 @@ class TemplateViewer extends Component {
                     }} />
                     <ButtonBlock label="Exit" onSave={() => this.setState({ modalOpen: false, commentTopicId: null })} />
                 </UnifiedModal>
-                <div style={{ marginLeft: "25%", marginRight: "25%", marginTop: 25, background: "rgba(200, 200, 200, 0.5)", textAlign: "center" }}>
+                <UnifiedModal open={this.state.criteriaModalOpen} title="Description">
+                    <DefaultTextArea defaultValue={this.state.criteriaModalOpen ? this.state.criteria.find(topic => topic.id === this.state.criteriaId).description : ""} label="Add description..." maxLength={600} onChange={e => {
+                        let TempCriteria = [...this.state.criteria];
+                        TempCriteria.find(topic => topic.id === this.state.criteriaId).description = e.target.value;
+                        this.setState({
+                            criteria: [...TempCriteria]
+                        })
+                    }} />
+                    <ButtonBlock onSave={() => this.setState({ criteriaModalOpen: false, criteriaId: null })} />
+                </UnifiedModal>
+                <div style={{ marginLeft: "15%", marginRight: "15%", marginTop: 25, background: "rgba(200, 200, 200, 0.5)", textAlign: "center" }}>
                     <TextField inputProps={{ style: { textAlign: 'center' } }} disabled={true} style={{ paddingBottom: 15, width: 250 }} defaultValue={this.state.templateName} label="Template name" onChange={e => this.setState({ templateName: e.target.value })} />
                     <div className="ButtonBlock" >
-                        <div style={{ marginLeft: "25%", marginRight: "25%", marginTop: 15, marginBottom: 15 }}>
+                        <div style={{ marginLeft: "15%", marginRight: "15%", marginTop: 15, marginBottom: 15 }}>
                             {this.state.categories.map(category => {
                                 return (
                                     <Chip label={category} />
@@ -90,6 +105,11 @@ class TemplateViewer extends Component {
                                         topics: tempTopics
                                     });
                                 }}>
+                                    <ListItemIcon>
+                                        <IconButton onClick={() => this.setState({ modalOpen: true, commentTopicId: entry.id })}>
+                                            <DescriptionIcon style={{ color: entry.description === "" ? null : "green" }} />
+                                        </IconButton>
+                                    </ListItemIcon>
                                     <ListItemText>{entry.name}</ListItemText>
                                 </ListItem>);
                         })}
@@ -135,6 +155,11 @@ class TemplateViewer extends Component {
                                                             criteria: tempCriteria
                                                         })
                                                     }}>
+                                                        <ListItemIcon>
+                                                            <IconButton onClick={() => this.setState({ criteriaModalOpen: true, criteriaId: criteria.id })}>
+                                                                <DescriptionIcon style={{ color: criteria.description === "" ? null : "green" }} />
+                                                            </IconButton>
+                                                        </ListItemIcon>
                                                         <ListItemText>{criteria.name}</ListItemText>
                                                         <ListItemText style={{ textAlign: "right", paddingRight: 80 }}>{criteria.points}</ListItemText>
                                                     </ListItem>

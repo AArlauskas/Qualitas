@@ -18,6 +18,7 @@ namespace Qualitas_Backend.Models
         public string name { get; set; }
         public int points { get; set; }
         public int TopicId { get; set; }
+        public string description { get; set; }
     
         public virtual TopicTemplate TopicTemplate { get; set; }
     }

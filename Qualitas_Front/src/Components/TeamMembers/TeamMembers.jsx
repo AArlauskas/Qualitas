@@ -15,7 +15,7 @@ class TeamMembers extends Component {
         filteredUsers.forEach(user => {
             dataSource.push({
                 key: user.id,
-                title: user.firstname + " " + user.lastname
+                title: user.role + ": " + user.firstname + " " + user.lastname
             });
         });
         this.props.team.Users.forEach(user => {

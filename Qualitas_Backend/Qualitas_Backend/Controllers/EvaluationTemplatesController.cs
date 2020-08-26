@@ -120,6 +120,7 @@ namespace Qualitas_Backend.Controllers
                         id = criteria.id,
                         name = criteria.name,
                         points = criteria.points,
+                        description = criteria.description,
                         parentId = tempTopic.id,
                     };
                     response.Criteria.Add(tempCriteria);
@@ -148,6 +149,7 @@ namespace Qualitas_Backend.Controllers
                     {
                         criteria.id,
                         criteria.name,
+                        criteria.description,
                         criteria.points,
                     })
                 })
@@ -229,6 +231,7 @@ namespace Qualitas_Backend.Controllers
                     var tempCriteria = new CriteriaTemplate()
                     {
                         name = criteria.name,
+                        description = criteria.description,
                         points = criteria.points
                     };
                     listOfCriteria.Add(tempCriteria);
@@ -322,7 +325,8 @@ namespace Qualitas_Backend.Controllers
                     var tempCriteria = new CriteriaTemplate()
                     {
                         name = criteria.name,
-                        points = criteria.points
+                        points = criteria.points,
+                        description = criteria.description
                     };
                     listOfCriteria.Add(tempCriteria);
                 }
@@ -335,10 +339,46 @@ namespace Qualitas_Backend.Controllers
             return Ok(1);
         }
 
+        [ResponseType(typeof(void))]
+        [HttpPost]
+        [Route("api/EvaluationTemplates/copy/{id}")]
+        public async Task<IHttpActionResult> CopyEvaluationTemplate([FromUri]int id)
+        {
+            var oldTemplate = await db.EvaluationTemplates.Where(template => !template.isDeleted).FirstOrDefaultAsync(template => template.id == id);
+            if (oldTemplate == null)
+            {
+                return NotFound();
+            }
+
+            var newTemplate = new EvaluationTemplate()
+            {
+                Categories = oldTemplate.Categories.Select(temp => new Category
+                {
+                    name = temp.name
+                }).ToList(),
+                isDeleted = false,
+                name = oldTemplate.name + "-Copy",
+                TopicTemplates = oldTemplate.TopicTemplates.Select(temp => new TopicTemplate
+                {
+                    description = temp.description,
+                    name = temp.name,
+                    isCritical = temp.isCritical,
+                    CriteriaTemplates = temp.CriteriaTemplates.Select(criteria => new CriteriaTemplate
+                    {
+                        name = criteria.name,
+                        points = criteria.points
+                    }).ToList()
+                }).ToList()
+            };
+
+            db.EvaluationTemplates.Add(newTemplate);
+            await db.SaveChangesAsync();
+            return Ok(newTemplate.id);
+        }
 
 
-        // POST: api/EvaluationTemplates
-        [ResponseType(typeof(EvaluationTemplate))]
+    // POST: api/EvaluationTemplates
+    [ResponseType(typeof(EvaluationTemplate))]
         public async Task<IHttpActionResult> PostEvaluationTemplate(EvaluationTemplate evaluationTemplate)
         {
             if (!ModelState.IsValid)

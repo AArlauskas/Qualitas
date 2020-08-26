@@ -34,7 +34,7 @@ class ClientUserReviewDisplay extends Component {
             points += evaluation.points;
         });
 
-        let average = Math.trunc((score / points) * 100);
+        let average = Math.round((score / points) * 10000) / 100;
         if (isNaN(average)) {
             average = 0;
         }
@@ -44,7 +44,7 @@ class ClientUserReviewDisplay extends Component {
     render() {
         return (
             <div>
-                {this.props.evaluations.length === 0 ? <LoadingScreen /> :
+                {this.props.evaluations === null ? <LoadingScreen /> :
                     <div>
                         <div style={{ textAlign: "center" }}>
                             <h3>User: {this.props.evaluations.firstname + " " + this.props.evaluations.lastname}</h3>

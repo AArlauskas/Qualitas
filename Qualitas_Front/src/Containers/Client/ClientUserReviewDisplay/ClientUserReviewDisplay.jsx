@@ -47,8 +47,8 @@ class ClientUserReviewDisplay extends Component {
                 {this.props.evaluations === null ? <LoadingScreen /> :
                     <div>
                         <div style={{ textAlign: "center" }}>
-                            <h3>User: {this.props.evaluations.firstname + " " + this.props.evaluations.lastname}</h3>
-                            <h3>Overall score: {this.calculateOverallScore()}%</h3>
+                            <h3 style={{ color: "#F2F5F9" }}>User: {this.props.evaluations.firstname + " " + this.props.evaluations.lastname}</h3>
+                            <h3 style={{ color: "#F2F5F9" }}>Overall score: {this.calculateOverallScore()}%</h3>
                         </div>
                         <div style={{ marginTop: 20, marginBottom: 100 }}>
                             <ClientUserReview

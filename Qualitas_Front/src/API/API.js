@@ -1,6 +1,6 @@
 import axios from "axios";
 
-let baseUri = "https://localhost:44326/api"
+let baseUri = "http://infomedia-001-site1.ftempurl.com/api"
 let Api = axios.create({
     baseURL: baseUri,
     headers: {

@@ -37,9 +37,9 @@ export default function Credentials(props) {
     return (
         <div>
             <div style={{ textAlign: "center" }}>
-                <h2>Credentials:</h2>
-                <h3>Role: {window.localStorage.getItem("role")}</h3>
-                <h3>Name: {window.localStorage.getItem("name")}</h3>
+                <h2 style={{ color: "#F2F5F9" }}>Credentials:</h2>
+                <h3 style={{ color: "#F2F5F9" }}>Role: {window.localStorage.getItem("role")}</h3>
+                <h3 style={{ color: "#F2F5F9" }}>Name: {window.localStorage.getItem("name")}</h3>
             </div>
             <div>
                 {console.log(props)}
@@ -84,7 +84,7 @@ export default function Credentials(props) {
                             <Button
                                 fullWidth
                                 variant="contained"
-                                color="primary"
+                                style={{ backgroundColor: "#DAA1A0", color: "#F2F5F9" }}
                                 disabled={username.length < 4 || password.length < 4}
                                 className={classes.submit}
                                 onClick={() => {

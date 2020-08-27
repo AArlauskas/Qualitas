@@ -14,7 +14,7 @@ class TemplatesDisplay extends Component {
         return (
             <div>
                 {this.props.templates === null ? <LoadingScreen /> :
-                    <div><Button color="primary" variant="outlined" href="/newTemplate" style={{ marginBottom: 10 }}>Create new template</Button>
+                    <div><Button variant="contained" href="/newTemplate" style={{ marginBottom: 10, marginLeft: 10, backgroundColor: "#DAA1A0", color: "#F2F5F9" }}>Create new template</Button>
                         <TemplateTable
                             templates={this.props.templates}
                             copyTemplate={this.props.copyTemplate}

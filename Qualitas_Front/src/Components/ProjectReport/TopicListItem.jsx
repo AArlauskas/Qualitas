@@ -67,7 +67,7 @@ const TopicListItem = (props) => {
                                             <CustomTooltip arrow TransitionComponent={Fade} title={criteria.description} interactive>
                                                 <DescriptionOutlined />
                                             </CustomTooltip>  </ListItemIcon>}
-                                    <ListItemText>{criteria.name}</ListItemText>
+                                    <ListItemText style={{ marginRight: 50 }}>{criteria.name}</ListItemText>
                                     <ListItemSecondaryAction>
                                         <ListItemText>{isNaN(Math.round(criteria.score / criteria.points * 10000) / 100) ? "0%" : Math.round(criteria.score / criteria.points * 10000) / 100 + "%"}</ListItemText>
                                     </ListItemSecondaryAction>

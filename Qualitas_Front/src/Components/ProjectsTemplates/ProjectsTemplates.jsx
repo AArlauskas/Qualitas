@@ -44,7 +44,7 @@ class ProjectsTemplates extends Component {
             <div>
                 {console.log(this.props.project)}
                 <div style={{ textAlign: "center" }}>
-                    <h2>Project's name: {this.props.project.name}</h2>
+                    <h2 style={{ color: "#F2F5F9" }}>Project's name: {this.props.project.name}</h2>
                 </div>
                 <div>
                     <span>Unassigned teams</span> <span style={{ float: "right" }}>Assigned teams</span>

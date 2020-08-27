@@ -8,7 +8,7 @@ import LoadingScreen from '../../Components/LoadingScreen/LoadingScreen';
 import ProjectReport from '../../Components/ProjectReport/ProjectReport';
 import UserReport from '../../Components/UserReport/UserReport';
 import TeamReport from '../../Components/TeamReport/TeamReport';
-import { DownloadProjectReport, DownloadUserReport } from '../../API/DownloadAPI';
+import { DownloadProjectReport, DownloadUserReport, DownloadClientUserReport } from '../../API/DownloadAPI';
 
 let date = new Date();
 class ReportsDisplay extends Component {
@@ -126,7 +126,7 @@ class ReportsDisplay extends Component {
                                     }}
                                 />
                             </MuiPickersUtilsProvider>
-                            <Button style={{ marginTop: 30, marginLeft: 15 }} variant="outlined" color="secondary"
+                            <Button style={{ marginTop: 30, marginLeft: 15, backgroundColor: "#DAA1A0", color: "#F2F5F9" }} variant="contained"
                                 onClick={() => {
                                     if (this.state.Report.length !== 0) {
                                         this.setState({ Report: [] });
@@ -155,7 +155,7 @@ class ReportsDisplay extends Component {
                 <div style={{ clear: "both" }}>
                     {this.state.Report.length === 0 ? this.state.loading ? <LoadingScreen /> : null :
                         this.state.reportBy === "Project" ? <ProjectReport report={this.state.Report} changeToUserReport={changeToUserReport} download={() => DownloadProjectReport(this.state.reportItemId, this.state.minDate, this.state.maxDate)} /> :
-                            this.state.reportBy === "User" ? <UserReport report={this.state.Report} download={() => DownloadUserReport(this.state.reportItemId, this.state.minDate, this.state.maxDate)} /> :
+                            this.state.reportBy === "User" ? <UserReport report={this.state.Report} download={window.localStorage.getItem("role") === "client" ? () => DownloadClientUserReport(this.state.reportItemId, window.localStorage.getItem("id"), this.state.minDate, this.state.maxDate) : () => DownloadUserReport(this.state.reportItemId, this.state.minDate, this.state.maxDate)} /> :
                                 this.state.reportBy === "Team" ? <TeamReport report={this.state.Report} /> : null}
                 </div>
             </div>

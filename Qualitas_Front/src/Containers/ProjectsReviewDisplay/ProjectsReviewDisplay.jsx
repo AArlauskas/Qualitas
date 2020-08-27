@@ -42,8 +42,8 @@ class ProjectsReviewDisplay extends Component {
             <div>
                 {this.state.Project === null ? <LoadingScreen /> : <div>
                     <div style={{ textAlign: "center" }}>
-                        <h2>Project's name: {this.state.Project.name}</h2>
-                        <h2>Overall score: {this.calculateOverallScore()}%</h2>
+                        <h2 style={{ color: "#F2F5F9" }}>Project's name: {this.state.Project.name}</h2>
+                        <h2 style={{ color: "#F2F5F9" }}>Overall score: {this.calculateOverallScore()}%</h2>
                     </div>
                     <div>
                         <ProjectsReview

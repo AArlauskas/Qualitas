@@ -56,14 +56,14 @@ class EvaluationsDisplay extends Component {
                 {this.state.User === null ? <LoadingScreen /> :
                     <div>
                         <div style={{ textAlign: "center" }}>
-                            <h3>User: {this.state.User.firstname + " " + this.state.User.lastname}</h3>
-                            <h3>Assigned projects: {this.state.User.projectCount}</h3>
-                            <h3>Overall score: {this.calculateOverallScore()}%</h3>
+                            <h3 style={{ color: "#F2F5F9" }}>User: {this.state.User.firstname + " " + this.state.User.lastname}</h3>
+                            <h3 style={{ color: "#F2F5F9" }}>Assigned projects: {this.state.User.projectCount}</h3>
+                            <h3 style={{ color: "#F2F5F9" }}>Overall score: {this.calculateOverallScore()}%</h3>
                             {this.state.User.teamName === null ? null :
                                 <div style={{ display: "inline" }}>
-                                    <h3 style={{ display: "inline", marginRight: 10 }}>Team: {this.state.User.teamName}</h3>
-                                    <h3 style={{ display: "inline", marginRight: 10 }}>Members: {this.state.User.teamUsersCount}</h3>
-                                    <h3 style={{ display: "inline", marginRight: 10 }}>Rating: {this.state.User.rating + " / " + this.state.User.teamUsersCount}</h3>
+                                    <h3 style={{ display: "inline", marginRight: 10, color: "#F2F5F9" }}>Team: {this.state.User.teamName}</h3>
+                                    <h3 style={{ display: "inline", marginRight: 10, color: "#F2F5F9" }}>Members: {this.state.User.teamUsersCount}</h3>
+                                    <h3 style={{ display: "inline", marginRight: 10, color: "#F2F5F9" }}>Rating: {this.state.User.rating + " / " + this.state.User.teamUsersCount}</h3>
                                 </div>}
                         </div>
                         <div>

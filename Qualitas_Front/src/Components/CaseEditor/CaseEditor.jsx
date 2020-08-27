@@ -74,7 +74,7 @@ class CaseEditor extends Component {
         return (
             <div>
                 {console.log(this.state)}
-                <div style={{ marginLeft: "15%", marginRight: "15%", background: "rgba(200, 200, 200, 0.5)" }}>
+                <div style={{ marginLeft: "15%", marginRight: "15%", borderRadius: 10, background: "rgba(242, 245, 249, 0.6)" }}>
                     <UnifiedModal open={this.state.modalOpen} title="Comment">
                         <DefaultTextArea defaultValue={this.state.modalOpen ? this.state.topics.find(topic => topic.id === this.state.commentTopicId)
                             .criteria.find(criteria => criteria.id === this.state.commentCriteriaId).comment : ""} label="Add comment..." maxLength={600} onChange={e => {
@@ -88,11 +88,11 @@ class CaseEditor extends Component {
                         <ButtonBlock onSave={() => this.setState({ modalOpen: false, commentCriteriaId: null, commentTopicId: null })} />
                     </UnifiedModal>
                     <div style={{ textAlign: "center" }}>
-                        <TextField style={{ marginLeft: 20, width: 400 }} value={this.state.caseName} label="Case name" onChange={e => this.setState({ caseName: e.target.value })} />
+                        <TextField inputProps={{ style: { textAlign: 'center' } }} style={{ marginLeft: 20, width: 400 }} value={this.state.caseName} label="Case name" onChange={e => this.setState({ caseName: e.target.value })} />
                         {this.state.CategoryName === "" ? null : <h3>Category: {this.state.CategoryName}</h3>}
                         <div>
-                            <h3>Points: {TotalScore(this.state.topics)} / {TotalPoints(this.state.topics)}</h3>
-                            <h3>Percent: {isNaN(Math.round(TotalScore(this.state.topics) / TotalPoints(this.state.topics) * 10000) / 100) ? 0 : Math.round(TotalScore(this.state.topics) / TotalPoints(this.state.topics) * 10000) / 100}%</h3>
+                            <h3 style={{ color: "#F2F5F9" }}>Points: {TotalScore(this.state.topics)} / {TotalPoints(this.state.topics)}</h3>
+                            <h3 style={{ color: "#F2F5F9" }}>Percent: {isNaN(Math.round(TotalScore(this.state.topics) / TotalPoints(this.state.topics) * 10000) / 100) ? 0 : Math.round(TotalScore(this.state.topics) / TotalPoints(this.state.topics) * 10000) / 100}%</h3>
                         </div>
                         <div>
                             <div>
@@ -260,7 +260,7 @@ class CaseEditor extends Component {
                         label="Comment..." />
                 </div>
                 <div style={{ textAlign: "center", marginTop: 50, marginBottom: 50 }}>
-                    <Button disabled={this.state.caseName.length === 0} style={{ width: "20%", color: "white", backgroundColor: "#2fed95" }}
+                    <Button disabled={this.state.caseName.length === 0} style={{ width: "20%", color: "white", backgroundColor: "#DAA1A0" }}
                         onClick={() => {
                             let data = {
                                 id: this.state.id,

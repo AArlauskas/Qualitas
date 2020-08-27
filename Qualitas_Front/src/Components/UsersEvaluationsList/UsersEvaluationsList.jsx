@@ -32,7 +32,7 @@ class UsersEvaluationsList extends Component {
                 title: "Last update", field: "updatedDate", filtering: false, render: rowData => rowData.updatedDate === null ? "" : rowData.updatedDate.split("T")[0]
             },
             {
-                title: "Project", field: "project", render: rowData => <Chip label={rowData.projectName} onClick={() => window.location.href = "/ProjectReview/" + rowData.projectId} />,
+                title: "Project", field: "project", render: rowData => <Chip style={{ backgroundColor: "rgba(218, 161, 160, 0.5)" }} label={rowData.projectName} onClick={() => window.location.href = "/ProjectReview/" + rowData.projectId} />,
                 customFilterAndSearch: (term, rowData) => rowData.projectName === undefined ? false : rowData.projectName.toLowerCase().startsWith(term.toLowerCase())
             },
             {
@@ -133,7 +133,7 @@ class UsersEvaluationsList extends Component {
                                 setTimeout(() => {
                                     resolve();
                                     this.props.deleteEvaluation(oldData.id);
-                                    window.location.reload();
+                                    setTimeout(() => window.location.reload(), 1000);
                                 }, 600);
                             })
                     }}

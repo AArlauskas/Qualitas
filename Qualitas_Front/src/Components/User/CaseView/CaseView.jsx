@@ -69,17 +69,17 @@ class CaseView extends Component {
         return (
             <div>
                 {console.log(this.state)}
-                <div style={{ marginLeft: "15%", marginRight: "15%", background: "rgba(200, 200, 200, 0.5)" }}>
+                <div style={{ marginLeft: "15%", marginRight: "15%", borderRadius: 10, background: "rgba(242, 245, 249, 0.6)" }}>
                     <UnifiedModal open={this.state.modalOpen} title="Comment">
                         <p>{this.state.modalOpen ? this.state.topics.find(topic => topic.id === this.state.commentTopicId)
                             .criteria.find(criteria => criteria.id === this.state.commentCriteriaId).comment : ""}</p>
                     </UnifiedModal>
                     <div style={{ textAlign: "center" }}>
-                        <h2>Case name: {this.state.caseName}</h2>
-                        {this.state.CategoryName === "" ? null : <h2>Category: {this.state.CategoryName}</h2>}
+                        <h2 style={{ color: "#F2F5F9" }}>Case name: {this.state.caseName}</h2>
+                        {this.state.CategoryName === "" ? null : <h2 style={{ color: "#F2F5F9" }}>Category: {this.state.CategoryName}</h2>}
                         <div>
-                            <h3>Points: {TotalScore(this.state.topics)} / {TotalPoints(this.state.topics)}</h3>
-                            <h3>Percent: {isNaN(Math.round(TotalScore(this.state.topics) / TotalPoints(this.state.topics) * 10000) / 100) ? "0" : Math.round(TotalScore(this.state.topics) / TotalPoints(this.state.topics) * 10000) / 100}%</h3>
+                            <h3 style={{ color: "#F2F5F9" }}>Points: {TotalScore(this.state.topics)} / {TotalPoints(this.state.topics)}</h3>
+                            <h3 style={{ color: "#F2F5F9" }}>Percent: {isNaN(Math.round(TotalScore(this.state.topics) / TotalPoints(this.state.topics) * 10000) / 100) ? "0" : Math.round(TotalScore(this.state.topics) / TotalPoints(this.state.topics) * 10000) / 100}%</h3>
                         </div>
                         <div>
                             <div>

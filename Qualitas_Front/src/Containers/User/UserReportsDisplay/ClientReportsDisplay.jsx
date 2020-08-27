@@ -52,7 +52,9 @@ class UserReportsDisplay extends Component {
                                 }}
                             />
                         </MuiPickersUtilsProvider>
-                        <Button style={{ marginTop: 30, marginLeft: 15 }} variant="outlined" color="secondary"
+                        <Button style={{
+                            marginTop: 30, marginLeft: 15, backgroundColor: "#DAA1A0", color: "#F2F5F9"
+                        }} variant="outlined"
                             onClick={() => {
                                 if (this.state.Report.length !== 0) {
                                     this.setState({ Report: [] });

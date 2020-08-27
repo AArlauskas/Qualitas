@@ -17,9 +17,9 @@ import MuiAlert from '@material-ui/lab/Alert';
 
 function Copyright() {
     return (
-        <Typography variant="body2" color="textSecondary" align="center">
+        <Typography style={{ color: "white" }} variant="body2" color="textSecondary" align="center">
             {'Copyright © '}
-            <Link color="inherit" href="https://material-ui.com/">
+            <Link color="inherit" href="https://infomedia.lt">
                 Infomedia
       </Link>{' '}
             {new Date().getFullYear()}
@@ -86,7 +86,7 @@ export default function SignIn() {
             }
         }}>
             <div style={{ textAlign: "center" }}>
-                <img src={RTCLogo} alt="RTC_Logo" style={{ width: 400, height: 400 }} />
+                <img src={RTCLogo} alt="RTC_Logo" style={{ width: 400, height: 400, marginTop: 30 }} />
             </div>
             {loading ? <LoadingScreen /> :
                 <div>
@@ -101,11 +101,12 @@ export default function SignIn() {
                             <Avatar className={classes.avatar}>
                                 <LockOutlinedIcon />
                             </Avatar>
-                            <Typography component="h1" variant="h5">
+                            <Typography style={{ color: "white" }} component="h1" variant="h5">
                                 Sign in
                             </Typography>
                             <form className={classes.form} noValidate>
                                 <TextField
+                                    style={{ color: "white" }}
                                     variant="outlined"
                                     margin="normal"
                                     required
@@ -133,7 +134,7 @@ export default function SignIn() {
                                 <Button
                                     fullWidth
                                     variant="contained"
-                                    color="primary"
+                                    style={{ backgroundColor: "#DAA1A0", color: "#F2F5F9" }}
                                     disabled={username.length < 4 || password.length < 4}
                                     className={classes.submit}
                                     onClick={() => attemtSignIn()}

@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
 import { Backdrop } from '@material-ui/core';
-import RingLoader from "react-spinners/RingLoader";
+import PacmanLoader from "react-spinners/PacmanLoader";
 class LoadingScreen extends Component {
     state = {}
     render() {
         return (
             <div style={{ textAlign: "center" }}>
                 <Backdrop open={true}>
-                    <RingLoader size={150} color={"#ce2b27"} />
+                    <PacmanLoader size={125} color={"#DAA1A0"} />
                 </Backdrop>
             </div>
         );

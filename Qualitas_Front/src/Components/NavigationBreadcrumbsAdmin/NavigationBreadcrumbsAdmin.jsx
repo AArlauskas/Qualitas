@@ -2,7 +2,6 @@ import React from "react";
 import { Breadcrumbs, Link } from "@material-ui/core";
 import { PeopleRounded, DashboardRounded, AssignmentTurnedInOutlined, ArchiveOutlined, WorkRounded, GroupWorkOutlined } from "@material-ui/icons";
 import QLogo from "../../Images/QLogo.png";
-import "./NavigationBreadcrumbs.scss";
 
 const NavigationBreadcrumbsAdmin = () => {
     const currentPage = window.location.pathname;
@@ -58,7 +57,7 @@ const NavigationBreadcrumbsAdmin = () => {
             <div style={{ marginTop: 5, marginRight: 5 }}>
                 {window.localStorage.getItem("name")}
                 <br />
-                <a style={{ color: "#ce2b27" }} onClick={() => window.localStorage.clear()} href="/">Log Out</a>
+                <a style={{ color: "#DAA1A0" }} onClick={() => window.localStorage.clear()} href="/">Log Out</a>
             </div>
         </div>
     );

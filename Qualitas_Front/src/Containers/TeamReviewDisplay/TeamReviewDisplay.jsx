@@ -43,9 +43,9 @@ class TeamReviewDisplay extends Component {
                 {this.state.Team === null ? <LoadingScreen /> :
                     <div>
                         <div style={{ textAlign: "center" }}>
-                            <h2>Team: {this.state.Team.name}</h2>
-                            <h2>Users: {this.state.Team.Users.length}</h2>
-                            <h2>Overall score: {this.calculateOverallScore()}%</h2>
+                            <h2 style={{ color: "#F2F5F9" }}>Team: {this.state.Team.name}</h2>
+                            <h2 style={{ color: "#F2F5F9" }}>Users: {this.state.Team.Users.length}</h2>
+                            <h2 style={{ color: "#F2F5F9" }}>Overall score: {this.calculateOverallScore()}%</h2>
                         </div>
                         <div>
                             <TeamReviewList

@@ -45,7 +45,7 @@ class TemplateProjects extends Component {
             <div>
                 <div>
                     <div style={{ textAlign: "center" }}>
-                        <h2>Template name: {this.props.template.name}</h2>
+                        <h2 style={{ color: "#F2F5F9" }}>Template name: {this.props.template.name}</h2>
                     </div>
                     <div>
                         <span>Unassigned projects</span> <span style={{ float: "right" }}>Assigned projects</span>

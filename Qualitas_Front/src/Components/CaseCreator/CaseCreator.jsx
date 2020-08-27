@@ -78,7 +78,7 @@ class CaseCreator extends Component {
     render() {
         return (
             <div>
-                <div style={{ marginLeft: "15%", marginRight: "15%", background: "rgba(200, 200, 200, 0.5)" }}>
+                <div style={{ marginLeft: "15%", marginRight: "15%", borderRadius: 10, background: "rgba(242, 245, 249, 0.6)" }}>
                     {console.log(this.props)}
                     <UnifiedModal open={this.state.modalOpen} title="Comment">
                         <DefaultTextArea defaultValue={this.state.modalOpen ? this.state.topics.find(topic => topic.id === this.state.commentTopicId)
@@ -93,13 +93,13 @@ class CaseCreator extends Component {
                         <ButtonBlock onSave={() => this.setState({ modalOpen: false, commentCriteriaId: null, commentTopicId: null })} />
                     </UnifiedModal>
                     <div style={{ textAlign: "center" }}>
-                        <TextField style={{ marginLeft: 20, width: 400 }} label="Case name" onChange={e => this.setState({ caseName: e.target.value })} />
+                        <TextField inputProps={{ style: { textAlign: 'center' } }} style={{ marginLeft: 20, width: 400 }} label="Case name" onChange={e => this.setState({ caseName: e.target.value })} />
                         {this.props.template.categories.length === 0 ? null : <Select style={{ marginTop: 18, marginLeft: 15, width: 300 }} value={this.state.CategoryName} onChange={e => this.setState({ CategoryName: e.target.value })}>
                             {this.props.template.categories.map(category => <MenuItem key={category} value={category}>{category}</MenuItem>)}
                         </Select>}
                         <div>
-                            <h3>Points: {TotalScore(this.state.topics)} / {TotalPoints(this.state.topics)}</h3>
-                            <h3>Percent: {isNaN(Math.round(TotalScore(this.state.topics) / TotalPoints(this.state.topics) * 10000) / 100) ? 0 : Math.round(TotalScore(this.state.topics) / TotalPoints(this.state.topics) * 10000) / 100}%</h3>
+                            <h3 style={{ color: "#F2F5F9" }}>Points: {TotalScore(this.state.topics)} / {TotalPoints(this.state.topics)}</h3>
+                            <h3 style={{ color: "#F2F5F9" }}>Percent: {isNaN(Math.round(TotalScore(this.state.topics) / TotalPoints(this.state.topics) * 10000) / 100) ? 0 : Math.round(TotalScore(this.state.topics) / TotalPoints(this.state.topics) * 10000) / 100}%</h3>
                         </div>
                         <div>
                             <div>
@@ -270,7 +270,7 @@ class CaseCreator extends Component {
                         label="Comment..." />
                 </div>
                 <div style={{ textAlign: "center", marginTop: 50, marginBottom: 50 }}>
-                    <Button disabled={this.state.caseName.length === 0} style={{ width: "20%", color: "white", backgroundColor: "#2fed95" }}
+                    <Button disabled={this.state.caseName.length === 0} style={{ width: "20%", color: "white", backgroundColor: "#DAA1A0" }}
                         onClick={() => {
                             let data = {
                                 name: this.state.caseName,

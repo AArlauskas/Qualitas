@@ -48,7 +48,7 @@ const NavigationBreadcrumbsUser = () => {
             <div style={{ marginTop: 5, marginRight: 5 }}>
                 {window.localStorage.getItem("name")}
                 <br />
-                <a style={{ color: "#ce2b27" }} onClick={() => window.localStorage.clear()} href="/">Log Out</a>
+                <a style={{ color: "#DAA1A0" }} onClick={() => window.localStorage.clear()} href="/">Log Out</a>
             </div>
         </div>
     );

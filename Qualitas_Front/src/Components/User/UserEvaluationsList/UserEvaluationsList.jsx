@@ -29,7 +29,7 @@ class UserEvaluationsList extends Component {
                 title: "Date", field: "createdDate", filtering: false, render: rowData => rowData.createdDate.split("T")[0]
             },
             {
-                title: "Project", field: "project", render: rowData => <Chip label={rowData.projectName} />,
+                title: "Project", field: "project", render: rowData => <Chip style={{ backgroundColor: "rgba(218, 161, 160, 0.5)" }} label={rowData.projectName} />,
                 customFilterAndSearch: (term, rowData) => rowData.projectName.toLowerCase().startsWith(term.toLowerCase())
             },
             {

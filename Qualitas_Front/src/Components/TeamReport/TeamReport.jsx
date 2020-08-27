@@ -21,13 +21,13 @@ class TeamReport extends Component {
         return (
             <div>
                 <div>
-                    <h2 style={{ textAlign: "center", paddingTop: 10 }}>Team score: {CalculateUserScore(this.props.report)}%</h2>
+                    <h2 style={{ textAlign: "center", paddingTop: 10, color: "#F2F5F9" }}>Team score: {CalculateUserScore(this.props.report)}%</h2>
                     <div style={{ paddingTop: 50, paddingBottom: 50 }}>
                         {console.log(this.state.categories)}
-                        <div style={{ marginLeft: "15%", marginRight: "15%", background: "rgba(255, 204, 204, 0.2)" }}>
+                        <div style={{ marginLeft: "15%", marginRight: "15%", borderRadius: 10, background: "rgba(242, 245, 249, 0.6)" }}>
                             {console.log(this.props.report)}
                             <List>
-                                <ListSubheader>Projects</ListSubheader>
+                                <ListSubheader style={{ color: "#F2F5F9" }}>Projects</ListSubheader>
                                 {this.props.report.map(report => {
                                     return (
                                         <React.Fragment key={report.id}>

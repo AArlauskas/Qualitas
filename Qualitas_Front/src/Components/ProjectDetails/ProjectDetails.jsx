@@ -47,7 +47,7 @@ export default class ProjectDetails extends React.Component {
         return (
             <div>
                 <div style={{ textAlign: "center" }}>
-                    <h2>Project's name: {this.props.project.name}</h2>
+                    <h2 style={{ color: "#F2F5F9" }}>Project's name: {this.props.project.name}</h2>
                 </div>
                 <div>
                     <span>Unassigned users</span> <span style={{ float: "right" }}>Assigned users</span>

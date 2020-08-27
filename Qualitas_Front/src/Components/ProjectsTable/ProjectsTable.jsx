@@ -50,7 +50,7 @@ class ProjectsTable extends Component {
                 editable: "never",
                 title: "Templates",
                 field: "templates",
-                render: rowData => <div>{rowData.templates.map(template => <Chip style={{ marginRight: 2, marginTop: 2 }} key={template.id}
+                render: rowData => <div>{rowData.templates.map(template => <Chip style={{ marginRight: 2, marginTop: 2, backgroundColor: "rgba(218, 161, 160, 0.5)" }} key={template.id}
                     label={template.name}
                     onClick={() => window.location.href = "/EditTemplate/" + template.id} />)}</div>,
                 customFilterAndSearch: (term, rowData) => rowData.templates.some(template => template.name.toLowerCase().startsWith(term.toLowerCase()))

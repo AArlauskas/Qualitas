@@ -11,7 +11,8 @@ const divStyle = {
   height: '100%',
   backgroundImage: `url(${background})`,
   backgroundSize: 'cover',
-  overflowY: "auto"
+  overflowY: "auto",
+  color: "rgba(242, 245, 249)"
 };
 
 ReactDOM.render(

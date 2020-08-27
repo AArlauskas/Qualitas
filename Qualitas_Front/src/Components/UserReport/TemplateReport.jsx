@@ -112,7 +112,7 @@ class ProjectReport extends Component {
                     <div style={{ paddingLeft: 50 }}>
                         {console.log(this.props.report)}
                         <List>
-                            <ListSubheader disableSticky>Templates</ListSubheader>
+                            <ListSubheader style={{ color: "#F2F5F9" }} disableSticky>Templates</ListSubheader>
                             {this.props.report.map(report => {
                                 return (
                                     <React.Fragment key={report.id}>

@@ -85,7 +85,7 @@ class TemplateCreator extends Component {
                     }} />
                     <ButtonBlock onSave={() => this.setState({ criteriaModalOpen: false, criteriaId: null })} />
                 </UnifiedModal>
-                <div style={{ marginLeft: "15%", marginRight: "15%", marginTop: 25, background: "rgba(200, 200, 200, 0.5)", textAlign: "center" }}>
+                <div style={{ marginLeft: "15%", marginRight: "15%", marginTop: 25, borderRadius: 10, background: "rgba(242, 245, 249, 0.6)", textAlign: "center" }}>
                     <TextField inputProps={{ style: { textAlign: 'center' } }} focused={true} style={{ paddingBottom: 15, width: 250 }} defaultValue={this.state.templateName} label="Template name" onChange={e => this.setState({ templateName: e.target.value })} />
                     <div className="ButtonBlock" >
                         <Button color="secondary" variant="contained" onClick={() => {
@@ -145,7 +145,7 @@ class TemplateCreator extends Component {
                             <div>
                                 {this.state.categories.map(category => {
                                     return (
-                                        <Chip label={category} onDelete={() => {
+                                        <Chip style={{ backgroundColor: "rgba(218, 161, 160, 0.5)" }} label={category} onDelete={() => {
                                             let tempCategories = [...this.state.categories];
                                             this.setState({
                                                 categories: tempCategories.filter(temp => temp !== category)
@@ -506,7 +506,7 @@ class TemplateCreator extends Component {
 
                 </div>
                 <div style={{ textAlign: "center", marginTop: 20, marginBottom: 20 }}>
-                    <Button disabled={this.state.templateName === "" || this.state.editing} style={{ width: "20%", color: "white", backgroundColor: "#2fed95" }} onClick={() => {
+                    <Button disabled={this.state.templateName === "" || this.state.editing} style={{ width: "20%", color: "white", backgroundColor: "#DAA1A0" }} onClick={() => {
                         let outputData = {
                             id: this.state.id,
                             TemplateName: this.state.templateName,

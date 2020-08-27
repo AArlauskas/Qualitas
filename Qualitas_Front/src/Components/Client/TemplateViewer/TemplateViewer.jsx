@@ -78,13 +78,13 @@ class TemplateViewer extends Component {
                     }} />
                     <ButtonBlock onSave={() => this.setState({ criteriaModalOpen: false, criteriaId: null })} />
                 </UnifiedModal>
-                <div style={{ marginLeft: "15%", marginRight: "15%", marginTop: 25, background: "rgba(200, 200, 200, 0.5)", textAlign: "center" }}>
+                <div style={{ marginLeft: "15%", marginRight: "15%", marginTop: 25, borderRadius: 10, background: "rgba(242, 245, 249, 0.6)", textAlign: "center" }}>
                     <TextField inputProps={{ style: { textAlign: 'center' } }} disabled={true} style={{ paddingBottom: 15, width: 250 }} defaultValue={this.state.templateName} label="Template name" onChange={e => this.setState({ templateName: e.target.value })} />
                     <div className="ButtonBlock" >
                         <div style={{ marginLeft: "15%", marginRight: "15%", marginTop: 15, marginBottom: 15 }}>
                             {this.state.categories.map(category => {
                                 return (
-                                    <Chip label={category} />
+                                    <Chip style={{ backgroundColor: "rgba(218, 161, 160, 0.5)" }} label={category} />
                                 );
                             })}
                         </div>

@@ -28,7 +28,7 @@ class TeamReviewList extends Component {
             },
             {
                 title: "Projects", field: "projects", editable: "never",
-                render: rowData => <div>{rowData.Projects.map(project => <Chip style={{ marginRight: 2, marginTop: 2 }} key={project.id}
+                render: rowData => <div>{rowData.Projects.map(project => <Chip style={{ marginRight: 2, marginTop: 2, backgroundColor: "rgba(218, 161, 160, 0.5)" }} key={project.id}
                     label={project.name}
                     onClick={() => window.location.href = "/projectReview/" + project.id} />)}</div>,
                 customFilterAndSearch: (term, rowData) => rowData.Projects.some(project => project.name.toLowerCase().startsWith(term.toLowerCase()))

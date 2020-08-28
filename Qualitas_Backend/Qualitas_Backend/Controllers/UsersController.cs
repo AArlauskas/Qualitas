@@ -405,25 +405,75 @@ namespace Qualitas_Backend.Controllers
             {
                 user.id,
                 name = user.firstname + " " + user.lastname,
-                Evaluations = user.Evaluations.Where(evaluation => !evaluation.isDeleted).Where(evaluation => evaluation.createdDate >= start && evaluation.createdDate <= end).Select(evaluation => new
-                {
-                    evaluation.name,
-                    score = evaluation.Topics.Select(topic => topic.Criteria.Select(criteria => criteria.score).Sum()).Sum(),
-                    points = evaluation.Topics.Select(topic => topic.Criteria.Select(criteria => criteria.points).Sum()).Sum()
-                }).ToList()
-            });
+                evaluationCount = user.Evaluations.Where(evaluation => !evaluation.isDeleted).Where(evaluation => evaluation.createdDate >= start && evaluation.createdDate <= end).Count(),
+                score = user.Evaluations.Where(evaluation => !evaluation.isDeleted).Where(evaluation => evaluation.createdDate >= start && evaluation.createdDate <= end)
+                .Select(evaluation => evaluation.Topics.Select(topic => topic.Criteria.Select(criteria => (double?)criteria.score).Sum()).Sum()).Sum(),
+                points = user.Evaluations.Where(evaluation => !evaluation.isDeleted).Where(evaluation => evaluation.createdDate >= start && evaluation.createdDate <= end)
+                .Select(evaluation => evaluation.Topics.Select(topic => topic.Criteria.Select(criteria => (int?)criteria.points).Sum()).Sum()).Sum(),
+            }).OrderByDescending(temp => temp.evaluationCount).ToList();
             xlWorkSheet = (Excel.Worksheet)xlWorkBook.Worksheets.Add();
             xlWorkSheet.get_Range("A1", "Z400").Cells.VerticalAlignment = Excel.XlHAlign.xlHAlignCenter;
-            xlWorkSheet.get_Range("A1", "A400").Cells.HorizontalAlignment = Excel.XlHAlign.xlHAlignCenter;
+            xlWorkSheet.get_Range("A1", "Z400").Cells.HorizontalAlignment = Excel.XlHAlign.xlHAlignCenter;
+            xlWorkSheet.get_Range("A1", "Z400").Cells.WrapText = true;
+            xlWorkSheet.Range[xlWorkSheet.Cells[1, 1], xlWorkSheet.Cells[1, 5]].Merge();
+            xlWorkSheet.Range[xlWorkSheet.Cells[1, 1], xlWorkSheet.Cells[1, 5]].Merge();
+            xlWorkSheet.Cells[1,1] = start.ToString("yyyy-MM-dd") + " " + end.ToString("yyyy-MM-dd");
+            xlWorkSheet.Range[xlWorkSheet.Cells[1,1], xlWorkSheet.Cells[users.Count() + 3, 5]].Cells.Borders.LineStyle = XlLineStyle.xlContinuous;
+            xlWorkSheet.Range[xlWorkSheet.Cells[3, 2], xlWorkSheet.Cells[users.Count() + 2, 5]].Interior.Color = ColorTranslator.ToOle(Color.PaleGoldenrod);
+            xlWorkSheet.Range[xlWorkSheet.Cells[2, 1], xlWorkSheet.Cells[2, 5]].Interior.Color = ColorTranslator.ToOle(Color.LightPink);
+            xlWorkSheet.Range[xlWorkSheet.Cells[3, 1], xlWorkSheet.Cells[users.Count() + 2, 1]].Interior.Color = ColorTranslator.ToOle(Color.SandyBrown);
             xlWorkSheet.Columns[1].ColumnWidth = 22;
-            int startRow = 1;
-            int startColumn = 1;
+            xlWorkSheet.Columns[2].ColumnWidth = 22;
+            xlWorkSheet.Columns[3].ColumnWidth = 22;
+            xlWorkSheet.Columns[4].ColumnWidth = 22;
+            xlWorkSheet.Columns[5].ColumnWidth = 22;
+
             xlWorkSheet.Name = "All Users";
-            xlWorkSheet.Cells[startRow, startColumn] = "User";
+            xlWorkSheet.Cells[2, 1] = "User";
+            xlWorkSheet.Cells[2, 2] = "Evaluated cases";
+            xlWorkSheet.Cells[2, 3] = "Max score";
+            xlWorkSheet.Cells[2, 4] = "Achieved score";
+            xlWorkSheet.Cells[2, 5] = "Total score";
 
+            int startRow = 3;
 
+            foreach(var user in users)
+            {
+                xlWorkSheet.Cells[startRow, 1] = user.name;
+                xlWorkSheet.Cells[startRow, 2] = user.evaluationCount;
+                if(user.evaluationCount == 0)
+                {
+                    xlWorkSheet.Cells[startRow, 3] = 0;
+                    xlWorkSheet.Cells[startRow, 4] = 0;
+                    xlWorkSheet.Cells[startRow, 5] = "0%";
+                }
+                else
+                {
+                    xlWorkSheet.Cells[startRow, 3] = user.points;
+                    xlWorkSheet.Cells[startRow, 4] = user.score;
+                    try
+                    {
+                        var average = user.score / user.points * 10000 / 100;
+                        xlWorkSheet.Cells[startRow, 5] = average + "%";
+                    }
+                    catch (DivideByZeroException e)
+                    {
+                        xlWorkSheet.Cells[startRow, 5] = "0%";
+                    }
+                }
+                startRow++;
+            }
+            xlWorkSheet.Range[xlWorkSheet.Cells[startRow, 1], xlWorkSheet.Cells[startRow, 5]].Interior.Color = ColorTranslator.ToOle(Color.LightPink);
+            xlWorkSheet.Cells[startRow, 1] = "Total:";
+            xlWorkSheet.Cells[startRow, 2] = users.Select(user => user.evaluationCount).Sum();
+            var score = xlWorkSheet.Cells[startRow, 2] = users.Select(user => user.score).Sum();
+            var points = xlWorkSheet.Cells[startRow, 2] = users.Select(user => user.points).Sum();
+            xlWorkSheet.Cells[startRow, 3] = score;
+            xlWorkSheet.Cells[startRow, 4] = points;
+            var Totalaverage = score / points;
+            xlWorkSheet.Cells[startRow, 5] = Totalaverage * 10000 / 100 + "%";
 
-            xlWorkBook.SaveAs("d:\\Excel\\csharp-Excel.xls", Excel.XlFileFormat.xlWorkbookNormal, misValue, misValue, misValue, misValue, Excel.XlSaveAsAccessMode.xlExclusive, misValue, misValue, misValue, misValue, misValue);
+            xlWorkBook.SaveAs("d:\\Excel\\csharp-Excel2.xls", Excel.XlFileFormat.xlWorkbookNormal, misValue, misValue, misValue, misValue, Excel.XlSaveAsAccessMode.xlExclusive, misValue, misValue, misValue, misValue, misValue);
             xlWorkBook.Close(true, misValue, misValue);
             xlApp.Quit();
 

@@ -106,12 +106,13 @@ export default function SignIn() {
                             </Typography>
                             <form className={classes.form} noValidate>
                                 <TextField
+
                                     style={{ color: "white" }}
                                     variant="outlined"
                                     margin="normal"
                                     required
                                     fullWidth
-                                    id="username"
+                                    id="field"
                                     label="Username"
                                     autoComplete="username"
                                     autoFocus
@@ -126,7 +127,7 @@ export default function SignIn() {
                                     name="password"
                                     label="Password"
                                     type="password"
-                                    id="password"
+                                    id="field"
                                     autoComplete="current-password"
                                     value={password}
                                     onChange={e => setPassword(e.target.value)}

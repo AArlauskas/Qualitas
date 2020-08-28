@@ -1,13 +1,13 @@
 import React from "react";
 import { Breadcrumbs, Link } from "@material-ui/core";
-import { PeopleRounded, DashboardRounded, AssignmentTurnedInOutlined, ArchiveOutlined, WorkRounded, GroupWorkOutlined } from "@material-ui/icons";
+import { PeopleRounded, DashboardRounded, AssignmentTurnedInOutlined, WorkRounded, GroupWorkOutlined, RestoreOutlined } from "@material-ui/icons";
 import QLogo from "../../Images/QLogo.png";
 
 const NavigationBreadcrumbsAdmin = () => {
     const currentPage = window.location.pathname;
     return (
         <div className="Navigation-Breadcrumbs-Wrapper">
-            <div style={{ marginLeft: 5 }}>
+            <div style={{ marginLeft: 5, marginBottom: 5, marginTop: 5 }}>
                 <img style={{ width: 50, height: 50 }} src={QLogo} alt="QLoto" />
             </div>
             <Breadcrumbs separator={<div className={"Separator"}>||</div>} className="Breadcrumbs">
@@ -50,7 +50,7 @@ const NavigationBreadcrumbsAdmin = () => {
                     href="/archives"
                     className={currentPage === "/archives" ? "LinkBold" : "Link"}
                 >
-                    <ArchiveOutlined className="Icon" fontSize="small" />
+                    <RestoreOutlined className="Icon" fontSize="small" />
                     Archives
                 </Link>
             </Breadcrumbs>

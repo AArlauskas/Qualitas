@@ -110,3 +110,29 @@ export const DownloadAllUsers = async (start, end) => {
             throw Error("An error has occurred calling the api: " + error);
         });
 };
+
+export const DownloadAllProjects = async (start, end) => {
+    return await Api.get("/Projects/all/download/", {
+        params: {
+            start: start,
+            end: end
+        }
+    })
+        .then((response) => {
+            const downloadUrl = window.URL.createObjectURL(new Blob([response.data]));
+            const link = document.createElement('a');
+
+            link.href = downloadUrl;
+
+            link.setAttribute('download', "report.xls"); //any other extension
+
+            document.body.appendChild(link);
+
+            link.click();
+
+            link.remove();
+        })
+        .catch((error) => {
+            throw Error("An error has occurred calling the api: " + error);
+        });
+};

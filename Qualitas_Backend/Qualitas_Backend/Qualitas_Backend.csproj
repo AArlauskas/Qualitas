@@ -230,6 +230,7 @@
     <Compile Include="Responses\UserListResponse.cs" />
     <Compile Include="Responses\UserProjectsResponse.cs" />
     <Compile Include="Responses\UserReviewResponse.cs" />
+    <Compile Include="SecurePasswordHasher.cs" />
   </ItemGroup>
   <ItemGroup>
     <EntityDeploy Include="Models\Qualitas_Database_Model.edmx">

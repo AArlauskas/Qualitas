@@ -16,10 +16,12 @@ import Search from '@material-ui/icons/Search';
 import ViewColumn from '@material-ui/icons/ViewColumn';
 import ArchiveIcon from '@material-ui/icons/Archive';
 import WorkIcon from '@material-ui/icons/Work';
-import { TextField } from '@material-ui/core';
+import { TextField, IconButton } from '@material-ui/core';
 import MaterialTable, { MTableToolbar } from 'material-table';
+import GetAppIcon from '@material-ui/icons/GetApp';
 import { KeyboardDatePicker, MuiPickersUtilsProvider } from '@material-ui/pickers';
 import DateFnsUtils from '@date-io/date-fns';
+import { DownloadAllUsers } from '../../API/DownloadAPI';
 
 const tableIcons = {
     Add: forwardRef((props, ref) => <AddBox {...props} ref={ref} />),
@@ -234,6 +236,9 @@ class UserListTable extends Component {
                         Toolbar: props => (
                             <div>
                                 <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                                    <IconButton onClick={() => DownloadAllUsers(this.props.minDate, this.props.maxDate)}>
+                                        <GetAppIcon fontSize="large" />
+                                    </IconButton>
                                     <MTableToolbar {...props} />
                                     <div style={{ marginLeft: 10 }}>
                                         <KeyboardDatePicker

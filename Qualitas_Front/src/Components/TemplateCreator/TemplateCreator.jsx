@@ -90,7 +90,8 @@ class TemplateCreator extends Component {
                     <ButtonBlock onSave={() => this.setState({ criteriaModalOpen: false, criteriaId: null })} />
                 </UnifiedModal>
                 <div style={{ marginLeft: "15%", marginRight: "15%", marginTop: 25, background: "rgba(242, 245, 249, 0.6)", borderRadius: 10, textAlign: "center" }}>
-                    <TextField inputProps={{ style: { textAlign: 'center' } }} style={{ paddingBottom: 15, width: 250 }} defaultValue="" label="Template name" onChange={e => this.setState({ templateName: e.target.value })} />
+                    <TextField error={this.props.templateNames.some(temp => temp === this.state.templateName)} inputProps={{ style: { textAlign: 'center' } }} style={{ paddingBottom: 15, width: 250 }} defaultValue="" label="Template name" onChange={e => this.setState({ templateName: e.target.value })} />
+                    {this.props.templateNames.some(temp => temp === this.state.templateName) ? <p style={{ color: "red" }}>Template name already exists!</p> : null}
                     <div className="ButtonBlock" >
                         <Button color="secondary" variant="contained" onClick={() => {
                             let tempTopics = [...this.state.topics]
@@ -510,7 +511,7 @@ class TemplateCreator extends Component {
                     </List>
                 </div>
                 <div style={{ textAlign: "center", marginTop: 20, marginBottom: 20 }}>
-                    <Button disabled={this.state.templateName === "" || this.state.editing} style={{ width: "20%", color: "white", backgroundColor: "#DAA1A0" }} onClick={() => {
+                    <Button disabled={this.state.templateName === "" || this.state.editing || this.props.templateNames.some(temp => temp === this.state.templateName)} style={{ width: "20%", color: "white", backgroundColor: "#DAA1A0" }} onClick={() => {
                         let outputData = {
                             TemplateName: this.state.templateName,
                             Topics: [],

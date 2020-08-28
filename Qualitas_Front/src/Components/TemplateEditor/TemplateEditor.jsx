@@ -22,6 +22,7 @@ let index = 4;
 class TemplateCreator extends Component {
     UNSAFE_componentWillMount() {
         this.setState({
+            isEditable: this.props.template.isEditable,
             modalOpen: false,
             criteriaModalOpen: false,
             commentTopicId: null,
@@ -86,9 +87,14 @@ class TemplateCreator extends Component {
                     <ButtonBlock onSave={() => this.setState({ criteriaModalOpen: false, criteriaId: null })} />
                 </UnifiedModal>
                 <div style={{ marginLeft: "15%", marginRight: "15%", marginTop: 25, borderRadius: 10, background: "rgba(242, 245, 249, 0.6)", textAlign: "center" }}>
-                    <TextField inputProps={{ style: { textAlign: 'center' } }} focused={true} style={{ paddingBottom: 15, width: 250 }} defaultValue={this.state.templateName} label="Template name" onChange={e => this.setState({ templateName: e.target.value })} />
+                    <TextField error={this.props.template.otherTemplateName.some(temp => temp === this.state.templateName) && this.state.templateName !== this.props.template.TemplateName} value={this.state.templateName} inputProps={{ style: { textAlign: 'center' } }} focused={true} style={{ paddingBottom: 15, width: 250 }} defaultValue={this.state.templateName} label="Template name" onChange={e => {
+                        if (!this.state.isEditable) {
+                            this.setState({ templateName: e.target.value })
+                        }
+                    }} />
+                    {this.props.template.otherTemplateName.some(temp => temp === this.state.templateName) && this.state.templateName !== this.props.template.TemplateName ? <p style={{ color: "red" }}>Template name already exists!</p> : null}
                     <div className="ButtonBlock" >
-                        <Button color="secondary" variant="contained" onClick={() => {
+                        <Button disabled={this.state.isEditable} color="secondary" variant="contained" onClick={() => {
                             let tempTopics = [...this.state.topics]
                             tempTopics.push({
                                 id: index,
@@ -102,7 +108,7 @@ class TemplateCreator extends Component {
                         }}>
                             Add critical
                     </Button>
-                        <Button color="primary" variant="contained" style={{ marginLeft: 5 }} onClick={() => {
+                        <Button disabled={this.state.isEditable} color="primary" variant="contained" style={{ marginLeft: 5 }} onClick={() => {
                             let tempTopics = [...this.state.topics]
                             tempTopics.push({
                                 id: index,
@@ -118,7 +124,7 @@ class TemplateCreator extends Component {
                             Add topic
                     </Button>
                         <div style={{ marginLeft: "15%", marginRight: "15%", marginTop: 15, marginBottom: 15 }}>
-                            <TextField onKeyPress={e => {
+                            <TextField disabled={this.state.isEditable} onKeyPress={e => {
                                 if (e.key === "Enter") {
                                     if (this.state.currentCategory !== "" && !this.state.categories.includes(this.state.currentCategory)) {
                                         let tempCategories = [...this.state.categories];
@@ -130,7 +136,7 @@ class TemplateCreator extends Component {
                                     }
                                 }
                             }} value={this.state.currentCategory} label="Add category" onChange={e => this.setState({ currentCategory: e.target.value })} />
-                            <IconButton style={{ marginTop: 5 }} onClick={() => {
+                            <IconButton disabled={this.state.isEditable} style={{ marginTop: 5 }} onClick={() => {
                                 if (this.state.currentCategory !== "" && !this.state.categories.includes(this.state.currentCategory)) {
                                     let tempCategories = [...this.state.categories];
                                     tempCategories.push(this.state.currentCategory);
@@ -145,7 +151,7 @@ class TemplateCreator extends Component {
                             <div>
                                 {this.state.categories.map(category => {
                                     return (
-                                        <Chip style={{ backgroundColor: "rgba(218, 161, 160, 0.5)" }} label={category} onDelete={() => {
+                                        <Chip disabled={this.state.isEditable} style={{ backgroundColor: "rgba(218, 161, 160, 0.5)" }} label={category} onDelete={() => {
                                             let tempCategories = [...this.state.categories];
                                             this.setState({
                                                 categories: tempCategories.filter(temp => temp !== category)
@@ -182,7 +188,7 @@ class TemplateCreator extends Component {
                                                 this.setState({ topics: tempTopics })
                                             }} />
                                             <ListItemSecondaryAction>
-                                                <IconButton edge="end" aria-label="Save" onClick={() => {
+                                                <IconButton disabled={this.state.isEditable} edge="end" aria-label="Save" onClick={() => {
                                                     let id = entry.id;
                                                     if (this.state.topics.filter(topic => topic.name === this.state.topics.find(critical => critical.id === id).name).length === 1) {
 
@@ -196,7 +202,7 @@ class TemplateCreator extends Component {
                                                 }}>
                                                     <DoneIcon />
                                                 </IconButton>
-                                                <IconButton edge="end" aria-label="Delete" onClick={() => {
+                                                <IconButton disabled={this.state.isEditable} edge="end" aria-label="Delete" onClick={() => {
                                                     let id = entry.id;
                                                     let tempTopics = [...this.state.topics];
                                                     tempTopics.splice(tempTopics.indexOf(entry), 1);
@@ -225,7 +231,7 @@ class TemplateCreator extends Component {
                                         </ListItemIcon>
                                         <ListItemText>{entry.name}</ListItemText>
                                         <ListItemSecondaryAction>
-                                            <IconButton disabled={this.state.editing} edge="end" aria-label="Edit" onClick={() => {
+                                            <IconButton disabled={this.state.editing || this.state.isEditable} edge="end" aria-label="Edit" onClick={() => {
                                                 let id = entry.id;
                                                 let tempTopics = [...this.state.topics];
                                                 tempTopics.find(critical => critical.id === id).editing = true;
@@ -236,7 +242,7 @@ class TemplateCreator extends Component {
                                             }}>
                                                 <EditIcon />
                                             </IconButton>
-                                            <IconButton disabled={this.state.editing} edge="end" aria-label="Delete" onClick={() => {
+                                            <IconButton disabled={this.state.editing || this.state.isEditable} edge="end" aria-label="Delete" onClick={() => {
                                                 let id = entry.id;
                                                 let tempTopics = [...this.state.topics];
                                                 tempTopics.splice(tempTopics.indexOf(entry), 1);
@@ -277,13 +283,13 @@ class TemplateCreator extends Component {
                                         }
                                     }}>
                                         <ListItem button >
-                                            <TextField autoFocus focused={true} style={{ width: 500 }} defaultValue={entry.name} onChange={e => {
+                                            <TextField disabled={this.state.isEditable} autoFocus focused={true} style={{ width: 500 }} defaultValue={entry.name} onChange={e => {
                                                 let tempTopics = [...this.state.topics];
                                                 tempTopics.find(critical => critical.id === entry.id).name = e.target.value;
                                                 this.setState({ topics: tempTopics })
                                             }} />
                                             <ListItemSecondaryAction>
-                                                <IconButton edge="end" aria-label="Save" onClick={() => {
+                                                <IconButton disabled={this.state.isEditable} edge="end" aria-label="Save" onClick={() => {
                                                     let id = entry.id;
                                                     if (this.state.topics.filter(topic => topic.name === this.state.topics.find(critical => critical.id === id).name).length === 1) {
                                                         let tempTopics = [...this.state.topics];
@@ -296,7 +302,7 @@ class TemplateCreator extends Component {
                                                 }}>
                                                     <DoneIcon />
                                                 </IconButton>
-                                                <IconButton edge="end" aria-label="Delete" onClick={() => {
+                                                <IconButton disabled={this.state.isEditable} edge="end" aria-label="Delete" onClick={() => {
                                                     let id = entry.id;
                                                     let tempTopics = [...this.state.topics];
                                                     tempTopics.splice(tempTopics.indexOf(entry), 1);
@@ -338,7 +344,7 @@ class TemplateCreator extends Component {
                                                 <ListItemText>{entry.name}</ListItemText>
                                                 <ListItemText style={{ textAlign: "right", marginRight: 80 }}>{<p style={{ paddingTop: 10 }}>Points: {calculateSum(this.state.criteria.filter(temp => temp.parentId === entry.id))}</p>}</ListItemText>
                                                 <ListItemSecondaryAction>
-                                                    <IconButton disabled={this.state.editing} edge="end" aria-label="Add" onClick={() => {
+                                                    <IconButton disabled={this.state.editing || this.state.isEditable} edge="end" aria-label="Add" onClick={() => {
                                                         let newCriteria = {
                                                             id: index,
                                                             name: "Enter criteria name",
@@ -355,7 +361,7 @@ class TemplateCreator extends Component {
                                                     }}>
                                                         <AddIcon />
                                                     </IconButton>
-                                                    <IconButton disabled={this.state.editing} edge="end" aria-label="Edit" onClick={() => {
+                                                    <IconButton disabled={this.state.editing || this.state.isEditable} edge="end" aria-label="Edit" onClick={() => {
                                                         let id = entry.id;
                                                         let tempTopics = [...this.state.topics];
                                                         tempTopics.find(critical => critical.id === id).editing = true;
@@ -366,7 +372,7 @@ class TemplateCreator extends Component {
                                                     }}>
                                                         <EditIcon />
                                                     </IconButton>
-                                                    <IconButton disabled={this.state.editing} edge="end" aria-label="Delete" onClick={() => {
+                                                    <IconButton disabled={this.state.editing || this.state.isEditable} edge="end" aria-label="Delete" onClick={() => {
                                                         let id = entry.id;
                                                         let tempTopics = [...this.state.topics];
                                                         tempTopics.splice(tempTopics.indexOf(entry), 1);
@@ -390,7 +396,7 @@ class TemplateCreator extends Component {
                                                     return (
                                                         <ListItem button key={criteria.id}>
                                                             <div style={{ paddingLeft: 80 }} >
-                                                                <TextField onKeyPress={e => {
+                                                                <TextField disabled={this.state.isEditable} onKeyPress={e => {
                                                                     if (e.key === "Enter") {
                                                                         let id = criteria.id;
                                                                         let tempCriteria = [...this.state.criteria];
@@ -407,7 +413,7 @@ class TemplateCreator extends Component {
                                                                 }} />
                                                             </div>
                                                             <div>
-                                                                <TextField onKeyPress={e => {
+                                                                <TextField disabled={this.state.isEditable} onKeyPress={e => {
                                                                     if (e.key === "Enter") {
                                                                         let id = criteria.id;
                                                                         let tempCriteria = [...this.state.criteria];
@@ -428,7 +434,7 @@ class TemplateCreator extends Component {
                                                                 }} />
                                                             </div>
                                                             <ListItemSecondaryAction>
-                                                                <IconButton edge="end" aria-label="Save" onClick={() => {
+                                                                <IconButton disabled={this.state.isEditable} edge="end" aria-label="Save" onClick={() => {
                                                                     let id = criteria.id;
                                                                     if (this.state.criteria.filter(temp => temp.name === this.state.criteria.find(critical => critical.id === id).name).length === 1) {
                                                                         let tempCriteria = [...this.state.criteria];
@@ -441,7 +447,7 @@ class TemplateCreator extends Component {
                                                                 }}>
                                                                     <DoneIcon />
                                                                 </IconButton>
-                                                                <IconButton edge="end" aria-label="Delete" onClick={() => {
+                                                                <IconButton disabled={this.state.isEditable} edge="end" aria-label="Delete" onClick={() => {
                                                                     let id = criteria.id;
                                                                     let tempCriteria = [...this.state.criteria];
                                                                     tempCriteria.splice(tempCriteria.indexOf(criteria), 1);
@@ -470,7 +476,7 @@ class TemplateCreator extends Component {
                                                                 <ListItemText style={{ marginRight: 30 }}>{criteria.name}</ListItemText>
                                                                 <ListItemText style={{ textAlign: "right", marginRight: 80, marginLeft: 30 }}>{criteria.points}</ListItemText>
                                                                 <ListItemSecondaryAction>
-                                                                    <IconButton edge="end" aria-label="edit" onClick={() => {
+                                                                    <IconButton disabled={this.state.isEditable} edge="end" aria-label="edit" onClick={() => {
                                                                         let id = criteria.id;
                                                                         let tempCriteria = [...this.state.criteria];
                                                                         tempCriteria.find(criteria => criteria.id === id).editing = true;
@@ -481,7 +487,7 @@ class TemplateCreator extends Component {
                                                                     }}>
                                                                         <EditIcon />
                                                                     </IconButton>
-                                                                    <IconButton disabled={this.state.editing} edge="end" aria-label="Delete" onClick={() => {
+                                                                    <IconButton disabled={this.state.editing || this.state.isEditable} edge="end" aria-label="Delete" onClick={() => {
                                                                         let id = criteria.id;
                                                                         let tempCriteria = [...this.state.criteria];
                                                                         tempCriteria.splice(tempCriteria.indexOf(criteria), 1);
@@ -506,7 +512,7 @@ class TemplateCreator extends Component {
 
                 </div>
                 <div style={{ textAlign: "center", marginTop: 20, marginBottom: 20 }}>
-                    <Button disabled={this.state.templateName === "" || this.state.editing} style={{ width: "20%", color: "white", backgroundColor: "#DAA1A0" }} onClick={() => {
+                    <Button disabled={this.state.templateName === "" || this.state.editing || (this.props.template.otherTemplateName.some(temp => temp === this.state.templateName) && this.state.templateName !== this.props.template.TemplateName)} style={{ width: "20%", color: "white", backgroundColor: "#DAA1A0" }} onClick={() => {
                         let outputData = {
                             id: this.state.id,
                             TemplateName: this.state.templateName,

@@ -66,7 +66,7 @@ class UserProjectsList extends Component {
         };
 
         return (
-            <div>
+            <div style={{ padding: 10 }}>
                 <MaterialTable
                     options={{
                         filtering: true,

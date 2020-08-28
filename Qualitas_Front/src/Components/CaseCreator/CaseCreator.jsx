@@ -10,6 +10,7 @@ import SentimentVeryDissatisfiedIcon from '@material-ui/icons/SentimentVeryDissa
 import Fade from '@material-ui/core/Fade';
 import { withStyles } from "@material-ui/styles";
 import { DescriptionOutlined } from '@material-ui/icons';
+import "./CaseCreator.scss";
 
 const CustomTooltip = withStyles({
     tooltip: {
@@ -261,6 +262,7 @@ class CaseCreator extends Component {
                 </div >
                 <div style={{ textAlign: "center", marginTop: 10, marginLeft: "25%", marginRight: "25%" }}>
                     <TextField
+                        id="field"
                         rows={6}
                         fullWidth
                         variant="outlined"

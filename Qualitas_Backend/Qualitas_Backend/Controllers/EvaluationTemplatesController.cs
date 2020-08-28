@@ -36,6 +36,7 @@ namespace Qualitas_Backend.Controllers
             {
                 template.id,
                 template.name,
+                evaluationCount = db.Evaluations.Where(evaluation => !evaluation.isDeleted).Where(evaluation => evaluation.EvaluationTemplateName == template.name).Count(),
                 Projects = template.Projects.Where(project => !project.isDeleted).Select(project => new
                 {
                     project.id,
@@ -44,6 +45,15 @@ namespace Qualitas_Backend.Controllers
             });
 
             return Ok(templates);
+        }
+
+        [HttpGet]
+        [Route("api/EvaluationTemplates/names")]
+        public async Task<IHttpActionResult> GetEvaluationListNames()
+        {
+            var names = await db.EvaluationTemplates.Select(template => template.name).ToListAsync();
+
+            return Ok(names);
         }
 
         [HttpGet]
@@ -96,6 +106,8 @@ namespace Qualitas_Backend.Controllers
 
             var response = new GetFullEvaluationTemplateResponse
             {
+                otherTemplateName = db.EvaluationTemplates.Select(temp => temp.name).ToList(),
+                isEditable = db.Evaluations.Where(evaluation => !evaluation.isDeleted).Any(evaluation => evaluation.EvaluationTemplateName == evaluationTemplate.name),
                 id = evaluationTemplate.id,
                 TemplateName = evaluationTemplate.name,
                 Criteria = new List<CriteriaRequest>(),
@@ -357,7 +369,7 @@ namespace Qualitas_Backend.Controllers
                     name = temp.name
                 }).ToList(),
                 isDeleted = false,
-                name = oldTemplate.name + "-Copy",
+                name = oldTemplate.name + "-Copy" + db.EvaluationTemplates.Where(e => e.name.StartsWith(oldTemplate.name)).Count(),
                 TopicTemplates = oldTemplate.TopicTemplates.Select(temp => new TopicTemplate
                 {
                     description = temp.description,
@@ -373,7 +385,12 @@ namespace Qualitas_Backend.Controllers
 
             db.EvaluationTemplates.Add(newTemplate);
             await db.SaveChangesAsync();
-            return Ok(newTemplate.id);
+            var response = new
+            {
+                newTemplate.id,
+                newTemplate.name
+            };
+            return Ok(response);
         }
 
 

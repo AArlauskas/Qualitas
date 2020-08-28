@@ -251,6 +251,7 @@ class CaseEditor extends Component {
                 </div >
                 <div style={{ textAlign: "center", marginTop: 10, marginLeft: "25%", marginRight: "25%" }}>
                     <TextField
+                        id="field"
                         rows={6}
                         fullWidth
                         variant="outlined"
@@ -269,6 +270,7 @@ class CaseEditor extends Component {
                                 comment: this.state.overallComment,
                                 UserId: this.props.case.userId,
                                 ProjectId: this.props.case.projectId,
+                                EvaluatorId: window.localStorage.getItem("id"),
                                 Topics: this.state.topics
                             };
                             this.props.updateCase(this.state.id, data);

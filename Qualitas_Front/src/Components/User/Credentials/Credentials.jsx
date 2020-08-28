@@ -62,7 +62,7 @@ export default function Credentials(props) {
                                 variant="outlined"
                                 margin="normal"
                                 fullWidth
-                                id="username"
+                                id="field"
                                 label="Username"
                                 autoComplete="username"
                                 autoFocus
@@ -76,7 +76,7 @@ export default function Credentials(props) {
                                 name="password"
                                 label="Password"
                                 type="password"
-                                id="password"
+                                id="field"
                                 autoComplete="current-password"
                                 value={password}
                                 onChange={e => setPassword(e.target.value)}

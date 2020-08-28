@@ -8,7 +8,7 @@ const NavigationBreadcrumbsUser = () => {
     const currentPage = window.location.pathname;
     return (
         <div className="Navigation-Breadcrumbs-Wrapper">
-            <div style={{ marginLeft: 5 }}>
+            <div style={{ marginLeft: 5, marginBottom: 5, marginTop: 5 }}>
                 <img style={{ width: 50, height: 50 }} src={QLogo} alt="QLoto" />
             </div>
             <Breadcrumbs separator={<div className={"Separator"}>||</div>} className="Breadcrumbs">

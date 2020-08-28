@@ -18,10 +18,10 @@ export const fetchClientTemplates = (id) => async (dispatch) => {
 };
 
 export const copyTemplate = (ids, name) => async (dispatch) => {
-    let id = await CopyTemplate(ids);
+    let newData = await CopyTemplate(ids);
     let data = {
-        id: id,
-        name: name + "-Copy",
+        id: newData.id,
+        name: newData.name,
         Projects: [],
     }
     dispatch({

@@ -31,6 +31,9 @@ class TemplateTable extends Component {
                     label={project.name}
                     onClick={() => window.location.href = "/ProjectDetails/" + project.id} />)}</div>,
                 customFilterAndSearch: (term, rowData) => rowData.Projects.some(project => project.name.toLowerCase().startsWith(term.toLowerCase()))
+            },
+            {
+                title: "Evaluated cases", field: "evaluationCount"
             }
         ]
     }

@@ -169,6 +169,163 @@ namespace Qualitas_Backend.Controllers
         }
 
         [HttpGet]
+        [Route("api/Projects/all/download")]
+        public HttpResponseMessage GetAllProjectsReport(DateTime start, DateTime end)
+        {
+            Excel.Application xlApp = new Excel.Application();
+            if (xlApp == null)
+            {
+                Console.WriteLine("No excel");
+                return null;
+            }
+
+            xlApp.DisplayAlerts = false;
+
+            Excel.Workbook xlWorkBook;
+            Excel.Worksheet xlWorkSheet;
+            object misValue = System.Reflection.Missing.Value;
+            xlWorkBook = xlApp.Workbooks.Add(misValue);
+            xlWorkBook.CheckCompatibility = false;
+            xlWorkBook.DoNotPromptForConvert = true;
+
+            var projects = db.Projects.Where(project => !project.isDeleted).Where(project => project.Users.Count() != 0).Select(project => new
+            {
+                project.id,
+                project.name,
+                users = project.Users.Where(user => !user.IsArchived && !user.IsDeleted && user.RoleType == "user").Select(user => new
+                {
+                    user.id,
+                    name = user.firstname + " " + user.lastname,
+                    evaluations = user.Evaluations.Where(evaluation => evaluation.ProjectId == project.id).Where(evaluation => !evaluation.isDeleted).Where(evaluation => evaluation.createdDate >= start && evaluation.createdDate <= end).Select(evaluation => new
+                    {
+                        evaluation.id,
+                        evaluation.name,
+                        score = evaluation.Topics.Select(topic => topic.Criteria.Select(criteria => (double?)criteria.score).Sum()).Sum(),
+                        points = evaluation.Topics.Select(topic => topic.Criteria.Select(criteria => (int?)criteria.points).Sum()).Sum(),
+                    }).ToList()
+                }).OrderBy(temp => temp.evaluations.Count()).ToList()
+            }).ToList();
+
+            var maxCount = projects.Select(project => project.users.Select(user => user.evaluations.Count()).Max()).Max();
+
+            xlWorkSheet = (Excel.Worksheet)xlWorkBook.Worksheets.Add();
+            xlWorkSheet.get_Range("A1", "Z400").Cells.VerticalAlignment = Excel.XlHAlign.xlHAlignCenter;
+            xlWorkSheet.get_Range("A1", "Z400").Cells.HorizontalAlignment = Excel.XlHAlign.xlHAlignCenter;
+            xlWorkSheet.get_Range("A1", "Z400").Cells.WrapText = true;
+
+            xlWorkSheet.Range[xlWorkSheet.Cells[1, 1], xlWorkSheet.Cells[1, maxCount + 6]].Merge();
+            xlWorkSheet.Cells[1,1] = start.ToString("yyyy-MM-dd") + " " + end.ToString("yyyy-MM-dd");
+            xlWorkSheet.Columns[1].ColumnWidth = 17;
+            xlWorkSheet.Columns[2].ColumnWidth = 22;
+            xlWorkSheet.Columns[maxCount + 3].ColumnWidth = 17;
+            xlWorkSheet.Columns[maxCount + 4].ColumnWidth = 17;
+            xlWorkSheet.Columns[maxCount + 5].ColumnWidth = 17;
+            xlWorkSheet.Columns[maxCount + 6].ColumnWidth = 17;
+            xlWorkSheet.Cells[2, 1] = "Project";
+            xlWorkSheet.Cells[2, 2] = "Users";
+            xlWorkSheet.Cells[2, maxCount + 3] = "Evaluated cases";
+            xlWorkSheet.Cells[2, maxCount + 4] = "Max score";
+            xlWorkSheet.Cells[2, maxCount + 5] = "Achieved score";
+            xlWorkSheet.Cells[2, maxCount + 6] = "Total score";
+            int column = 3;
+            for(int i = 1; i <= maxCount; i++ )
+            {
+                xlWorkSheet.Cells[2, column] = i;
+                column++;
+            }
+            column = 3;
+            xlWorkSheet.Range[xlWorkSheet.Cells[2, 1], xlWorkSheet.Cells[2, maxCount + 6]].Interior.Color = ColorTranslator.ToOle(Color.LightPink);
+
+            int row = 3;
+            foreach(var project in projects)
+            {
+                xlWorkSheet.Range[xlWorkSheet.Cells[row, 1], xlWorkSheet.Cells[row + project.users.Count() - 1, 1]].Merge();
+                xlWorkSheet.Cells[row, 1] = project.name;
+                foreach(var user in project.users)
+                {
+                    xlWorkSheet.Cells[row, 2] = user.name;
+                    column = 3;
+                    foreach(var evaluation in user.evaluations)
+                    {
+                        xlWorkSheet.Cells[row, column] = evaluation.score;
+                        column++;
+                    }
+                    if(user.evaluations.Count() == 0)
+                    {
+                        xlWorkSheet.Cells[row, maxCount + 3] = 0;
+                        column++;
+                        xlWorkSheet.Cells[row, maxCount + 4] = 0;
+                        column++;
+                        xlWorkSheet.Cells[row, maxCount + 5] = 0;
+                        column++;
+                        xlWorkSheet.Cells[row, maxCount + 6] = "0%";
+                    }
+                    else
+                    {
+                        xlWorkSheet.Cells[row, maxCount + 3] = user.evaluations.Count();
+                        column++;
+                        xlWorkSheet.Cells[row, maxCount + 4] = user.evaluations.Select(temp => temp.points).Sum();
+                        column++;
+                        xlWorkSheet.Cells[row, maxCount + 5] = user.evaluations.Select(temp => temp.score).Sum();
+                        column++;
+                        try
+                        {
+                            var average = user.evaluations.Select(temp => temp.score).Sum() / user.evaluations.Select(temp => temp.points).Sum();
+                            xlWorkSheet.Cells[row, maxCount + 6] = average * 10000 / 100 + "%";
+                        }
+                        catch (DivideByZeroException e)
+                        {
+                            xlWorkSheet.Cells[row, column] = "0%";
+                        }
+                    }
+                    row++;
+                }
+            }
+            xlWorkSheet.Range[xlWorkSheet.Cells[3, 1], xlWorkSheet.Cells[row - 1, 1]].Interior.Color = ColorTranslator.ToOle(Color.LightGreen);
+            xlWorkSheet.Range[xlWorkSheet.Cells[3, 2], xlWorkSheet.Cells[row - 1, 2]].Interior.Color = ColorTranslator.ToOle(Color.SandyBrown);
+            xlWorkSheet.Range[xlWorkSheet.Cells[3, 3], xlWorkSheet.Cells[row - 1, maxCount + 6]].Interior.Color = ColorTranslator.ToOle(Color.PaleGoldenrod);
+            xlWorkSheet.Range[xlWorkSheet.Cells[row, 1], xlWorkSheet.Cells[row, maxCount + 6]].Interior.Color = ColorTranslator.ToOle(Color.LightPink);
+            xlWorkSheet.Range[xlWorkSheet.Cells[row, 1], xlWorkSheet.Cells[row, maxCount + 2]].Merge();
+            xlWorkSheet.Cells[row, 1] = "Total:";
+            xlWorkSheet.Cells[row, maxCount + 3] = projects.Select(project => project.users.Select(user => user.evaluations.Count()).Sum()).Sum();
+            var score = projects.Select(project => project.users.Select(user => user.evaluations.Select(evaluation => evaluation.score).Sum()).Sum()).Sum();
+            var points = projects.Select(project => project.users.Select(user => user.evaluations.Select(evaluation => evaluation.points).Sum()).Sum()).Sum();
+            xlWorkSheet.Cells[row, maxCount + 4] = score;
+            xlWorkSheet.Cells[row, maxCount + 5] = points;
+            try
+            {
+                var average = score / points;
+                xlWorkSheet.Cells[row, maxCount + 6] = average * 10000 / 100 + "%";
+            }
+            catch
+            {
+                xlWorkSheet.Cells[row, maxCount + 6] = "0%";
+            }
+           
+
+            xlWorkSheet.Range[xlWorkSheet.Cells[1,1], xlWorkSheet.Cells[row, maxCount + 6]].Cells.Borders.LineStyle = XlLineStyle.xlContinuous;
+
+
+            xlWorkBook.SaveAs("d:\\Excel\\csharp-Excel3.xls", Excel.XlFileFormat.xlWorkbookNormal, misValue, misValue, misValue, misValue, Excel.XlSaveAsAccessMode.xlExclusive, misValue, misValue, misValue, misValue, misValue);
+            xlWorkBook.Close(true, misValue, misValue);
+            xlApp.Quit();
+
+            Marshal.ReleaseComObject(xlWorkBook);
+            Marshal.ReleaseComObject(xlApp);
+            var fileBytes = File.ReadAllBytes("d:\\Excel\\csharp-Excel3.xls");
+            File.Delete("d:\\Excel\\csharp-Excel.xls");
+            var response = new HttpResponseMessage(HttpStatusCode.OK);
+            var fileMemoryStream = new MemoryStream(fileBytes);
+            response.Content = new StreamContent(fileMemoryStream);
+            var headers = response.Content.Headers;
+            headers.ContentDisposition = new System.Net.Http.Headers.ContentDispositionHeaderValue("attachment");
+            headers.ContentDisposition.FileName = "Report_" + start.Date + "-" + end.Date + ".xls";
+            headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/octet-stream");
+            headers.ContentLength = fileMemoryStream.Length;
+            return response;
+        }
+
+        [HttpGet]
         [Route("api/Projects/report/download/{id}")]
         public HttpResponseMessage GetProjectReportDownload(int id, DateTime start, DateTime end)
         {

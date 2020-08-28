@@ -10,9 +10,9 @@ namespace Qualitas_Backend.Responses
     {
         public int id { get; set; }
         public string TemplateName { get; set; }
-
+        public List<string> otherTemplateName { get; set; }
         public List<CriteriaRequest> Criteria { get; set; }
-
+        public bool isEditable { get; set; }
         public List<TopicRequest> Topics { get; set; }
 
         public List<string> Categories { get; set; }

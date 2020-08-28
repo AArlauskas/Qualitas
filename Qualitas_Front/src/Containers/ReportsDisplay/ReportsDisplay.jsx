@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Select, MenuItem, Button } from '@material-ui/core';
+import { Select, MenuItem, Button, TextField, FormControl } from '@material-ui/core';
 import { FetchProjectsSimple, FetchUserListSimple, FetchTeamsSimple, FetchClientProjectsSimple, FetchClientProjectsUsersSimple, FetchClientUserReport, FetchTeamReport } from '../../API/API';
 import { KeyboardDatePicker, MuiPickersUtilsProvider } from '@material-ui/pickers';
 import DateFnsUtils from '@date-io/date-fns';
@@ -9,6 +9,7 @@ import ProjectReport from '../../Components/ProjectReport/ProjectReport';
 import UserReport from '../../Components/UserReport/UserReport';
 import TeamReport from '../../Components/TeamReport/TeamReport';
 import { DownloadProjectReport, DownloadUserReport, DownloadClientUserReport } from '../../API/DownloadAPI';
+import { Autocomplete } from '@material-ui/lab';
 
 let date = new Date();
 class ReportsDisplay extends Component {
@@ -17,7 +18,7 @@ class ReportsDisplay extends Component {
         maxDate: new Date(),
         reportBy: "Project",
         reportObjects: [],
-        reportItemId: "",
+        reportItemId: null,
         Report: [],
         loading: false
     }
@@ -69,33 +70,35 @@ class ReportsDisplay extends Component {
         }
         return (
             <div>
-                <div style={{ marginLeft: 10, marginTop: 15, display: "block" }}>
+                <div style={{ marginLeft: 10, marginTop: 15 }}>
                     <div style={{ float: "left", paddingTop: 30, marginRight: 15 }}>
-                        <Select
-                            label="Report by"
-                            style={{ width: 200 }}
-                            value={this.state.reportBy}
-                            onChange={e => {
-                                this.setState({ reportBy: e.target.value });
-                                this.reportByChanged(e.target.value);
-                            }}
-                        >
-                            <MenuItem value="Project">Project</MenuItem>
-                            {window.localStorage.getItem("role") === "client" ? null : <MenuItem value="Team">Team</MenuItem>}
-                            <MenuItem value="User">User</MenuItem>
-                        </Select>
-
-                        {this.state.reportObjects.length === 0 ? null :
+                        <FormControl style={{ marginTop: 16 }}>
                             <Select
-                                value={this.state.reportItemId}
-                                onChange={e => this.setState({ reportItemId: e.target.value })}
-                                style={{ width: 200, marginLeft: 15 }}>
-                                {this.state.reportObjects.map(object => <MenuItem key={object.id} value={object.id}>{this.state.reportBy === "User" ?
-                                    object.firstname + " " + object.lastname : object.name}</MenuItem>)}
-                            </Select>}
+                                label="Report by"
+                                style={{ width: 200 }}
+                                value={this.state.reportBy}
+                                onChange={e => {
+                                    this.setState({ reportBy: e.target.value, reportObjects: [] });
+                                    this.reportByChanged(e.target.value);
+                                }}
+                            >
+                                <MenuItem value="Project">Project</MenuItem>
+                                {window.localStorage.getItem("role") === "client" ? null : <MenuItem value="Team">Team</MenuItem>}
+                                <MenuItem value="User">User</MenuItem>
+                            </Select>
+                        </FormControl>
+                        {this.state.reportObjects.length === 0 ? null :
+                            <FormControl style={{ paddingLeft: 10, width: 200 }}>
+                                <Autocomplete
+                                    autoComplete
+                                    includeInputInList
+                                    onChange={(event, value) => this.setState({ reportItemId: value.id })}
+                                    options={this.state.reportObjects}
+                                    getOptionLabel={item => this.state.reportBy === "User" ? item.firstname + " " + item.lastname : item.name}
+                                    renderInput={(params) => <TextField  {...params} margin="normal" />} /></FormControl>}
                     </div>
-                    {this.state.reportItemId === "" ? null :
-                        <div style={{ float: "left" }}>
+                    {this.state.reportItemId === null ? null :
+                        <div style={{ float: "left", marginTop: 15 }}>
                             <MuiPickersUtilsProvider utils={DateFnsUtils}>
                                 <KeyboardDatePicker
                                     disableToolbar

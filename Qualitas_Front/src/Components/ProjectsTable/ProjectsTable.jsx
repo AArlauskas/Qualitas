@@ -17,9 +17,11 @@ import Search from '@material-ui/icons/Search';
 import ViewColumn from '@material-ui/icons/ViewColumn';
 import GroupAddIcon from '@material-ui/icons/GroupAdd';
 import DashboardIcon from '@material-ui/icons/Dashboard';
-import { Chip } from '@material-ui/core';
+import GetAppIcon from '@material-ui/icons/GetApp';
+import { Chip, IconButton } from '@material-ui/core';
 import { KeyboardDatePicker, MuiPickersUtilsProvider } from '@material-ui/pickers';
 import DateFnsUtils from '@date-io/date-fns';
+import { DownloadAllProjects } from '../../API/DownloadAPI';
 
 class ProjectsTable extends Component {
     state = {}
@@ -184,6 +186,9 @@ class ProjectsTable extends Component {
                         Toolbar: props => (
                             <div>
                                 <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                                    <IconButton onClick={() => DownloadAllProjects(this.props.minDate, this.props.maxDate)}>
+                                        <GetAppIcon fontSize="large" />
+                                    </IconButton>
                                     <MTableToolbar {...props} />
                                     <div style={{ marginLeft: 10 }}>
                                         <KeyboardDatePicker

@@ -4,6 +4,7 @@ import { KeyboardArrowDown, KeyboardArrowUp } from '@material-ui/icons';
 import CriticalListItem from '../ProjectReport/CriticalListItem';
 import TopicListItem from '../ProjectReport/TopicListItem';
 import DefaultMultiSelect from '../Core-Components/DefaultMultiSelect/DefaultMultiSelect';
+import CriteriaDialog from '../CriteriaDialog/CriteriaDialog';
 
 const calculateScore = (report, categories) => {
 
@@ -103,10 +104,13 @@ class ProjectReport extends Component {
     state = {
         openId: null,
         categories: [],
+        dialogOpen: false,
+        dialogData: []
     }
     render() {
         return (
             <div>
+                <CriteriaDialog open={this.state.dialogOpen} data={this.state.dialogData} closeDialog={(data) => this.setState({ dialogOpen: false, dialogData: [] })} />
                 <div>
                     {console.log(this.state.categories)}
                     <div style={{ paddingLeft: 50 }}>
@@ -156,7 +160,9 @@ class ProjectReport extends Component {
                                                         <ListSubheader disableSticky style={{ color: "blue" }}>
                                                             Topics
                                     </ListSubheader>
-                                                        {getTopics(report, this.state.categories).map(topic => <TopicListItem topic={topic} />)}
+                                                        {getTopics(report, this.state.categories).map(topic => <TopicListItem topic={topic}
+                                                            openDialog={(data) => this.setState({ dialogOpen: true, dialogData: data })}
+                                                            closeDialog={(data) => this.setState({ dialogOpen: false, dialogData: [] })} />)}
                                                     </List>
                                                 </React.Fragment> : null
                                         }

@@ -217,6 +217,7 @@
     <Compile Include="Responses\ProjectScoreResponse.cs" />
     <Compile Include="Responses\ProjectsListItem.cs" />
     <Compile Include="Responses\Reports\Project\CategoryReport.cs" />
+    <Compile Include="Responses\Reports\Project\CommentReport.cs" />
     <Compile Include="Responses\Reports\Project\CriteriaReport.cs" />
     <Compile Include="Responses\Reports\Project\CrititalReport.cs" />
     <Compile Include="Responses\Reports\Team\UserReport.cs" />

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { ListItem, ListItemText, ListItemIcon, ListItemSecondaryAction, List, ListSubheader, Tooltip } from '@material-ui/core';
-import { KeyboardArrowDown, KeyboardArrowUp, DescriptionOutlined } from '@material-ui/icons';
+import { ListItem, ListItemText, ListItemIcon, ListItemSecondaryAction, List, ListSubheader, Tooltip, IconButton, FormControl } from '@material-ui/core';
+import { KeyboardArrowDown, KeyboardArrowUp, DescriptionOutlined, CommentOutlined } from '@material-ui/icons';
 import Fade from '@material-ui/core/Fade';
 import { withStyles } from "@material-ui/styles";
 
@@ -21,15 +21,18 @@ const getCriterias = (topic) => {
     Object.keys(group).forEach(key => {
         let score = 0;
         let points = 0;
+        let comments = [];
         group[key].forEach(member => {
             score += member.score;
             points += member.points;
+            member.comments.forEach(comment => comments.push(comment));
         });
         result.push({
             name: key,
             score: score,
             description: group[key][0].description === null ? "" : group[key][0].description,
-            points: points
+            points: points,
+            comments: comments
         })
     });
     return result;
@@ -69,7 +72,18 @@ const TopicListItem = (props) => {
                                             </CustomTooltip>  </ListItemIcon>}
                                     <ListItemText style={{ marginRight: 50 }}>{criteria.name}</ListItemText>
                                     <ListItemSecondaryAction>
-                                        <ListItemText>{isNaN(Math.round(criteria.score / criteria.points * 10000) / 100) ? "0%" : Math.round(criteria.score / criteria.points * 10000) / 100 + "%"}</ListItemText>
+                                        <FormControl style={{ marginTop: 5 }}>
+                                            <ListItemText>{isNaN(Math.round(criteria.score / criteria.points * 10000) / 100) ? "0%" : Math.round(criteria.score / criteria.points * 10000) / 100 + "%"}</ListItemText>
+                                        </FormControl>
+                                        <FormControl>
+                                            <ListItemIcon>
+                                                {criteria.comments.length === 0 ? null :
+                                                    <IconButton onClick={() => props.openDialog(criteria.comments)}>
+                                                        <CommentOutlined />
+                                                    </IconButton>
+                                                }
+                                            </ListItemIcon>
+                                        </FormControl>
                                     </ListItemSecondaryAction>
                                 </ListItem>
                                 <hr style={{ borderTop: "1px solid green" }} />

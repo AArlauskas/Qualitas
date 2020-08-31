@@ -20,6 +20,7 @@ using System.Runtime.InteropServices;
 using Excel = Microsoft.Office.Interop.Excel;
 using Microsoft.Office.Interop.Excel;
 using System.Drawing;
+using Qualitas_Backend.Responses.Reports.Project;
 
 namespace Qualitas_Backend.Controllers
 {
@@ -94,9 +95,15 @@ namespace Qualitas_Backend.Controllers
                     {
                         criteria.id,
                         criteria.name,
-                        criteria.comment,
                         criteria.points,
-                        criteria.score
+                        criteria.score,
+                        comment = new CommentReport()
+                        {
+                            comment = criteria.comment,
+                            id = evaluation.User.id,
+                            name = evaluation.User.firstname + " " + evaluation.User.lastname,
+                            evaluatedBy = evaluation.Evaluator.firstname + " " + evaluation.Evaluator.lastname
+                        }
                     })
                 }).ToList(),
             }).GroupBy(evaluation => evaluation.EvaluationTemplateName).ToList();
@@ -125,7 +132,7 @@ namespace Qualitas_Backend.Controllers
                         score = category.Where(userGroup => userGroup.User.id == temp.User.id).Select(group => group.Topics.Select(topic => topic.crierias.Select(criteria => criteria.score).Sum()).Sum()).Sum(),
                         points = category.Where(userGroup => userGroup.User.id == temp.User.id).Select(group => group.Topics.Select(topic => topic.crierias.Select(criteria => criteria.points).Sum()).Sum()).Sum()
                     }).GroupBy(temp => temp.id).Select(temp => temp.First()).ToList(),
-                    criticals = evaluationTemplate.TopicTemplates.Where(topic => topic.isCritical).Select(topic => new CrititalReport() 
+                    criticals = evaluationTemplate.TopicTemplates.Where(topic => topic.isCritical).Select(topic => new CrititalReport()
                     {
                         name = topic.name,
                         description = topic.description,
@@ -141,7 +148,7 @@ namespace Qualitas_Backend.Controllers
                             description = criteria.description,
                             score = category.Select(group => group.Topics.Where(tempTopic => tempTopic.name == topic.name).Select(tempTopic => tempTopic.crierias.Where(tempCriteria => tempCriteria.name == criteria.name).Select(tempCriteria => tempCriteria.score).Sum()).Sum()).Sum(),
                             points = category.Select(group => group.Topics.Where(tempTopic => tempTopic.name == topic.name).Select(tempTopic => tempTopic.crierias.Where(tempCriteria => tempCriteria.name == criteria.name).Select(tempCriteria => tempCriteria.points).Sum()).Sum()).Sum(),
-                            comments = category.Select(group => group.Topics.Where(tempTopic => tempTopic.name == topic.name).Select(tempTopic => tempTopic.crierias.Where(tempCriteria => tempCriteria.name == criteria.name).Select(tempCriteria => tempCriteria.comment)).SelectMany(x => x)).SelectMany(x => x).ToList()
+                            comments = category.Select(group => group.Topics.Where(tempTopic => tempTopic.name == topic.name).Select(tempTopic => tempTopic.crierias.Where(tempCriteria => tempCriteria.name == criteria.name).Select(tempCriteria => tempCriteria.comment)).SelectMany(x => x)).SelectMany(x => x).Where(x => x.comment != "").ToList()
                         }).ToList()
                     }).ToList()
                 }).ToList();

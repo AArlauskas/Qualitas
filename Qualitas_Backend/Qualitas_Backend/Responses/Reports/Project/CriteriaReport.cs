@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Qualitas_Backend.Responses.Reports.Project;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -12,6 +13,6 @@ namespace Qualitas_Backend.Responses.Reports
         public double? score { get; set; }
         public int? points { get; set; }
         public string description { get; set; }
-        public List<string> comments { get; set; }
+        public List<CommentReport> comments { get; set; }
     }
 }

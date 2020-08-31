@@ -21,6 +21,7 @@ using System.Runtime.InteropServices;
 using Excel = Microsoft.Office.Interop.Excel;
 using Microsoft.Office.Interop.Excel;
 using System.Drawing;
+using Qualitas_Backend.Responses.Reports.Project;
 
 namespace Qualitas_Backend.Controllers
 {
@@ -300,7 +301,13 @@ namespace Qualitas_Backend.Controllers
                             criteria.points,
                             criteria.description,
                             criteria.score,
-                            criteria.comment
+                            comment = new CommentReport()
+                            {
+                                comment = criteria.comment,
+                                id = evaluation.User.id,
+                                name = evaluation.User.firstname + " " + evaluation.User.lastname,
+                                evaluatedBy = evaluation.Evaluator.firstname + " " + evaluation.Evaluator.lastname
+                            }
                         })
                     }).ToList(),
                 }).GroupBy(evaluation => evaluation.Project.id).ToList();
@@ -345,7 +352,8 @@ namespace Qualitas_Backend.Controllers
                                 name = criteria.name,
                                 description = criteria.description,
                                 score = category.Select(group => group.Topics.Where(tempTopic => tempTopic.name == topic.name).Select(tempTopic => tempTopic.crierias.Where(tempCriteria => tempCriteria.name == criteria.name).Select(tempCriteria => tempCriteria.score).Sum()).Sum()).Sum(),
-                                points = category.Select(group => group.Topics.Where(tempTopic => tempTopic.name == topic.name).Select(tempTopic => tempTopic.crierias.Where(tempCriteria => tempCriteria.name == criteria.name).Select(tempCriteria => tempCriteria.points).Sum()).Sum()).Sum()
+                                points = category.Select(group => group.Topics.Where(tempTopic => tempTopic.name == topic.name).Select(tempTopic => tempTopic.crierias.Where(tempCriteria => tempCriteria.name == criteria.name).Select(tempCriteria => tempCriteria.points).Sum()).Sum()).Sum(),
+                                comments = category.Select(group => group.Topics.Where(tempTopic => tempTopic.name == topic.name).Select(tempTopic => tempTopic.crierias.Where(tempCriteria => tempCriteria.name == criteria.name).Select(tempCriteria => tempCriteria.comment)).SelectMany(x => x)).SelectMany(x => x).Where(x => x.comment != "").ToList()
                             }).ToList()
                         }).ToList()
                     }).ToList();
@@ -1105,7 +1113,14 @@ namespace Qualitas_Backend.Controllers
                             criteria.name,
                             criteria.description,
                             criteria.points,
-                            criteria.score
+                            criteria.score,
+                            comment = new CommentReport()
+                            {
+                                comment = criteria.comment,
+                                id = evaluation.User.id,
+                                name = evaluation.User.firstname + " " + evaluation.User.lastname,
+                                evaluatedBy = evaluation.Evaluator.firstname + " " + evaluation.Evaluator.lastname
+                            }
                         })
                     }).ToList(),
                 }).Where(evaluation => clientProjectIds.Contains(evaluation.Project.id)).GroupBy(evaluation => evaluation.Project.id).ToList();
@@ -1149,7 +1164,8 @@ namespace Qualitas_Backend.Controllers
                                 name = criteria.name,
                                 description = criteria.description,
                                 score = category.Select(group => group.Topics.Where(tempTopic => tempTopic.name == topic.name).Select(tempTopic => tempTopic.crierias.Where(tempCriteria => tempCriteria.name == criteria.name).Select(tempCriteria => tempCriteria.score).Sum()).Sum()).Sum(),
-                                points = category.Select(group => group.Topics.Where(tempTopic => tempTopic.name == topic.name).Select(tempTopic => tempTopic.crierias.Where(tempCriteria => tempCriteria.name == criteria.name).Select(tempCriteria => tempCriteria.points).Sum()).Sum()).Sum()
+                                points = category.Select(group => group.Topics.Where(tempTopic => tempTopic.name == topic.name).Select(tempTopic => tempTopic.crierias.Where(tempCriteria => tempCriteria.name == criteria.name).Select(tempCriteria => tempCriteria.points).Sum()).Sum()).Sum(),
+                                comments = category.Select(group => group.Topics.Where(tempTopic => tempTopic.name == topic.name).Select(tempTopic => tempTopic.crierias.Where(tempCriteria => tempCriteria.name == criteria.name).Select(tempCriteria => tempCriteria.comment)).SelectMany(x => x)).SelectMany(x => x).Where(x => x.comment != "").ToList()
                             }).ToList()
                         }).ToList()
                     }).ToList();
@@ -1510,6 +1526,11 @@ namespace Qualitas_Backend.Controllers
                 password = request.password,
                 TeamId = request.teamId
             };
+
+            if(db.Users.FirstOrDefault(temp => temp.username == user.username) != null)
+            {
+                return Ok();
+            }
 
             db.Users.Add(user);
 

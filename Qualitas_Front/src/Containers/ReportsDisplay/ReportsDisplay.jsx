@@ -92,7 +92,7 @@ class ReportsDisplay extends Component {
                                 <Autocomplete
                                     autoComplete
                                     includeInputInList
-                                    onChange={(event, value) => this.setState({ reportItemId: value.id })}
+                                    onChange={(event, value) => value === null ? this.setState({ reportItemId: value }) : this.setState({ reportItemId: value.id })}
                                     options={this.state.reportObjects}
                                     getOptionLabel={item => this.state.reportBy === "User" ? item.firstname + " " + item.lastname : item.name}
                                     renderInput={(params) => <TextField  {...params} margin="normal" />} /></FormControl>}

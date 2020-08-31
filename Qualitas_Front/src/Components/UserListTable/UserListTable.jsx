@@ -54,6 +54,15 @@ class UserListTable extends Component {
                     "admin": "Admin",
                     "user": "User",
                     "client": "Client"
+                },
+                validate: rowData => {
+                    if (rowData.role === "" || rowData.role === undefined) {
+                        return {
+                            isValid: false,
+                            helperText: "Role must be selected"
+                        }
+                    }
+                    return true;
                 }
             },
             {

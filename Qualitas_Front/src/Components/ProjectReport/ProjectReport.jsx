@@ -5,6 +5,7 @@ import CriticalListItem from './CriticalListItem';
 import TopicListItem from './TopicListItem';
 import DefaultMultiSelect from '../Core-Components/DefaultMultiSelect/DefaultMultiSelect';
 import ProjectUserList from './ProjectUserList';
+import CriteriaDialog from '../CriteriaDialog/CriteriaDialog';
 
 const calculateScore = (report, categories) => {
 
@@ -148,10 +149,13 @@ class ProjectReport extends Component {
     state = {
         openId: null,
         categories: [],
+        dialogOpen: false,
+        dialogData: []
     }
     render() {
         return (
             <div>
+                <CriteriaDialog open={this.state.dialogOpen} data={this.state.dialogData} closeDialog={(data) => this.setState({ dialogOpen: false, dialogData: [] })} />
                 <div style={{ textAlign: "center" }}>
                     <h2 style={{ paddingTop: 10, color: "#F2F5F9" }}>Project score: {OverallScore(this.props.report)}%</h2>
                     <IconButton style={{ marginLeft: 5, paddingTop: 10 }} onClick={() => this.props.download()}>
@@ -206,7 +210,10 @@ class ProjectReport extends Component {
                                                         <ListSubheader disableSticky style={{ color: "blue" }}>
                                                             Topics
                                     </ListSubheader>
-                                                        {getTopics(report, this.state.categories).map(topic => <TopicListItem topic={topic} />)}
+                                                        {getTopics(report, this.state.categories).map(topic => <TopicListItem topic={topic}
+                                                            openDialog={(data) => this.setState({ dialogOpen: true, dialogData: data })}
+                                                            closeDialog={(data) => this.setState({ dialogOpen: false, dialogData: [] })}
+                                                        />)}
                                                     </List>
                                                 </React.Fragment> : null
                                         }

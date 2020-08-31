@@ -13,6 +13,7 @@ using System.Web.Http.Description;
 using Qualitas_Backend.Models;
 using Qualitas_Backend.Responses;
 using Qualitas_Backend.Responses.Reports;
+using Qualitas_Backend.Responses.Reports.Project;
 
 namespace Qualitas_Backend.Controllers
 {
@@ -135,7 +136,14 @@ namespace Qualitas_Backend.Controllers
                             criteria.name,
                             criteria.description,
                             criteria.points,
-                            criteria.score
+                            criteria.score,
+                            comment = new CommentReport()
+                            {
+                                comment = criteria.comment,
+                                id = evaluation.User.id,
+                                name = evaluation.User.firstname + " " + evaluation.User.lastname,
+                                evaluatedBy = evaluation.Evaluator.firstname + " " + evaluation.Evaluator.lastname
+                            }
                         })
                     }).ToList(),
                 }).GroupBy(evaluation => evaluation.User.id).ToList();
@@ -189,6 +197,7 @@ namespace Qualitas_Backend.Controllers
                                     name = criteria.name,
                                     description = criteria.description,
                                     score = category.Select(group => group.Topics.Where(tempTopic => tempTopic.name == topic.name).Select(tempTopic => tempTopic.crierias.Where(tempCriteria => tempCriteria.name == criteria.name).Select(tempCriteria => tempCriteria.score).Sum()).Sum()).Sum(),
+                                    comments = category.Select(group => group.Topics.Where(tempTopic => tempTopic.name == topic.name).Select(tempTopic => tempTopic.crierias.Where(tempCriteria => tempCriteria.name == criteria.name).Select(tempCriteria => tempCriteria.comment)).SelectMany(x => x)).SelectMany(x => x).Where(x => x.comment != "").ToList(),
                                     points = category.Select(group => group.Topics.Where(tempTopic => tempTopic.name == topic.name).Select(tempTopic => tempTopic.crierias.Where(tempCriteria => tempCriteria.name == criteria.name).Select(tempCriteria => tempCriteria.points).Sum()).Sum()).Sum()
                                 }).ToList()
                             }).ToList()
